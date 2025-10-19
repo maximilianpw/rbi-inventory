@@ -8,11 +8,17 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createServerRootRoute } from '@tanstack/react-start/server'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ItemsRouteImport } from './routes/items'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { ServerRoute as ApiDemoTqTodosServerRouteImport } from './routes/api.demo-tq-todos'
+import { ServerRoute as ApiDemoNamesServerRouteImport } from './routes/api.demo-names'
+
+const rootServerRouteImport = createServerRootRoute()
 
 const ItemsRoute = ItemsRouteImport.update({
   id: '/items',
@@ -33,6 +39,16 @@ const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDemoTqTodosServerRoute = ApiDemoTqTodosServerRouteImport.update({
+  id: '/api/demo-tq-todos',
+  path: '/api/demo-tq-todos',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
+  id: '/api/demo-names',
+  path: '/api/demo-names',
+  getParentRoute: () => rootServerRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -68,6 +84,31 @@ export interface RootRouteChildren {
   ItemsRoute: typeof ItemsRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
+export interface FileServerRoutesByFullPath {
+  '/api/demo-names': typeof ApiDemoNamesServerRoute
+  '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
+}
+export interface FileServerRoutesByTo {
+  '/api/demo-names': typeof ApiDemoNamesServerRoute
+  '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
+}
+export interface FileServerRoutesById {
+  __root__: typeof rootServerRouteImport
+  '/api/demo-names': typeof ApiDemoNamesServerRoute
+  '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
+}
+export interface FileServerRouteTypes {
+  fileServerRoutesByFullPath: FileServerRoutesByFullPath
+  fullPaths: '/api/demo-names' | '/api/demo-tq-todos'
+  fileServerRoutesByTo: FileServerRoutesByTo
+  to: '/api/demo-names' | '/api/demo-tq-todos'
+  id: '__root__' | '/api/demo-names' | '/api/demo-tq-todos'
+  fileServerRoutesById: FileServerRoutesById
+}
+export interface RootServerRouteChildren {
+  ApiDemoNamesServerRoute: typeof ApiDemoNamesServerRoute
+  ApiDemoTqTodosServerRoute: typeof ApiDemoTqTodosServerRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
@@ -101,6 +142,24 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+declare module '@tanstack/react-start/server' {
+  interface ServerFileRoutesByPath {
+    '/api/demo-tq-todos': {
+      id: '/api/demo-tq-todos'
+      path: '/api/demo-tq-todos'
+      fullPath: '/api/demo-tq-todos'
+      preLoaderRoute: typeof ApiDemoTqTodosServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/demo-names': {
+      id: '/api/demo-names'
+      path: '/api/demo-names'
+      fullPath: '/api/demo-names'
+      preLoaderRoute: typeof ApiDemoNamesServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+  }
+}
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -111,12 +170,10 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
+const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiDemoNamesServerRoute: ApiDemoNamesServerRoute,
+  ApiDemoTqTodosServerRoute: ApiDemoTqTodosServerRoute,
 }
+export const serverRouteTree = rootServerRouteImport
+  ._addFileChildren(rootServerRouteChildren)
+  ._addFileTypes<FileServerRouteTypes>()

@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { ChevronDown, ChevronRight, Folder, FolderOpen } from 'lucide-react'
 import clsx from 'clsx'
+import { useTranslation } from 'react-i18next'
 import type { FolderNode } from '@/data/types/folder-node'
-import { EmptyStateMessages, UIStrings } from '@/lib/enums'
 
 interface FolderItemProps {
   folder: FolderNode
@@ -82,10 +82,12 @@ export default function FolderSidebar({
   selectedId,
   onSelect,
 }: FolderSidebarProps) {
+  const { t } = useTranslation()
+
   return (
     <aside className="w-64 border-r border-gray-200 bg-white h-full overflow-y-auto">
       <div className="p-4 border-b border-gray-200">
-        <h2 className="font-semibold text-sm">{UIStrings.FOLDERS}</h2>
+        <h2 className="font-semibold text-sm">{t('folders.title')}</h2>
       </div>
       <nav className="py-2">
         {folders.length > 0 ? (
@@ -99,7 +101,7 @@ export default function FolderSidebar({
           ))
         ) : (
           <div className="px-3 py-4 text-sm text-gray-500 text-center">
-            {EmptyStateMessages.NO_FOLDERS}
+            {t('folders.noFolders')}
           </div>
         )}
       </nav>

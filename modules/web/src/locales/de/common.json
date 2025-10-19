@@ -1,0 +1,50 @@
+{
+  "welcome": "Willkommen",
+  "navigation": {
+    "dashboard": "Dashboard",
+    "items": "Artikel",
+    "search": "Suchen",
+    "deliveries": "Lieferungen",
+    "tags": "Tags",
+    "report": "Bericht",
+    "settings": "Einstellungen"
+  },
+  "search": {
+    "placeholder": "Suchen...",
+    "itemsPlaceholder": "Artikel suchen...",
+    "help": "Versuchen Sie, Ihre Suche anzupassen"
+  },
+  "sort": {
+    "by": "Sortieren nach",
+    "name": "Name",
+    "quantity": "Menge",
+    "value": "Wert",
+    "dateAdded": "Hinzugefügt am"
+  },
+  "actions": {
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "close": "Schließen",
+    "addNewItem": "Neuen Artikel hinzufügen",
+    "addNewFolder": "Neuen Ordner hinzufügen"
+  },
+  "items": {
+    "allItems": "Alle Artikel",
+    "quantity": "Artikelmenge",
+    "totalValue": "Gesamtartikel",
+    "noItemsFound": "Keine Artikel gefunden",
+    "noItemsFolder": "Keine Artikel in diesem Ordner"
+  },
+  "folders": {
+    "title": "Ordner",
+    "noFolders": "Noch keine Ordner"
+  },
+  "view": {
+    "grid": "Rasteransicht",
+    "list": "Listenansicht"
+  },
+  "category": "Kategorie"
+}

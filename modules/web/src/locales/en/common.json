@@ -1,0 +1,50 @@
+{
+  "welcome": "Welcome",
+  "navigation": {
+    "dashboard": "Dashboard",
+    "items": "Items",
+    "search": "Search",
+    "deliveries": "Deliveries",
+    "tags": "Tags",
+    "report": "Report",
+    "settings": "Settings"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "itemsPlaceholder": "Search items...",
+    "help": "Try adjusting your search"
+  },
+  "sort": {
+    "by": "Sort by",
+    "name": "Name",
+    "quantity": "Quantity",
+    "value": "Value",
+    "dateAdded": "Date Added"
+  },
+  "actions": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "addNewItem": "Add New Item",
+    "addNewFolder": "Add New Folder"
+  },
+  "items": {
+    "allItems": "All Items",
+    "quantity": "Item Quantity",
+    "totalValue": "Total Items",
+    "noItemsFound": "No Items Found",
+    "noItemsFolder": "No items in this folder"
+  },
+  "folders": {
+    "title": "Folders",
+    "noFolders": "No folders yet"
+  },
+  "view": {
+    "grid": "Grid view",
+    "list": "List view"
+  },
+  "category": "Category"
+}

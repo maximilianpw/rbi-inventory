@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { FolderNode } from './FolderSidebar'
 
 interface BreadcrumbProps {
@@ -11,6 +12,8 @@ export default function Breadcrumbs({
   path,
   setSelectedFolderId,
 }: BreadcrumbProps) {
+  const { t } = useTranslation()
+
   return (
     <div className="flex items-center gap-2 text-sm flex-1 min-w-0">
       {path.length > 0 ? (
@@ -30,7 +33,7 @@ export default function Breadcrumbs({
           ))}
         </>
       ) : (
-        <span className="font-medium text-gray-900">All Items</span>
+        <span className="font-medium text-gray-900">{t('items.allItems')}</span>
       )}
     </div>
   )

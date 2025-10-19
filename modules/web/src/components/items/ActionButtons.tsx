@@ -1,4 +1,5 @@
 import { FolderPlus, Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '../ui/button'
 
 interface ActionButtonsProps {
@@ -12,18 +13,20 @@ export function ActionButtons({
   onAddFolder,
   className = '',
 }: ActionButtonsProps) {
+  const { t } = useTranslation()
+
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       {onAddItem && (
         <Button variant={'outline'} className="gap-2" onClick={onAddItem}>
           <Plus className="h-4 w-4" />
-          Add New Item
+          {t('actions.addNewItem')}
         </Button>
       )}
       {onAddFolder && (
         <Button variant={'outline'} className="gap-2" onClick={onAddFolder}>
           <FolderPlus className="h-4 w-4" />
-          Add New Folder
+          {t('actions.addNewFolder')}
         </Button>
       )}
     </div>

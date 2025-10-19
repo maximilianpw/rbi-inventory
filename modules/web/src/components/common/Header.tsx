@@ -12,49 +12,49 @@ import {
   Truck,
 } from 'lucide-react'
 import clsx from 'clsx'
+import { useTranslation } from 'react-i18next'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import {
-  ButtonVariant,
-  NavigationRoutes,
-  SheetPosition,
-  SizeVariant,
-} from '@/lib/enums'
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 
-const routes = [
-  {
-    name: NavigationRoutes.DASHBOARD.label,
-    route: NavigationRoutes.DASHBOARD.path,
-    icon: LayoutDashboard,
-  },
-  {
-    name: NavigationRoutes.ITEMS.label,
-    route: NavigationRoutes.ITEMS.path,
-    icon: Package,
-  },
-  {
-    name: NavigationRoutes.SEARCH.label,
-    route: NavigationRoutes.SEARCH.path,
-    icon: Search,
-  },
-  {
-    name: NavigationRoutes.DELIVERIES.label,
-    route: NavigationRoutes.DELIVERIES.path,
-    icon: Truck,
-  },
-  {
-    name: NavigationRoutes.TAGS.label,
-    route: NavigationRoutes.TAGS.path,
-    icon: Tag,
-  },
-  {
-    name: NavigationRoutes.REPORT.label,
-    route: NavigationRoutes.REPORT.path,
-    icon: BarChart2,
-  },
-]
+const useRoutes = () => {
+  const { t } = useTranslation()
+
+  return [
+    {
+      name: t('navigation.dashboard'),
+      route: '/',
+      icon: LayoutDashboard,
+    },
+    {
+      name: t('navigation.items'),
+      route: '/items',
+      icon: Package,
+    },
+    {
+      name: t('navigation.search'),
+      route: '/search',
+      icon: Search,
+    },
+    {
+      name: t('navigation.deliveries'),
+      route: '/deliveries',
+      icon: Truck,
+    },
+    {
+      name: t('navigation.tags'),
+      route: '/tags',
+      icon: Tag,
+    },
+    {
+      name: t('navigation.report'),
+      route: '/report',
+      icon: BarChart2,
+    },
+  ]
+}
 
 function useIsActive(to: string) {
   const { location } = useRouterState()
@@ -85,6 +85,9 @@ function NavItem({
 }
 
 function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
+  const { t } = useTranslation()
+  const routes = useRoutes()
+
   return (
     <div className="flex h-full flex-col">
       {/* Brand */}
@@ -117,18 +120,14 @@ function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
       <Separator />
 
       {/* Footer / Settings */}
-      <div className="p-3">
-        <Link
-          to={NavigationRoutes.SETTINGS.path}
-          className="w-full"
-          onClick={onItemClick}
-        >
+      <div className="p-3 space-y-2">
+        <LanguageSwitcher />
+        <Link to="/settings" className="w-full" onClick={onItemClick}>
           <Button
-            variant={ButtonVariant.OUTLINE}
+            variant={'outline'}
             className="w-full justify-start rounded-xl"
           >
-            <Settings className="mr-2 h-4 w-4" />{' '}
-            {NavigationRoutes.SETTINGS.label}
+            <Settings className="mr-2 h-4 w-4" /> {t('navigation.settings')}
           </Button>
         </Link>
       </div>
@@ -151,11 +150,11 @@ export default function Header() {
           </Link>
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant={ButtonVariant.OUTLINE} size={SizeVariant.SM}>
+              <Button variant={'outline'} size={'sm'}>
                 <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side={SheetPosition.LEFT} className="w-64 p-0">
+            <SheetContent side={'left'} className="w-64 p-0">
               <SidebarContent onItemClick={() => setMobileMenuOpen(false)} />
             </SheetContent>
           </Sheet>

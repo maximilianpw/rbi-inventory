@@ -1,4 +1,5 @@
 import { Search } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Input } from '../ui/input'
 
 interface SearchBarProps {
@@ -11,15 +12,16 @@ interface SearchBarProps {
 export function SearchBar({
   value,
   onChange,
-  placeholder = 'Search...',
+  placeholder,
   className = '',
 }: SearchBarProps) {
+  const { t } = useTranslation()
   return (
     <div className={`relative flex-1 ${className}`}>
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
       <Input
         type="text"
-        placeholder={placeholder}
+        placeholder={placeholder || t('search.placeholder')}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="pl-10"

@@ -1,33 +1,34 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import type { FolderNode } from '@/data/types/folder-node'
+import { useTranslation } from 'react-i18next'
 import type { SortOption } from '@/components/items/SortSelect'
-import FolderSidebar from '@/components/common/FolderSidebar'
-import { ItemCard } from '@/components/items/ItemCard'
-import { sampleItems } from '@/data/routes/item'
-import { sampleFolders } from '@/data/routes/folders'
+import type { FolderNode } from '@/data/types/folder-node'
 import Breadcrumbs from '@/components/common/Breadcrumbs'
+import FolderSidebar from '@/components/common/FolderSidebar'
+import { ActionButtons } from '@/components/items/ActionButtons'
+import { DisplayTypeToggle } from '@/components/items/DisplayTypeToggle'
+import { ItemCard } from '@/components/items/ItemCard'
+import { ItemsGrid } from '@/components/items/ItemsGrid'
 import { SearchBar } from '@/components/items/SearchBar'
 import { SortSelect } from '@/components/items/SortSelect'
-import { DisplayTypeToggle } from '@/components/items/DisplayTypeToggle'
-import { ItemsGrid } from '@/components/items/ItemsGrid'
-import { ActionButtons } from '@/components/items/ActionButtons'
-import {
-  DisplayType,
-  EmptyStateMessages,
-  SortField,
-  UIStrings,
-} from '@/lib/enums'
+import { sampleFolders } from '@/data/routes/folders'
+import { sampleItems } from '@/data/routes/item'
+import { SortField } from '@/lib/enums/sort-field.enum'
+import { DisplayType } from '@/lib/enums/display-type.enum'
 
 export const Route = createFileRoute('/items')({
   component: ItemsPage,
 })
 
-const SORT_OPTIONS: Array<SortOption> = [
-  { value: SortField.NAME, label: 'Name' },
-  { value: SortField.QUANTITY, label: 'Quantity' },
-  { value: SortField.ITEM_VALUE, label: 'Value' },
-]
+const useSortOptions = (): Array<SortOption> => {
+  const { t } = useTranslation()
+
+  return [
+    { value: SortField.NAME, label: t('sort.name') },
+    { value: SortField.QUANTITY, label: t('sort.quantity') },
+    { value: SortField.VALUE, label: t('sort.value') },
+  ]
+}
 
 function findFolderPath(
   folders: Array<FolderNode>,
@@ -48,6 +49,8 @@ function findFolderPath(
 }
 
 function ItemsPage() {
+  const { t } = useTranslation()
+  const sortOptions = useSortOptions()
   const [selectedFolderId, setSelectedFolderId] = useState<string | undefined>()
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState(SortField.NAME)
@@ -66,8 +69,7 @@ function ItemsPage() {
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (sortBy === SortField.NAME) return a.name.localeCompare(b.name)
     if (sortBy === SortField.QUANTITY) return b.quantity - a.quantity
-    if (sortBy === SortField.ITEM_VALUE) return b.value - a.value
-    return 0
+    return b.value - a.value
   })
 
   return (
@@ -91,12 +93,12 @@ function ItemsPage() {
             <SearchBar
               value={searchQuery}
               onChange={setSearchQuery}
-              placeholder={UIStrings.SEARCH_ITEMS_PLACEHOLDER}
+              placeholder={t('search.itemsPlaceholder')}
             />
             <SortSelect
               value={sortBy}
               onChange={(value) => setSortBy(value as SortField)}
-              options={SORT_OPTIONS}
+              options={sortOptions}
             />
             <DisplayTypeToggle value={displayType} onChange={setDisplayType} />
           </div>
@@ -109,7 +111,7 @@ function ItemsPage() {
             renderItem={(item) => (
               <ItemCard key={item.id} item={item} displayType={displayType} />
             )}
-            emptyMessage={EmptyStateMessages.NO_ITEMS_FOLDER}
+            emptyMessage={t('items.noItemsFolder')}
             searchQuery={searchQuery}
           />
         </div>
