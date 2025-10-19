@@ -29,6 +29,8 @@
 
           pkgs.docker # Optional: local containers
           pkgs.docker-compose
+
+          pkgs.postgresql
         ];
 
         shellHook = ''
@@ -37,6 +39,36 @@
 
           # Add ./bin (if you generate helpers) to PATH
           export PATH="$PWD/modules/api/bin:$PATH"
+
+          # PostgreSQL configuration
+          export PGDATA="$PWD/.postgres/data"
+          export PGHOST="$PWD/.postgres"
+          export PGDATABASE="rbi_inventory"
+          export PGUSER="postgres"
+          export DATABASE_URL="postgresql://$PGUSER@localhost/$PGDATABASE?host=$PGHOST"
+
+          # Initialize PostgreSQL if not already done
+          if [ ! -d "$PGDATA" ]; then
+            echo "Initializing PostgreSQL database..."
+            initdb --auth=trust --no-locale --encoding=UTF8 -U "$PGUSER"
+            echo "unix_socket_directories = '$PGHOST'" >> "$PGDATA/postgresql.conf"
+            echo "PostgreSQL initialized. Start it with: pg_ctl start"
+            echo "Create database with: createdb $PGDATABASE"
+          fi
+
+          echo ""
+          echo "PostgreSQL environment configured:"
+          echo "  Data directory: $PGDATA"
+          echo "  Database: $PGDATABASE"
+          echo "  User: $PGUSER"
+          echo ""
+          echo "Useful commands:"
+          echo "  pg_ctl start           - Start PostgreSQL server"
+          echo "  pg_ctl stop            - Stop PostgreSQL server"
+          echo "  pg_ctl status          - Check server status"
+          echo "  createdb $PGDATABASE   - Create the database"
+          echo "  psql                   - Connect to database"
+          echo ""
         '';
       };
     });

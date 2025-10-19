@@ -1,0 +1,10 @@
+2025-10-19 21:36:10.024 CEST [363067] LOG:  starting PostgreSQL 17.6 on x86_64-pc-linux-gnu, compiled by clang version 19.1.7, 64-bit
+2025-10-19 21:36:10.025 CEST [363067] LOG:  listening on IPv6 address "::1", port 5432
+2025-10-19 21:36:10.025 CEST [363067] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-19 21:36:10.029 CEST [363067] LOG:  listening on Unix socket "/home/maxpw/local/rbi-inventory/.postgres/.s.PGSQL.5432"
+2025-10-19 21:36:10.034 CEST [363070] LOG:  database system was shut down at 2025-10-19 21:22:11 CEST
+2025-10-19 21:36:10.038 CEST [363067] LOG:  database system is ready to accept connections
+2025-10-19 21:36:12.311 CEST [363329] FATAL:  database "rbi_inventory" does not exist
+2025-10-19 21:36:48.468 CEST [363568] FATAL:  database "rbi_inventory" does not exist
+2025-10-19 21:41:10.063 CEST [363068] LOG:  checkpoint starting: time
+2025-10-19 21:42:47.180 CEST [363068] LOG:  checkpoint complete: wrote 968 buffers (5.9%); 0 WAL file(s) added, 0 removed, 0 recycled; write=97.024 s, sync=0.033 s, total=97.117 s; sync files=310, longest=0.002 s, average=0.001 s; distance=4526 kB, estimate=4526 kB; lsn=0/19586F8, redo lsn=0/1958668
