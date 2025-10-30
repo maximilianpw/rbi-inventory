@@ -18,6 +18,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
+import { SignedOut, SignInButton } from '@clerk/tanstack-react-start'
 
 const useRoutes = () => {
   const { t } = useTranslation()
@@ -130,6 +131,10 @@ function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
             <Settings className="mr-2 h-4 w-4" /> {t('navigation.settings')}
           </Button>
         </Link>
+        <Separator />
+        <SignedOut>
+          <SignInButton mode="modal" />
+        </SignedOut>
       </div>
     </div>
   )

@@ -16,7 +16,7 @@ import { sampleItems } from '@/data/routes/item'
 import { SortField } from '@/lib/enums/sort-field.enum'
 import { DisplayType } from '@/lib/enums/display-type.enum'
 
-export const Route = createFileRoute('/items')({
+export const Route = createFileRoute('/_authed/items')({
   component: ItemsPage,
 })
 

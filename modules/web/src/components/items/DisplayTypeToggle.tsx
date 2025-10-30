@@ -1,7 +1,7 @@
-import { DisplayType } from '@/lib/enums/display-type.enum'
 import clsx from 'clsx'
 import { Grid, List } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { DisplayType } from '@/lib/enums/display-type.enum'
 
 interface DisplayTypeToggleProps {
   value: DisplayType
