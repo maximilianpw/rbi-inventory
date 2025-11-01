@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { ClassValue } from 'clsx'
-import { FolderNode } from '@/data/types/folder-node'
+import type { FolderNode } from '@/data/types/folder-node'
 
 export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
