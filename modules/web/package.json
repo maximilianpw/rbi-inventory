@@ -34,6 +34,7 @@
     "@tanstack/react-router-ssr-query": "^1.133.36",
     "@tanstack/react-start": "^1.134.0",
     "@tanstack/router-plugin": "^1.133.36",
+    "axios": "^1.13.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "i18next": "^25.6.0",

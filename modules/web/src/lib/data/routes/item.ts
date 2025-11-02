@@ -1,6 +1,4 @@
-import type { Item } from '../types/item'
-
-export const sampleItems: Array<Item> = [
+export const sampleItems: Array<any> = [
   {
     id: 'item-1',
     name: 'MacBook Pro 16"',
