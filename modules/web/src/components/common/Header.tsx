@@ -18,7 +18,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 
 const useRoutes = () => {
   const { t } = useTranslation()
@@ -122,7 +121,6 @@ function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
 
       {/* Footer / Settings */}
       <div className="p-3 space-y-2">
-        <LanguageSwitcher />
         <Link to="/settings" className="w-full" onClick={onItemClick}>
           <Button
             variant={'outline'}

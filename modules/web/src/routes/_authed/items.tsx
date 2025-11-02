@@ -1,9 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useLoaderData } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SortOption } from '@/components/items/SortSelect'
-import Breadcrumbs from '@/components/common/Breadcrumbs'
 import FolderSidebar from '@/components/common/FolderSidebar'
 import { ActionButtons } from '@/components/items/ActionButtons'
 import { DisplayTypeToggle } from '@/components/items/DisplayTypeToggle'
@@ -11,19 +10,27 @@ import { ItemCard } from '@/components/items/ItemCard'
 import { ItemsGrid } from '@/components/items/ItemsGrid'
 import { SearchBar } from '@/components/items/SearchBar'
 import { SortSelect } from '@/components/items/SortSelect'
+import { fetchItems } from '@/lib/items'
 import { sampleFolders } from '@/data/routes/folders'
-import { sampleItems } from '@/data/routes/item'
 import { DisplayType } from '@/lib/enums/display-type.enum'
 import { SortField } from '@/lib/enums/sort-field.enum'
 import { findFolderPath } from '@/lib/utils'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 
 export const Route = createFileRoute('/_authed/items')({
   component: ItemsPage,
+  loader: async () => {
+    const response = await fetchItems()
+    return response
+  },
 })
-
-const fetchItems = createServerFn({
-  method: 'GET',
-}).handler(() => sampleItems)
 
 const useSortOptions = (): Array<SortOption> => {
   const { t } = useTranslation()
@@ -35,7 +42,7 @@ const useSortOptions = (): Array<SortOption> => {
   ]
 }
 
-async function ItemsPage() {
+function ItemsPage() {
   const { t } = useTranslation()
   const sortOptions = useSortOptions()
   const [selectedFolderId, setSelectedFolderId] = useState<string | undefined>()
@@ -47,7 +54,7 @@ async function ItemsPage() {
     ? findFolderPath(sampleFolders, selectedFolderId) || []
     : []
 
-  const items = await fetchItems()
+  const items = Route.useLoaderData()
 
   const filteredItems = items.filter(
     (item) =>
@@ -71,10 +78,35 @@ async function ItemsPage() {
       <div className="page-content">
         <div className="page-header">
           <div className="header-actions-row">
-            <Breadcrumbs
-              path={breadcrumbPath}
-              setSelectedFolderId={setSelectedFolderId}
-            />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    onClick={() => setSelectedFolderId(undefined)}
+                    className="cursor-pointer"
+                  >
+                    All Items
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                {breadcrumbPath.map((folder, index) => (
+                  <>
+                    <BreadcrumbSeparator key={`sep-${folder.id}`} />
+                    <BreadcrumbItem key={folder.id}>
+                      {index === breadcrumbPath.length - 1 ? (
+                        <BreadcrumbPage>{folder.name}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink
+                          onClick={() => setSelectedFolderId(folder.id)}
+                          className="cursor-pointer"
+                        >
+                          {folder.name}
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                  </>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
             <ActionButtons className="action-group" />
           </div>
 
