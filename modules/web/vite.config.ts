@@ -14,7 +14,7 @@ const config = defineConfig({
     }),
     tailwindcss(),
     tanstackStart({
-      customViteReactPlugin: true,
+      srcDirectory: 'src',
     }),
     viteReact(),
   ],
@@ -24,7 +24,5 @@ export default wrapVinxiConfigWithSentry(config, {
   org: process.env.VITE_SENTRY_ORG,
   project: process.env.VITE_SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
-  // Only print logs for uploading source maps in CI
-  // Set to `true` to suppress logs
   silent: !process.env.CI,
 })

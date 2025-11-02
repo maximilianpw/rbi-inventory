@@ -13,8 +13,9 @@ import { createServerFn } from '@tanstack/react-start'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
-import Header from '@/components/common/Header'
-import '../lib/i18n'
+import AppSidebar from '@/components/common/Header'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import '../locales/i18n'
 import { DefaultCatchBoundary } from '@/components/common/DefaultCatchBoundary'
 import { NotFound } from '@/components/common/NotFound'
 
@@ -86,8 +87,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Header />
-        <main className="pt-16 lg:pt-0 lg:pl-64">{children}</main>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <main className="flex flex-1 flex-col p-4">{children}</main>
+          </SidebarInset>
+        </SidebarProvider>
         <TanstackDevtools
           config={{
             position: 'bottom-left',
