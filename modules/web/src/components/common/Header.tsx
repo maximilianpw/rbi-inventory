@@ -1,13 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import {
-  BarChart2,
-  LayoutDashboard,
-  Package,
-  Search,
-  Settings,
-  Tag,
-  Truck,
-} from 'lucide-react'
+import { BarChart2, LayoutDashboard, Package, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SignInButton, SignedOut } from '@clerk/tanstack-react-start'
 import {
@@ -38,19 +30,9 @@ const useRoutes = () => {
       icon: Package,
     },
     {
-      name: t('navigation.search'),
-      route: '/search',
-      icon: Search,
-    },
-    {
-      name: t('navigation.deliveries'),
-      route: '/deliveries',
-      icon: Truck,
-    },
-    {
-      name: t('navigation.tags'),
-      route: '/tags',
-      icon: Tag,
+      name: t('navigation.catalog'),
+      route: '/catalog',
+      icon: Package,
     },
     {
       name: t('navigation.report'),
