@@ -1,6 +1,6 @@
 'use client'
 
-import FolderSidebar from '@/components/common/FolderSidebar'
+import CategorySidebar from '@/components/common/FolderSidebar'
 import { ActionButtons } from '@/components/items/ActionButtons'
 import { DisplayTypeToggle } from '@/components/items/DisplayTypeToggle'
 import { ItemCard } from '@/components/items/ItemCard'
@@ -61,11 +61,6 @@ export default function ItemsPage() {
 
   return (
     <div className="flex h-full w-full">
-      <FolderSidebar
-        folders={sampleFolders}
-        selectedId={selectedFolderId}
-        onSelect={setSelectedFolderId}
-      />
       <div className="flex flex-1 flex-col">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <Breadcrumb>

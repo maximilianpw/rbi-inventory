@@ -1,23 +1,26 @@
+'use client'
 import * as React from 'react'
 import { ChevronDown, ChevronRight, Folder, FolderOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { FolderNode } from '@/lib/data/types/folder-node'
+import { Category } from '@/lib/data/types'
+import { useCategoryQuery } from '@/lib/data/components/categories'
 
-interface FolderItemProps {
-  folder: FolderNode
+interface CategoryItemProps {
+  folder: Category
   selectedId?: string
   onSelect?: (id: string) => void
   level?: number
 }
 
-function FolderItem({
+function CategoryItem({
   folder,
   selectedId,
   onSelect,
   level = 0,
-}: FolderItemProps) {
+}: CategoryItemProps) {
   const [isExpanded, setIsExpanded] = React.useState(false)
   const hasChildren = folder.children && folder.children.length > 0
   const isActive = selectedId === folder.id
@@ -59,7 +62,7 @@ function FolderItem({
       {hasChildren && isExpanded && (
         <div>
           {folder.children!.map((child) => (
-            <FolderItem
+            <CategoryItem
               key={child.id}
               folder={child}
               selectedId={selectedId}
@@ -74,28 +77,28 @@ function FolderItem({
 }
 
 interface FolderSidebarProps {
-  folders?: Array<FolderNode>
+  folders?: Array<Category>
   selectedId?: string
   onSelect?: (id: string) => void
 }
 
-export default function FolderSidebar({
-  folders = [],
+export default function CategorySidebar({
   selectedId,
   onSelect,
 }: FolderSidebarProps) {
   const { t } = useTranslation()
+  const { data } = useCategoryQuery()
 
   return (
     <aside className="w-64 border-r bg-background h-full flex flex-col">
       <div className="p-4 border-b">
         <h2 className="font-semibold text-sm">{t('folders.title')}</h2>
       </div>
-      <nav className="flex-1 overflow-auto p-2">
-        {folders.length > 0 ? (
+      <nav className="flex-1 overflow-y-hidden p-2">
+        {data && data.length > 0 ? (
           <div className="space-y-1">
-            {folders.map((folder) => (
-              <FolderItem
+            {data.map((folder) => (
+              <CategoryItem
                 key={folder.id}
                 folder={folder}
                 selectedId={selectedId}
