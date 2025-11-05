@@ -1,14 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import type { SortOption } from '@/components/items/SortSelect'
 import FolderSidebar from '@/components/common/FolderSidebar'
 import { ActionButtons } from '@/components/items/ActionButtons'
 import { DisplayTypeToggle } from '@/components/items/DisplayTypeToggle'
 import { ItemCard } from '@/components/items/ItemCard'
 import { ItemsGrid } from '@/components/items/ItemsGrid'
 import { SearchBar } from '@/components/items/SearchBar'
+import type { SortOption } from '@/components/items/SortSelect'
 import { SortSelect } from '@/components/items/SortSelect'
 import {
   Breadcrumb,
@@ -19,10 +17,12 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { sampleFolders } from '@/lib/data/routes/folders'
+import { sampleItems } from '@/lib/data/routes/item'
 import { DisplayType } from '@/lib/enums/display-type.enum'
 import { SortField } from '@/lib/enums/sort-field.enum'
 import { findFolderPath } from '@/lib/utils'
-import { sampleItems } from '@/lib/data/routes/item'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const useSortOptions = (): Array<SortOption> => {
   const { t } = useTranslation()
