@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -11,12 +10,18 @@ import (
 	"github.com/maximilianpw/rbi-inventory/internal/config"
 	"github.com/maximilianpw/rbi-inventory/internal/database"
 	"github.com/maximilianpw/rbi-inventory/internal/http"
+	"github.com/maximilianpw/rbi-inventory/internal/logger"
 )
 
 func main() {
+	// Initialize logger first
+	logLevel := logger.ParseLevel(os.Getenv("LOG_LEVEL"))
+	log := logger.New(logLevel, os.Stdout)
+	logger.SetDefault(log)
+
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Warn("Error loading .env file", "error", err.Error())
 	}
 
 	port := os.Getenv("PORT")
@@ -28,11 +33,11 @@ func main() {
 
 	db, err := database.New(cfg.DatabaseURL)
 	if err != nil {
-		log.Fatalf("Failed to connect to database %v", err)
+		log.Fatal("Failed to connect to database", "error", err.Error())
 	}
 	defer db.Close()
 
-	log.Println("Database Connected successfully")
+	log.Info("Database connected successfully")
 
 	r := gin.Default()
 
@@ -42,11 +47,15 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
+
+	// Add structured logging middleware
+	r.Use(logger.GinMiddleware(log))
+
 	http.BuildRouter(r, db, cfg)
 
-	log.Printf("listening on port: %s", port)
+	log.Info("listening on port", "port", port)
 
 	if err := r.Run(":" + port); err != nil {
-		log.Fatal(err)
+		log.Fatal("Server error", "error", err.Error())
 	}
 }
