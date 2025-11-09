@@ -6,41 +6,23 @@ import axios, {
 } from 'axios'
 import { useMemo } from 'react'
 import { env } from '@/lib/env'
+import {
+  ConflictException,
+  NotFoundException,
+  ValidationException,
+  UnauthorizedException,
+  ForbiddenException,
+  InternalException,
+  BadRequestException,
+  TimeoutException,
+} from '@/lib/data/types'
 
 const API_BASE_URL = env.NEXT_PUBLIC_API_BASE_URL
 
+// Legacy interface kept for backward compatibility if needed
 export interface ApiResponse<T> {
   data?: T
   error?: string
-}
-
-export interface ApiError {
-  message: string
-  status?: number
-  code?: string
-  details?: unknown
-}
-
-/**
- * Custom error class for API errors
- */
-export class ApiException extends Error {
-  status?: number
-  code?: string
-  details?: unknown
-
-  constructor(
-    message: string,
-    status?: number,
-    code?: string,
-    details?: unknown,
-  ) {
-    super(message)
-    this.name = 'ApiException'
-    this.status = status
-    this.code = code
-    this.details = details
-  }
 }
 
 /**
@@ -71,36 +53,53 @@ export function createAxiosInstance(token?: string): AxiosInstance {
   // Response interceptor for error handling
   instance.interceptors.response.use(
     (response) => response,
-    (error: AxiosError<{ error?: string; message?: string }>) => {
+    (
+      error: AxiosError<{
+        error?: string
+        message?: string
+        field?: string
+        current?: string
+        desired?: string
+        retryIn?: number
+        service?: string
+        retryable?: boolean
+        operation?: string
+        duration?: number
+      }>,
+    ) => {
       const status = error.response?.status
+      const data = error.response?.data
       const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
+        data?.error ||
+        data?.message ||
         error.message ||
         'An unexpected error occurred'
 
-      if (status === 401) {
-        throw new ApiException(
-          'Authentication required',
-          status,
-          'UNAUTHORIZED',
-        )
+      if (status === 400) {
+        throw new BadRequestException(message)
+      } else if (status === 401) {
+        throw new UnauthorizedException(message)
       } else if (status === 403) {
-        throw new ApiException('Permission denied', status, 'FORBIDDEN')
+        throw new ForbiddenException(message)
       } else if (status === 404) {
-        throw new ApiException('Resource not found', status, 'NOT_FOUND')
+        throw new NotFoundException(message)
+      } else if (status === 409) {
+        throw new ConflictException(message)
       } else if (status === 422) {
-        throw new ApiException(
-          'Validation error',
-          status,
-          'VALIDATION_ERROR',
-          error.response?.data,
-        )
+        throw new ValidationException(message, data?.field)
+      } else if (status === 500) {
+        throw new InternalException(message)
       } else if (status && status >= 500) {
-        throw new ApiException('Server error', status, 'SERVER_ERROR')
+        throw new InternalException(message)
       }
 
-      throw new ApiException(message, status, error.code, error.response?.data)
+      // For network errors or other axios errors
+      if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+        throw new TimeoutException(message, data?.operation, data?.duration)
+      }
+
+      // Default fallback
+      throw new InternalException(message)
     },
   )
 
@@ -116,11 +115,7 @@ export function useApiClient() {
       async getAxiosInstance(): Promise<AxiosInstance> {
         const token = await getToken()
         if (!token) {
-          throw new ApiException(
-            'No authentication token available',
-            401,
-            'NO_TOKEN',
-          )
+          throw new UnauthorizedException('No authentication token available')
         }
         return createAxiosInstance(token)
       },
