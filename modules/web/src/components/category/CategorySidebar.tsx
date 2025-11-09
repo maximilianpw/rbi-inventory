@@ -4,12 +4,14 @@ import { ChevronDown, ChevronRight, Folder, FolderOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { FolderNode } from '@/lib/data/types/folder-node'
-import { Category } from '@/lib/data/types'
-import { useCategoryQuery } from '@/lib/data/components/categories'
+import { Spinner } from '@/components/ui/spinner'
+import {
+  CategoryWithChildrenResponse,
+  useListCategories,
+} from '@/lib/data/generated'
 
 interface CategoryItemProps {
-  folder: Category
+  folder: CategoryWithChildrenResponse
   selectedId?: string
   onSelect?: (id: string) => void
   level?: number
@@ -77,7 +79,6 @@ function CategoryItem({
 }
 
 interface FolderSidebarProps {
-  folders?: Array<Category>
   selectedId?: string
   onSelect?: (id: string) => void
 }
@@ -87,7 +88,7 @@ export default function CategorySidebar({
   onSelect,
 }: FolderSidebarProps) {
   const { t } = useTranslation()
-  const { data } = useCategoryQuery()
+  const { data: categories, isLoading, error } = useListCategories()
 
   return (
     <aside className="w-64 border-r bg-background h-full flex flex-col">
@@ -95,9 +96,17 @@ export default function CategorySidebar({
         <h2 className="font-semibold text-sm">{t('folders.title')}</h2>
       </div>
       <nav className="flex-1 overflow-y-hidden p-2">
-        {data && data.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-8">
+            <Spinner className="size-6" />
+          </div>
+        ) : error ? (
+          <div className="px-3 py-4 text-sm text-destructive text-center">
+            Error loading categories
+          </div>
+        ) : categories && categories.length > 0 ? (
           <div className="space-y-1">
-            {data.map((folder) => (
+            {categories.map((folder) => (
               <CategoryItem
                 key={folder.id}
                 folder={folder}
@@ -115,5 +124,3 @@ export default function CategorySidebar({
     </aside>
   )
 }
-
-export type { FolderNode }

@@ -1,4 +1,10 @@
-import { Select } from '../ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
 
 export interface SortOption {
   value: string
@@ -19,16 +25,17 @@ export function SortSelect({
   className = 'w-40',
 }: SortSelectProps) {
   return (
-    <Select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={className}
-    >
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className={className}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   )
 }

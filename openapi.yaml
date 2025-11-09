@@ -7,6 +7,7 @@ info:
     name: API Support
   license:
     name: MIT
+    identifier: MIT
 
 servers:
   - url: http://localhost:8080
@@ -178,7 +179,7 @@ components:
         children:
           type: array
           items:
-            $ref: '#/components/schemas/CategoryResponse'
+            $ref: '#/components/schemas/CategoryWithChildrenResponse'
         created_at:
           type: string
           format: date-time

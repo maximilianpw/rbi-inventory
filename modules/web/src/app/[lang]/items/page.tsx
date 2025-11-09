@@ -1,6 +1,5 @@
 'use client'
 
-import CategorySidebar from '@/components/common/FolderSidebar'
 import { ActionButtons } from '@/components/items/ActionButtons'
 import { DisplayTypeToggle } from '@/components/items/DisplayTypeToggle'
 import { ItemCard } from '@/components/items/ItemCard'
@@ -11,16 +10,12 @@ import { SortSelect } from '@/components/items/SortSelect'
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { sampleFolders } from '@/lib/data/routes/folders'
-import { sampleItems } from '@/lib/data/routes/item'
+import { useListProducts } from '@/lib/data/generated'
 import { DisplayType } from '@/lib/enums/display-type.enum'
 import { SortField } from '@/lib/enums/sort-field.enum'
-import { findFolderPath } from '@/lib/utils'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -37,26 +32,21 @@ const useSortOptions = (): Array<SortOption> => {
 export default function ItemsPage() {
   const { t } = useTranslation()
   const sortOptions = useSortOptions()
-  const [selectedFolderId, setSelectedFolderId] = useState<string | undefined>()
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState(SortField.NAME)
   const [displayType, setDisplayType] = useState<DisplayType>(DisplayType.GRID)
-  const [items, setItems] = useState(sampleItems)
 
-  const breadcrumbPath = selectedFolderId
-    ? findFolderPath(sampleFolders, selectedFolderId) || []
-    : []
+  const { data: productsResponse, isLoading } = useListProducts()
+  const items = (productsResponse as any)?.data || []
 
-  const filteredItems = items.filter(
-    (item) =>
-      (!selectedFolderId || item.folderId === selectedFolderId) &&
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredItems = items.filter((item: any) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const sortedItems = [...filteredItems].sort((a, b) => {
+  const sortedItems = [...filteredItems].sort((a: any, b: any) => {
     if (sortBy === SortField.NAME) return a.name.localeCompare(b.name)
-    if (sortBy === SortField.QUANTITY) return b.quantity - a.quantity
-    return b.value - a.value
+    // Sorting by quantity and value would need additional fields from API
+    return 0
   })
 
   return (
@@ -66,30 +56,8 @@ export default function ItemsPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink
-                  onClick={() => setSelectedFolderId(undefined)}
-                  className="cursor-pointer"
-                >
-                  All Items
-                </BreadcrumbLink>
+                <BreadcrumbPage>Products</BreadcrumbPage>
               </BreadcrumbItem>
-              {breadcrumbPath.map((folder, index) => (
-                <div key={index}>
-                  <BreadcrumbSeparator key={`sep-${folder.id}`} />
-                  <BreadcrumbItem key={folder.id}>
-                    {index === breadcrumbPath.length - 1 ? (
-                      <BreadcrumbPage>{folder.name}</BreadcrumbPage>
-                    ) : (
-                      <BreadcrumbLink
-                        onClick={() => setSelectedFolderId(folder.id)}
-                        className="cursor-pointer"
-                      >
-                        {folder.name}
-                      </BreadcrumbLink>
-                    )}
-                  </BreadcrumbItem>
-                </div>
-              ))}
             </BreadcrumbList>
           </Breadcrumb>
           <div className="ml-auto flex items-center gap-2">

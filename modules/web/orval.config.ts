@@ -8,8 +8,13 @@ export default defineConfig({
       client: 'react-query',
       baseUrl: 'http://localhost:8080',
       httpClient: 'axios',
-      mock: false,
       prettier: true,
+      override: {
+        mutator: {
+          path: './src/lib/data/axios-client.ts',
+          name: 'getAxiosInstance',
+        },
+      },
     },
   },
 })
