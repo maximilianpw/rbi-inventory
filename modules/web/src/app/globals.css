@@ -1,21 +1,21 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@import 'tw-animate-css';
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 body {
   @apply m-0;
   font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 :root {
@@ -144,7 +144,7 @@ code {
   }
 
   .page-content {
-    @apply flex-1 flex flex-col overflow-hidden;
+    @apply flex flex-1 flex-col overflow-hidden;
   }
 
   /* Header Section */
@@ -153,11 +153,11 @@ code {
   }
 
   .header-actions-row {
-    @apply flex items-center justify-between mb-6;
+    @apply mb-6 flex items-center justify-between;
   }
 
   .action-group {
-    @apply flex items-center gap-3 ml-4;
+    @apply ml-4 flex items-center gap-3;
   }
 
   /* Filters Section */
@@ -167,12 +167,12 @@ code {
 
   /* Content Section */
   .content-section {
-    @apply flex-1 overflow-y-auto p-6 bg-gray-50;
+    @apply flex-1 overflow-y-auto bg-gray-50 p-6;
   }
 
   /* Grid/List Layouts */
   .items-grid {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
   }
 
   .items-list {
@@ -181,6 +181,6 @@ code {
 
   /* Empty States */
   .empty-state {
-    @apply flex items-center justify-center h-64 text-gray-500;
+    @apply flex h-64 items-center justify-center text-gray-500;
   }
 }

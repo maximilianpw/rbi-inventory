@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
+
 import {
   Select,
   SelectContent,
@@ -15,11 +16,11 @@ const languages = [
   { code: 'fr', name: 'Français' },
 ]
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher(): React.JSX.Element {
   const { i18n } = useTranslation()
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng)
+  const changeLanguage = (lng: string): void => {
+    void i18n.changeLanguage(lng)
   }
 
   return (

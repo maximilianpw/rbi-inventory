@@ -1,62 +1,43 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+// src/lib/data/axios-client.ts
+import axios, { type AxiosRequestConfig } from 'axios'
+
 import { env } from '@/lib/env'
 
 const API_BASE_URL = env.NEXT_PUBLIC_API_BASE_URL
 
-export function createAxiosInstance(
-  getToken?: () => Promise<string | null>,
-): AxiosInstance {
-  const instance = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 30000,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
-  // Request interceptor to add authentication token from Clerk
-  instance.interceptors.request.use(
-    async (config) => {
-      // Get the token from Clerk if available
-      try {
-        const token = getToken ? await getToken() : null
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`
-        }
-      } catch (error) {
-        // Token retrieval failed, continue without it
-        console.error('Failed to get Clerk token:', error)
-      }
-      return config
-    },
-    (error) => {
-      return Promise.reject(error)
-    },
-  )
+let getToken: (() => Promise<string | null>) | undefined
 
-  return instance
+export function initializeAuth(
+  tokenGetter: () => Promise<string | null>,
+): void {
+  getToken = tokenGetter
 }
 
-let cachedInstance: AxiosInstance | null = null
-let tokenGetter: (() => Promise<string | null>) | null = null
-
-export function setTokenGetter(getter: () => Promise<string | null>) {
-  tokenGetter = getter
-}
-
-function getInstance(): AxiosInstance {
-  if (!cachedInstance) {
-    cachedInstance = createAxiosInstance(async () => {
-      return tokenGetter ? await tokenGetter() : null
-    })
-  }
-  return cachedInstance
-}
+export const setTokenGetter = initializeAuth
 
 export async function getAxiosInstance<T>(
   config: AxiosRequestConfig,
 ): Promise<T> {
-  const instance = getInstance()
-  const response = await instance.request<T>(config)
+  if (getToken) {
+    try {
+      const token = await getToken()
+      if (token !== null && token.length > 0 && config.headers !== undefined) {
+        // eslint-disable-next-line no-param-reassign
+        config.headers.Authorization = `Bearer ${token}`
+      }
+    } catch (error) {
+      console.error('Failed to get auth token:', error)
+    }
+  }
+
+  const response = await axiosInstance.request<T>(config)
   return response.data
 }

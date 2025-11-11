@@ -1,3 +1,3 @@
-export default async function Home() {
-  return <div className="text-center"></div>
+export default function Home(): React.JSX.Element {
+  return <div className="text-center" />
 }

@@ -14,7 +14,7 @@ export interface SortOption {
 interface SortSelectProps {
   value: string
   onChange: (value: string) => void
-  options: Array<SortOption>
+  options: SortOption[]
   className?: string
 }
 
@@ -23,7 +23,7 @@ export function SortSelect({
   onChange,
   options,
   className = 'w-40',
-}: SortSelectProps) {
+}: SortSelectProps): React.JSX.Element {
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className={className}>

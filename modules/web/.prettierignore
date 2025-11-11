@@ -5,4 +5,4 @@ yarn.lock
 .nitro/
 .tanstack/
 node_modules/
-src/lib/data/generated.ts
+src/components/ui

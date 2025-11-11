@@ -5,7 +5,7 @@ export function ReactQueryProvider({
   children,
 }: {
   children: React.ReactNode
-}) {
+}): React.JSX.Element {
   const queryClient = new QueryClient()
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

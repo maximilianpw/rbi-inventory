@@ -1,4 +1,10 @@
 'use client'
+import Link from 'next/link'
+
+import { SignedOut, SignInButton } from '@clerk/nextjs'
+import { LayoutDashboard, Package, Settings } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+
 import {
   Sidebar,
   SidebarContent,
@@ -11,12 +17,12 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from '@/components/ui/sidebar'
-import { SignedOut, SignInButton } from '@clerk/nextjs'
-import { BarChart2, LayoutDashboard, Package, Settings } from 'lucide-react'
-import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
 
-const useRoutes = () => {
+function useRoutes(): {
+  name: string
+  route: string
+  icon: React.ComponentType
+}[] {
   const { t } = useTranslation()
 
   return [
@@ -26,31 +32,26 @@ const useRoutes = () => {
       icon: LayoutDashboard,
     },
     {
-      name: t('navigation.items'),
-      route: '/items',
+      name: t('navigation.stock'),
+      route: '/stock',
       icon: Package,
     },
     {
-      name: t('navigation.search'),
-      route: '/search',
+      name: t('navigation.products'),
+      route: '/products',
       icon: Package,
-    },
-    {
-      name: t('navigation.report'),
-      route: '/report',
-      icon: BarChart2,
     },
   ]
 }
 
-export default function AppSidebar() {
+export default function AppSidebar(): React.JSX.Element {
   const { t } = useTranslation()
   const routes = useRoutes()
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <Link href="/" className="inline-flex items-center gap-2 px-2">
+        <Link className="inline-flex items-center gap-2 px-2" href="/">
           <span className="text-base font-bold tracking-tight">
             RBI Inventory
           </span>

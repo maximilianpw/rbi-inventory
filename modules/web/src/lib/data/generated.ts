@@ -6,6 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import { useMutation, useQuery } from '@tanstack/react-query'
+
+import { getAxiosInstance } from './axios-client'
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -21,7 +24,6 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-import { getAxiosInstance } from './axios-client'
 export type Uuid = string
 
 export interface ErrorResponse {
@@ -35,7 +37,6 @@ export interface MessageResponse {
 export type UserResponseRole =
   (typeof UserResponseRole)[keyof typeof UserResponseRole]
 
- 
 export const UserResponseRole = {
   ADMIN: 'ADMIN',
   WAREHOUSE_MANAGER: 'WAREHOUSE_MANAGER',
@@ -58,7 +59,6 @@ export interface UserResponse {
 export type CreateUserRequestRole =
   (typeof CreateUserRequestRole)[keyof typeof CreateUserRequestRole]
 
- 
 export const CreateUserRequestRole = {
   ADMIN: 'ADMIN',
   WAREHOUSE_MANAGER: 'WAREHOUSE_MANAGER',
@@ -79,7 +79,6 @@ export interface CreateUserRequest {
 export type UpdateUserRequestRole =
   (typeof UpdateUserRequestRole)[keyof typeof UpdateUserRequestRole]
 
- 
 export const UpdateUserRequestRole = {
   ADMIN: 'ADMIN',
   WAREHOUSE_MANAGER: 'WAREHOUSE_MANAGER',
@@ -330,9 +329,7 @@ export interface UpdateProductRequest {
 /**
  * Clerk user profile data
  */
-export interface ProfileResponse {
-  [key: string]: unknown
-}
+export type ProfileResponse = Record<string, unknown>
 
 export interface SessionClaimsResponse {
   user_id: string
@@ -341,11 +338,11 @@ export interface SessionClaimsResponse {
   issued_at: number
 }
 
-export type HealthCheck200 = {
+export interface HealthCheck200 {
   status?: string
 }
 
-export type ListUsersParams = {
+export interface ListUsersParams {
   /**
    * Filter users by role
    */
@@ -358,7 +355,6 @@ export type ListUsersParams = {
 
 export type ListUsersRole = (typeof ListUsersRole)[keyof typeof ListUsersRole]
 
- 
 export const ListUsersRole = {
   ADMIN: 'ADMIN',
   WAREHOUSE_MANAGER: 'WAREHOUSE_MANAGER',
@@ -366,7 +362,7 @@ export const ListUsersRole = {
   SALES: 'SALES',
 } as const
 
-export type SearchUsersParams = {
+export interface SearchUsersParams {
   /**
    * Search query
    */
@@ -377,16 +373,16 @@ export type SearchUsersParams = {
  * Returns the health status of the API
  * @summary Health check endpoint
  */
-export const healthCheck = (signal?: AbortSignal) => {
+export const healthCheck = async (signal?: AbortSignal) => {
   return getAxiosInstance<HealthCheck200>({
-    url: `http://localhost:8080/health-check`,
+    url: `/health-check`,
     method: 'GET',
     signal,
   })
 }
 
 export const getHealthCheckQueryKey = () => {
-  return [`http://localhost:8080/health-check`] as const
+  return [`/health-check`] as const
 }
 
 export const getHealthCheckQueryOptions = <
@@ -401,9 +397,9 @@ export const getHealthCheckQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getHealthCheckQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof healthCheck>>> = ({
-    signal,
-  }) => healthCheck(signal)
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof healthCheck>>
+  > = async ({ signal }) => healthCheck(signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof healthCheck>>,
@@ -505,16 +501,16 @@ export function useHealthCheck<
  * Returns the authenticated user's profile from Clerk
  * @summary Get user profile
  */
-export const getProfile = (signal?: AbortSignal) => {
+export const getProfile = async (signal?: AbortSignal) => {
   return getAxiosInstance<ProfileResponse>({
-    url: `http://localhost:8080/api/v1/auth/profile`,
+    url: `/api/v1/auth/profile`,
     method: 'GET',
     signal,
   })
 }
 
 export const getGetProfileQueryKey = () => {
-  return [`http://localhost:8080/api/v1/auth/profile`] as const
+  return [`/api/v1/auth/profile`] as const
 }
 
 export const getGetProfileQueryOptions = <
@@ -529,9 +525,9 @@ export const getGetProfileQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getGetProfileQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getProfile>>> = ({
-    signal,
-  }) => getProfile(signal)
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getProfile>>
+  > = async ({ signal }) => getProfile(signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getProfile>>,
@@ -633,16 +629,16 @@ export function useGetProfile<
  * Returns the session claims from the current authenticated request
  * @summary Get session claims
  */
-export const getSessionClaims = (signal?: AbortSignal) => {
+export const getSessionClaims = async (signal?: AbortSignal) => {
   return getAxiosInstance<SessionClaimsResponse>({
-    url: `http://localhost:8080/api/v1/auth/session`,
+    url: `/api/v1/auth/session`,
     method: 'GET',
     signal,
   })
 }
 
 export const getGetSessionClaimsQueryKey = () => {
-  return [`http://localhost:8080/api/v1/auth/session`] as const
+  return [`/api/v1/auth/session`] as const
 }
 
 export const getGetSessionClaimsQueryOptions = <
@@ -659,7 +655,7 @@ export const getGetSessionClaimsQueryOptions = <
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getSessionClaims>>
-  > = ({ signal }) => getSessionClaims(signal)
+  > = async ({ signal }) => getSessionClaims(signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getSessionClaims>>,
@@ -777,9 +773,12 @@ export function useGetSessionClaims<
  * Retrieves a list of all users with optional filtering
  * @summary List all users
  */
-export const listUsers = (params?: ListUsersParams, signal?: AbortSignal) => {
+export const listUsers = async (
+  params?: ListUsersParams,
+  signal?: AbortSignal,
+) => {
   return getAxiosInstance<UserResponse[]>({
-    url: `http://localhost:8080/api/v1/users`,
+    url: `/api/v1/users`,
     method: 'GET',
     params,
     signal,
@@ -787,10 +786,7 @@ export const listUsers = (params?: ListUsersParams, signal?: AbortSignal) => {
 }
 
 export const getListUsersQueryKey = (params?: ListUsersParams) => {
-  return [
-    `http://localhost:8080/api/v1/users`,
-    ...(params ? [params] : []),
-  ] as const
+  return [`/api/v1/users`, ...(params ? [params] : [])] as const
 }
 
 export const getListUsersQueryOptions = <
@@ -808,7 +804,7 @@ export const getListUsersQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getListUsersQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof listUsers>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listUsers>>> = async ({
     signal,
   }) => listUsers(params, signal)
 
@@ -916,12 +912,12 @@ export function useListUsers<
  * Creates a new user in the system
  * @summary Create a new user
  */
-export const createUser = (
+export const createUser = async (
   createUserRequest: CreateUserRequest,
   signal?: AbortSignal,
 ) => {
   return getAxiosInstance<UserResponse>({
-    url: `http://localhost:8080/api/v1/users`,
+    url: `/api/v1/users`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: createUserRequest,
@@ -957,7 +953,7 @@ export const getCreateUserMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof createUser>>,
     { data: CreateUserRequest }
-  > = (props) => {
+  > = async (props) => {
     const { data } = props ?? {}
 
     return createUser(data)
@@ -1000,16 +996,16 @@ export const useCreateUser = <TError = ErrorResponse, TContext = unknown>(
  * Retrieves a specific user by their UUID
  * @summary Get user by ID
  */
-export const getUser = (id: Uuid, signal?: AbortSignal) => {
+export const getUser = async (id: Uuid, signal?: AbortSignal) => {
   return getAxiosInstance<UserResponse>({
-    url: `http://localhost:8080/api/v1/users/${id}`,
+    url: `/api/v1/users/${id}`,
     method: 'GET',
     signal,
   })
 }
 
 export const getGetUserQueryKey = (id?: Uuid) => {
-  return [`http://localhost:8080/api/v1/users/${id}`] as const
+  return [`/api/v1/users/${id}`] as const
 }
 
 export const getGetUserQueryOptions = <
@@ -1027,7 +1023,7 @@ export const getGetUserQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getGetUserQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = async ({
     signal,
   }) => getUser(id, signal)
 
@@ -1138,9 +1134,12 @@ export function useGetUser<
  * Updates an existing user
  * @summary Update user
  */
-export const updateUser = (id: Uuid, updateUserRequest: UpdateUserRequest) => {
+export const updateUser = async (
+  id: Uuid,
+  updateUserRequest: UpdateUserRequest,
+) => {
   return getAxiosInstance<UserResponse>({
-    url: `http://localhost:8080/api/v1/users/${id}`,
+    url: `/api/v1/users/${id}`,
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     data: updateUserRequest,
@@ -1175,7 +1174,7 @@ export const getUpdateUserMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof updateUser>>,
     { id: Uuid; data: UpdateUserRequest }
-  > = (props) => {
+  > = async (props) => {
     const { id, data } = props ?? {}
 
     return updateUser(id, data)
@@ -1218,9 +1217,9 @@ export const useUpdateUser = <TError = ErrorResponse, TContext = unknown>(
  * Deletes a user from the system
  * @summary Delete user
  */
-export const deleteUser = (id: Uuid) => {
+export const deleteUser = async (id: Uuid) => {
   return getAxiosInstance<MessageResponse>({
-    url: `http://localhost:8080/api/v1/users/${id}`,
+    url: `/api/v1/users/${id}`,
     method: 'DELETE',
   })
 }
@@ -1253,7 +1252,7 @@ export const getDeleteUserMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deleteUser>>,
     { id: Uuid }
-  > = (props) => {
+  > = async (props) => {
     const { id } = props ?? {}
 
     return deleteUser(id)
@@ -1296,9 +1295,9 @@ export const useDeleteUser = <TError = ErrorResponse, TContext = unknown>(
  * Activates a user (sets is_active to true)
  * @summary Activate user
  */
-export const activateUser = (id: Uuid, signal?: AbortSignal) => {
+export const activateUser = async (id: Uuid, signal?: AbortSignal) => {
   return getAxiosInstance<MessageResponse>({
-    url: `http://localhost:8080/api/v1/users/${id}/activate`,
+    url: `/api/v1/users/${id}/activate`,
     method: 'POST',
     signal,
   })
@@ -1332,7 +1331,7 @@ export const getActivateUserMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof activateUser>>,
     { id: Uuid }
-  > = (props) => {
+  > = async (props) => {
     const { id } = props ?? {}
 
     return activateUser(id)
@@ -1375,9 +1374,9 @@ export const useActivateUser = <TError = ErrorResponse, TContext = unknown>(
  * Deactivates a user (sets is_active to false)
  * @summary Deactivate user
  */
-export const deactivateUser = (id: Uuid, signal?: AbortSignal) => {
+export const deactivateUser = async (id: Uuid, signal?: AbortSignal) => {
   return getAxiosInstance<MessageResponse>({
-    url: `http://localhost:8080/api/v1/users/${id}/deactivate`,
+    url: `/api/v1/users/${id}/deactivate`,
     method: 'POST',
     signal,
   })
@@ -1411,7 +1410,7 @@ export const getDeactivateUserMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deactivateUser>>,
     { id: Uuid }
-  > = (props) => {
+  > = async (props) => {
     const { id } = props ?? {}
 
     return deactivateUser(id)
@@ -1454,12 +1453,12 @@ export const useDeactivateUser = <TError = ErrorResponse, TContext = unknown>(
  * Searches for users by name (partial match)
  * @summary Search users by name
  */
-export const searchUsers = (
+export const searchUsers = async (
   params: SearchUsersParams,
   signal?: AbortSignal,
 ) => {
   return getAxiosInstance<UserResponse[]>({
-    url: `http://localhost:8080/api/v1/users/search`,
+    url: `/api/v1/users/search`,
     method: 'GET',
     params,
     signal,
@@ -1467,10 +1466,7 @@ export const searchUsers = (
 }
 
 export const getSearchUsersQueryKey = (params?: SearchUsersParams) => {
-  return [
-    `http://localhost:8080/api/v1/users/search`,
-    ...(params ? [params] : []),
-  ] as const
+  return [`/api/v1/users/search`, ...(params ? [params] : [])] as const
 }
 
 export const getSearchUsersQueryOptions = <
@@ -1488,9 +1484,9 @@ export const getSearchUsersQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getSearchUsersQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof searchUsers>>> = ({
-    signal,
-  }) => searchUsers(params, signal)
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof searchUsers>>
+  > = async ({ signal }) => searchUsers(params, signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof searchUsers>>,
@@ -1596,16 +1592,16 @@ export function useSearchUsers<
  * Retrieves all product categories with their child categories
  * @summary List all categories
  */
-export const listCategories = (signal?: AbortSignal) => {
+export const listCategories = async (signal?: AbortSignal) => {
   return getAxiosInstance<CategoryWithChildrenResponse[]>({
-    url: `http://localhost:8080/api/v1/categories`,
+    url: `/api/v1/categories`,
     method: 'GET',
     signal,
   })
 }
 
 export const getListCategoriesQueryKey = () => {
-  return [`http://localhost:8080/api/v1/categories`] as const
+  return [`/api/v1/categories`] as const
 }
 
 export const getListCategoriesQueryOptions = <
@@ -1620,9 +1616,9 @@ export const getListCategoriesQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getListCategoriesQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof listCategories>>> = ({
-    signal,
-  }) => listCategories(signal)
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listCategories>>
+  > = async ({ signal }) => listCategories(signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listCategories>>,
@@ -1724,12 +1720,12 @@ export function useListCategories<
  * Creates a new product category
  * @summary Create category
  */
-export const createCategory = (
+export const createCategory = async (
   createCategoryRequest: CreateCategoryRequest,
   signal?: AbortSignal,
 ) => {
   return getAxiosInstance<CategoryResponse>({
-    url: `http://localhost:8080/api/v1/categories`,
+    url: `/api/v1/categories`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: createCategoryRequest,
@@ -1765,7 +1761,7 @@ export const getCreateCategoryMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof createCategory>>,
     { data: CreateCategoryRequest }
-  > = (props) => {
+  > = async (props) => {
     const { data } = props ?? {}
 
     return createCategory(data)
@@ -1808,12 +1804,12 @@ export const useCreateCategory = <TError = ErrorResponse, TContext = unknown>(
  * Updates an existing product category
  * @summary Update category
  */
-export const updateCategory = (
+export const updateCategory = async (
   id: Uuid,
   updateCategoryRequest: UpdateCategoryRequest,
 ) => {
   return getAxiosInstance<CategoryResponse>({
-    url: `http://localhost:8080/api/v1/categories/${id}`,
+    url: `/api/v1/categories/${id}`,
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     data: updateCategoryRequest,
@@ -1848,7 +1844,7 @@ export const getUpdateCategoryMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof updateCategory>>,
     { id: Uuid; data: UpdateCategoryRequest }
-  > = (props) => {
+  > = async (props) => {
     const { id, data } = props ?? {}
 
     return updateCategory(id, data)
@@ -1891,9 +1887,9 @@ export const useUpdateCategory = <TError = ErrorResponse, TContext = unknown>(
  * Deletes a product category
  * @summary Delete category
  */
-export const deleteCategory = (id: Uuid) => {
+export const deleteCategory = async (id: Uuid) => {
   return getAxiosInstance<MessageResponse>({
-    url: `http://localhost:8080/api/v1/categories/${id}`,
+    url: `/api/v1/categories/${id}`,
     method: 'DELETE',
   })
 }
@@ -1926,7 +1922,7 @@ export const getDeleteCategoryMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deleteCategory>>,
     { id: Uuid }
-  > = (props) => {
+  > = async (props) => {
     const { id } = props ?? {}
 
     return deleteCategory(id)
@@ -1969,16 +1965,16 @@ export const useDeleteCategory = <TError = ErrorResponse, TContext = unknown>(
  * Retrieves all products in the catalog
  * @summary List all products
  */
-export const listProducts = (signal?: AbortSignal) => {
+export const listProducts = async (signal?: AbortSignal) => {
   return getAxiosInstance<ProductResponse[]>({
-    url: `http://localhost:8080/api/v1/products`,
+    url: `/api/v1/products`,
     method: 'GET',
     signal,
   })
 }
 
 export const getListProductsQueryKey = () => {
-  return [`http://localhost:8080/api/v1/products`] as const
+  return [`/api/v1/products`] as const
 }
 
 export const getListProductsQueryOptions = <
@@ -1993,9 +1989,9 @@ export const getListProductsQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getListProductsQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof listProducts>>> = ({
-    signal,
-  }) => listProducts(signal)
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listProducts>>
+  > = async ({ signal }) => listProducts(signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listProducts>>,
@@ -2097,12 +2093,12 @@ export function useListProducts<
  * Creates a new product in the catalog
  * @summary Create product
  */
-export const createProduct = (
+export const createProduct = async (
   createProductRequest: CreateProductRequest,
   signal?: AbortSignal,
 ) => {
   return getAxiosInstance<ProductResponse>({
-    url: `http://localhost:8080/api/v1/products`,
+    url: `/api/v1/products`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: createProductRequest,
@@ -2138,7 +2134,7 @@ export const getCreateProductMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof createProduct>>,
     { data: CreateProductRequest }
-  > = (props) => {
+  > = async (props) => {
     const { data } = props ?? {}
 
     return createProduct(data)
@@ -2181,16 +2177,16 @@ export const useCreateProduct = <TError = ErrorResponse, TContext = unknown>(
  * Retrieves a specific product by UUID
  * @summary Get product by ID
  */
-export const getProduct = (id: Uuid, signal?: AbortSignal) => {
+export const getProduct = async (id: Uuid, signal?: AbortSignal) => {
   return getAxiosInstance<ProductResponse>({
-    url: `http://localhost:8080/api/v1/products/${id}`,
+    url: `/api/v1/products/${id}`,
     method: 'GET',
     signal,
   })
 }
 
 export const getGetProductQueryKey = (id?: Uuid) => {
-  return [`http://localhost:8080/api/v1/products/${id}`] as const
+  return [`/api/v1/products/${id}`] as const
 }
 
 export const getGetProductQueryOptions = <
@@ -2208,9 +2204,9 @@ export const getGetProductQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getGetProductQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getProduct>>> = ({
-    signal,
-  }) => getProduct(id, signal)
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getProduct>>
+  > = async ({ signal }) => getProduct(id, signal)
 
   return {
     queryKey,
@@ -2321,12 +2317,12 @@ export function useGetProduct<
  * Updates an existing product
  * @summary Update product
  */
-export const updateProduct = (
+export const updateProduct = async (
   id: Uuid,
   updateProductRequest: UpdateProductRequest,
 ) => {
   return getAxiosInstance<ProductResponse>({
-    url: `http://localhost:8080/api/v1/products/${id}`,
+    url: `/api/v1/products/${id}`,
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     data: updateProductRequest,
@@ -2361,7 +2357,7 @@ export const getUpdateProductMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof updateProduct>>,
     { id: Uuid; data: UpdateProductRequest }
-  > = (props) => {
+  > = async (props) => {
     const { id, data } = props ?? {}
 
     return updateProduct(id, data)
@@ -2404,9 +2400,9 @@ export const useUpdateProduct = <TError = ErrorResponse, TContext = unknown>(
  * Deletes a product from the catalog
  * @summary Delete product
  */
-export const deleteProduct = (id: Uuid) => {
+export const deleteProduct = async (id: Uuid) => {
   return getAxiosInstance<MessageResponse>({
-    url: `http://localhost:8080/api/v1/products/${id}`,
+    url: `/api/v1/products/${id}`,
     method: 'DELETE',
   })
 }
@@ -2439,7 +2435,7 @@ export const getDeleteProductMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deleteProduct>>,
     { id: Uuid }
-  > = (props) => {
+  > = async (props) => {
     const { id } = props ?? {}
 
     return deleteProduct(id)
@@ -2482,21 +2478,19 @@ export const useDeleteProduct = <TError = ErrorResponse, TContext = unknown>(
  * Retrieves all products in a specific category
  * @summary Get products by category
  */
-export const getProductsByCategory = (
+export const getProductsByCategory = async (
   categoryId: Uuid,
   signal?: AbortSignal,
 ) => {
   return getAxiosInstance<ProductResponse[]>({
-    url: `http://localhost:8080/api/v1/products/category/${categoryId}`,
+    url: `/api/v1/products/category/${categoryId}`,
     method: 'GET',
     signal,
   })
 }
 
 export const getGetProductsByCategoryQueryKey = (categoryId?: Uuid) => {
-  return [
-    `http://localhost:8080/api/v1/products/category/${categoryId}`,
-  ] as const
+  return [`/api/v1/products/category/${categoryId}`] as const
 }
 
 export const getGetProductsByCategoryQueryOptions = <
@@ -2521,7 +2515,7 @@ export const getGetProductsByCategoryQueryOptions = <
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getProductsByCategory>>
-  > = ({ signal }) => getProductsByCategory(categoryId, signal)
+  > = async ({ signal }) => getProductsByCategory(categoryId, signal)
 
   return {
     queryKey,
@@ -2648,21 +2642,19 @@ export function useGetProductsByCategory<
  * Retrieves all products in a category and its child categories
  * @summary Get products by category tree
  */
-export const getProductsByCategoryTree = (
+export const getProductsByCategoryTree = async (
   categoryId: Uuid,
   signal?: AbortSignal,
 ) => {
   return getAxiosInstance<ProductResponse[]>({
-    url: `http://localhost:8080/api/v1/products/category/${categoryId}/tree`,
+    url: `/api/v1/products/category/${categoryId}/tree`,
     method: 'GET',
     signal,
   })
 }
 
 export const getGetProductsByCategoryTreeQueryKey = (categoryId?: Uuid) => {
-  return [
-    `http://localhost:8080/api/v1/products/category/${categoryId}/tree`,
-  ] as const
+  return [`/api/v1/products/category/${categoryId}/tree`] as const
 }
 
 export const getGetProductsByCategoryTreeQueryOptions = <
@@ -2687,7 +2679,7 @@ export const getGetProductsByCategoryTreeQueryOptions = <
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getProductsByCategoryTree>>
-  > = ({ signal }) => getProductsByCategoryTree(categoryId, signal)
+  > = async ({ signal }) => getProductsByCategoryTree(categoryId, signal)
 
   return {
     queryKey,

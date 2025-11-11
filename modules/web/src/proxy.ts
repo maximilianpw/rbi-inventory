@@ -1,5 +1,6 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
 import { NextResponse, type NextRequest } from 'next/server'
+
+import { clerkMiddleware } from '@clerk/nextjs/server'
 import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 
@@ -8,25 +9,23 @@ const defaultLocale = 'en'
 
 function getLocale(request: NextRequest): string {
   const negotiatorHeaders: Record<string, string> = {}
-  request.headers.forEach((value, key) => {
+  for (const [key, value] of request.headers.entries()) {
     negotiatorHeaders[key] = value
-  })
+  }
 
   try {
     const languages = new Negotiator({ headers: negotiatorHeaders }).languages()
-    return match(languages, locales as unknown as string[], defaultLocale)
+    return match(languages, locales, defaultLocale)
   } catch {
     return defaultLocale
   }
 }
 
-export default clerkMiddleware(async (auth, request: NextRequest) => {
-  // Clerk authentication is handled automatically
-
+export default clerkMiddleware((_, request: NextRequest) => {
   const { pathname } = request.nextUrl
 
   // Skip locale handling for specific routes
-  const skipLocaleRoutes = ['/monitoring', '/api', '/trpc']
+  const skipLocaleRoutes = ['/monitoring', '/api']
   if (skipLocaleRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.next()
   }

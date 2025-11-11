@@ -1,12 +1,15 @@
-import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import '../globals.css'
+
 import { ClerkProvider } from '@clerk/nextjs'
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
+
+import type { Metadata } from 'next'
 import AppSidebar from '@/components/common/Header'
-import { ReactQueryProvider } from '@/hooks/providers/ReactQueryProvider'
-import { I18nProvider } from '@/hooks/providers/I18nProvider'
+import { SidebarProvider } from '@/components/ui/sidebar'
 import { AuthProvider } from '@/hooks/providers/AuthProvider'
+import { I18nProvider } from '@/hooks/providers/I18nProvider'
+import { ReactQueryProvider } from '@/hooks/providers/ReactQueryProvider'
+
+import '../globals.css'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,6 +21,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
   title: 'Rivierabeauty Inventory',
   description: 'Inventory management system',
@@ -29,7 +33,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
   params: Promise<{ lang: string }>
-}>) {
+}>): Promise<React.JSX.Element> {
   const { lang } = await params
 
   return (
@@ -42,12 +46,8 @@ export default async function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
               >
                 <SidebarProvider>
-                  <div suppressHydrationWarning>
-                    <AppSidebar />
-                  </div>
-                  <SidebarInset>
-                    <main className="flex flex-1 flex-col p-4">{children}</main>
-                  </SidebarInset>
+                  <AppSidebar />
+                  <main className="flex flex-1 flex-col p-4">{children}</main>
                 </SidebarProvider>
               </body>
             </html>

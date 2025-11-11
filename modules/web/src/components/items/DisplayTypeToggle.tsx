@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { Grid, List } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+
 import { DisplayType } from '@/lib/enums/display-type.enum'
 
 interface DisplayTypeToggleProps {
@@ -13,30 +14,30 @@ export function DisplayTypeToggle({
   value,
   onChange,
   className = '',
-}: DisplayTypeToggleProps) {
+}: DisplayTypeToggleProps): React.JSX.Element {
   const { t } = useTranslation()
 
   return (
     <div
-      className={`flex border border-gray-300 rounded-md overflow-hidden ${className}`}
+      className={`flex overflow-hidden rounded-md border border-gray-300 ${className}`}
     >
       <button
-        onClick={() => onChange(DisplayType.GRID)}
+        aria-label={t('view.grid')}
         className={clsx(
           'p-2 hover:bg-gray-100',
           value === DisplayType.GRID && 'bg-gray-100',
         )}
-        aria-label={t('view.grid')}
+        onClick={() => onChange(DisplayType.GRID)}
       >
         <Grid className="h-4 w-4" />
       </button>
       <button
-        onClick={() => onChange(DisplayType.LIST)}
+        aria-label={t('view.list')}
         className={clsx(
           'p-2 hover:bg-gray-100',
           value === DisplayType.LIST && 'bg-gray-100',
         )}
-        aria-label={t('view.list')}
+        onClick={() => onChange(DisplayType.LIST)}
       >
         <List className="h-4 w-4" />
       </button>

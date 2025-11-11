@@ -6,7 +6,6 @@ export default defineConfig({
     output: {
       target: './src/lib/data/generated.ts',
       client: 'react-query',
-      baseUrl: 'http://localhost:8080',
       httpClient: 'axios',
       prettier: true,
       override: {

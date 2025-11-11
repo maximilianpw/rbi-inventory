@@ -1,11 +1,14 @@
 'use client'
 
+import { useState } from 'react'
+
+import { useTranslation } from 'react-i18next'
+
 import { ActionButtons } from '@/components/items/ActionButtons'
 import { DisplayTypeToggle } from '@/components/items/DisplayTypeToggle'
 import { ItemCard } from '@/components/items/ItemCard'
 import { ItemsGrid } from '@/components/items/ItemsGrid'
 import { SearchBar } from '@/components/items/SearchBar'
-import type { SortOption } from '@/components/items/SortSelect'
 import { SortSelect } from '@/components/items/SortSelect'
 import {
   Breadcrumb,
@@ -16,10 +19,10 @@ import {
 import { useListProducts } from '@/lib/data/generated'
 import { DisplayType } from '@/lib/enums/display-type.enum'
 import { SortField } from '@/lib/enums/sort-field.enum'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
-const useSortOptions = (): Array<SortOption> => {
+import type { SortOption } from '@/components/items/SortSelect'
+
+function useSortOptions(): SortOption[] {
   const { t } = useTranslation()
 
   return [
@@ -29,21 +32,21 @@ const useSortOptions = (): Array<SortOption> => {
   ]
 }
 
-export default function ItemsPage() {
+export default function ItemsPage(): React.JSX.Element {
   const { t } = useTranslation()
   const sortOptions = useSortOptions()
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState(SortField.NAME)
   const [displayType, setDisplayType] = useState<DisplayType>(DisplayType.GRID)
 
-  const { data: productsResponse, isLoading } = useListProducts()
-  const items = (productsResponse as any)?.data || []
+  const { data: productsResponse } = useListProducts()
+  const items = productsResponse ?? []
 
-  const filteredItems = items.filter((item: any) =>
+  const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const sortedItems = [...filteredItems].sort((a: any, b: any) => {
+  const sortedItems = [...filteredItems].sort((a, b) => {
     if (sortBy === SortField.NAME) return a.name.localeCompare(b.name)
     // Sorting by quantity and value would need additional fields from API
     return 0
@@ -67,27 +70,27 @@ export default function ItemsPage() {
         <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="flex items-center gap-2">
             <SearchBar
+              className="flex-1"
+              placeholder={t('search.itemsPlaceholder')}
               value={searchQuery}
               onChange={setSearchQuery}
-              placeholder={t('search.itemsPlaceholder')}
-              className="flex-1"
             />
             <SortSelect
+              options={sortOptions}
               value={sortBy}
               onChange={(value) => setSortBy(value as SortField)}
-              options={sortOptions}
             />
             <DisplayTypeToggle value={displayType} onChange={setDisplayType} />
           </div>
           <div className="flex-1 overflow-auto">
             <ItemsGrid
-              items={sortedItems}
               displayType={displayType}
-              renderItem={(item) => (
-                <ItemCard key={item.id} item={item} displayType={displayType} />
-              )}
               emptyMessage={t('items.noItemsFolder')}
+              items={sortedItems}
               searchQuery={searchQuery}
+              renderItem={(item) => (
+                <ItemCard key={item.id} displayType={displayType} item={item} />
+              )}
             />
           </div>
         </div>

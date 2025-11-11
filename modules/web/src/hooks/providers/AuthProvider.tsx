@@ -4,7 +4,11 @@ import { useAuth } from '@clerk/nextjs'
 import { useEffect } from 'react'
 import { setTokenGetter } from '@/lib/data/axios-client'
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode
+}): React.JSX.Element {
   const { getToken } = useAuth()
 
   useEffect(() => {

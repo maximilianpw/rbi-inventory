@@ -1,7 +1,7 @@
 import CategorySidebar from '@/components/category/CategorySidebar'
 import { ProductList } from '@/components/products/ProductList'
 
-export default async function ProductPage() {
+export default function ProductPage(): React.JSX.Element {
   return (
     <div className="flex h-full w-full">
       <CategorySidebar />

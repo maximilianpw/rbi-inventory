@@ -1,12 +1,6 @@
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 
-export default async function SettingsPage({
-  params,
-}: {
-  params: Promise<{ lang: string }>
-}) {
-  const { lang } = await params
-
+export default function SettingsPage(): React.JSX.Element {
   return (
     <div>
       <LanguageSwitcher />
