@@ -1,5 +1,3 @@
-import { Card, CardContent } from '@/components/ui/card'
-
 import type { CategoryResponse } from '@/lib/data/generated'
 
 interface CategoryCardProps {
@@ -10,17 +8,17 @@ export function CategoryCard({
   category,
 }: CategoryCardProps): React.JSX.Element {
   return (
-    <Card className="cursor-pointer p-4 transition-shadow hover:shadow-md">
-      <CardContent className="p-0">
-        <h3 className="mb-2 text-lg font-semibold">{category.name}</h3>
-        {category.description !== null &&
-          category.description !== undefined &&
-          category.description.length > 0 && (
-            <p className="line-clamp-2 text-sm text-gray-600">
-              {category.description}
-            </p>
-          )}
-      </CardContent>
-    </Card>
+    <div className="group mb-1 cursor-pointer rounded-lg border border-gray-200 bg-white p-3 transition-all hover:border-gray-300 hover:shadow-sm">
+      <h4 className="text-sm font-medium text-gray-900 group-hover:text-gray-700">
+        {category.name}
+      </h4>
+      {category.description !== null &&
+        category.description !== undefined &&
+        category.description.length > 0 && (
+          <p className="mt-1 line-clamp-2 text-xs text-gray-500">
+            {category.description}
+          </p>
+        )}
+    </div>
   )
 }
