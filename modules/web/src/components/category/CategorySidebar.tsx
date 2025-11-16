@@ -36,8 +36,8 @@ export default function CategorySidebar(): React.JSX.Element {
         )}
         {!!data && (
           <>
-            {data.map((category) => (
-              <NestedCategory key={category.id} category={category} />
+            {data.map((category, index) => (
+              <NestedCategory key={index} category={category} />
             ))}
           </>
         )}

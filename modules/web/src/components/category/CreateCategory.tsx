@@ -36,9 +36,6 @@ export function CreateCategory({
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button form="create-category-form" type="submit">
-            Create
-          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

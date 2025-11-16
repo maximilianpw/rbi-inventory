@@ -11,7 +11,8 @@ import {
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { CategorySelector } from './CategorySelector'
-import { type CategoryResponse } from '@/lib/data/generated'
+import { useCreateCategory, type CategoryResponse } from '@/lib/data/generated'
+import { Button } from '../ui/button'
 
 interface CategoryFormProps {
   categories?: CategoryResponse[]
@@ -23,16 +24,14 @@ const formSchema = z.object({
     .min(1, 'Name must be longer that 1 character')
     .max(100, 'Name must be shorter that 100 characters'),
   parent_id: z.string(),
-  description: z
-    .string()
-    .min(1, 'Name must be longer that 1 character')
-    .max(500, 'Name must be shorter that 500 characters'),
+  description: z.string().max(500, 'Name must be shorter that 500 characters'),
 })
 
 // eslint-disable-next-line max-lines-per-function
 export function CategoryForm({
   categories,
 }: CategoryFormProps): React.JSX.Element {
+  const mutation = useCreateCategory()
   const form = useForm({
     defaultValues: {
       name: '',
@@ -43,6 +42,7 @@ export function CategoryForm({
       onSubmit: formSchema,
     },
     onSubmit: ({ value }) => {
+      mutation.mutate({ data: value })
       toast('You submitted the following values:', {
         description: (
           <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
@@ -142,6 +142,11 @@ export function CategoryForm({
             </Field>
           )}
         </form.Field>
+        <Field>
+          <Button form="create-category-form" type="submit">
+            Create
+          </Button>
+        </Field>
       </FieldGroup>
     </form>
   )

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
 import AppSidebar from '@/components/common/Header'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AuthProvider } from '@/hooks/providers/AuthProvider'
@@ -48,6 +49,7 @@ export default async function RootLayout({
                 <SidebarProvider>
                   <AppSidebar />
                   <main className="flex flex-1 flex-col p-4">{children}</main>
+                  <Toaster />
                 </SidebarProvider>
               </body>
             </html>
