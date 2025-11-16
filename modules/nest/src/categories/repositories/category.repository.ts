@@ -49,7 +49,10 @@ export class CategoryRepository {
     return this.repository.save(category);
   }
 
-  async update(id: string, categoryData: Partial<Category>): Promise<Category | null> {
+  async update(
+    id: string,
+    categoryData: Partial<Category>,
+  ): Promise<Category | null> {
     await this.repository.update(id, categoryData);
     return this.findById(id);
   }

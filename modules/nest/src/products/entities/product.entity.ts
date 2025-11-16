@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Category } from '../../categories/entities/category.entity';
 
 @Entity('products')
@@ -28,19 +36,43 @@ export class Product {
   @Column({ type: 'int', nullable: true, name: 'volume_ml' })
   volume_ml: number | null;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, name: 'weight_kg' })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: true,
+    name: 'weight_kg',
+  })
   weight_kg: number | null;
 
   @Column({ type: 'varchar', nullable: true, name: 'dimensions_cm' })
   dimensions_cm: string | null;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, name: 'standard_cost' })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: true,
+    name: 'standard_cost',
+  })
   standard_cost: number | null;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, name: 'standard_price' })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: true,
+    name: 'standard_price',
+  })
   standard_price: number | null;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true, name: 'markup_percentage' })
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+    name: 'markup_percentage',
+  })
   markup_percentage: number | null;
 
   @Column({ type: 'int', default: 10, name: 'reorder_point' })

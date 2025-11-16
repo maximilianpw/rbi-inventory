@@ -45,7 +45,8 @@ export class ClerkAuthGuard implements CanActivate {
       };
 
       return true;
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
       throw new UnauthorizedException('Invalid or expired token');
     }
   }

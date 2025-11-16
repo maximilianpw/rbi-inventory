@@ -42,7 +42,10 @@ export class ProductRepository {
     return this.repository.save(product);
   }
 
-  async update(id: string, productData: Partial<Product>): Promise<Product | null> {
+  async update(
+    id: string,
+    productData: Partial<Product>,
+  ): Promise<Product | null> {
     await this.repository.update(id, productData);
     return this.findById(id);
   }

@@ -22,7 +22,8 @@ import databaseConfig from './config/database.config';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.get('database'),
+      useFactory: (configService: ConfigService) =>
+        configService.get('database'),
     }),
     HealthModule,
     AuthModule,
