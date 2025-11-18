@@ -22,6 +22,10 @@
           pkgs.nodejs_24 # node
           pkgs.pnpm_10 # Better npm
 
+          pkgs.maven
+          pkgs.spring-boot-cli
+          pkgs.checkstyle
+
           pkgs.docker
           pkgs.docker-compose
 
