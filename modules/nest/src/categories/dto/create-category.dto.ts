@@ -1,11 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateCategoryDto {
   @ApiProperty({
@@ -23,7 +17,6 @@ export class CreateCategoryDto {
     nullable: true,
   })
   @IsOptional()
-  @IsUUID()
   parent_id?: string | null;
 
   @ApiPropertyOptional({

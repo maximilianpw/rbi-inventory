@@ -1,0 +1,43 @@
+# Install dependencies
+bootstrap:
+  npm install
+
+# Decrypt environment variables
+decrypt:
+  op inject -i env.template -o .env
+
+# Run development server
+dev:
+  npm run start:dev
+
+# Build for production
+build:
+  npm run build
+
+# Run production server
+start:
+  npm run start:prod
+
+# Lint and fix code
+lint:
+  npm run lint
+
+# Format code
+format:
+  npm run format
+
+# Run tests
+test:
+  npm run test
+
+# Run tests in watch mode
+test-watch:
+  npm run test:watch
+
+# Run tests with coverage
+test-coverage:
+  npm run test:cov
+
+# Run e2e tests
+test-e2e:
+  npm run test:e2e

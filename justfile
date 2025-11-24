@@ -1,11 +1,12 @@
 # Bootstrap both frontend and backend
 bootstrap:
   just modules/web/bootstrap
+  just modules/nest/bootstrap
 
 # Decrypt environment variables for both apps
 decrypt:
   just modules/web/decrypt
-  just modules/api/decrypt
+  just modules/nest/decrypt
 
 # Frontend commands
 web:
@@ -19,13 +20,16 @@ wtest:
 
 # Backend commands
 api:
-  just modules/api/run
+  just modules/nest/dev
 
-migrate-up:
-  just modules/api/migrate-up
+build-api:
+  just modules/nest/build
 
-migrate-down:
-  just modules/api/migrate-down
+start-api:
+  just modules/nest/start
 
-migrate-status:
-  just modules/api/migrate-status
+api-lint:
+  just modules/nest/lint
+
+api-test:
+  just modules/nest/test
