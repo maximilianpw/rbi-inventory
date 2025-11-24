@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { CategoryForm } from './CategoryForm'
 import { Button } from '@/components/ui/button'
 import type { CategoryWithChildrenResponseDto } from '@/lib/data/generated'
@@ -19,24 +20,25 @@ interface CreateCategoryProps {
 export function CreateCategory({
   categories,
 }: CreateCategoryProps): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="rounded-t-none" variant="outline">
-          Create Category
+          {t('form.createCategoryTitle')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Category</DialogTitle>
+          <DialogTitle>{t('form.createCategoryTitle')}</DialogTitle>
           <DialogDescription>
-            Add a new category to organize your inventory.
+            {t('form.createCategoryDescription')}
           </DialogDescription>
         </DialogHeader>
         <CategoryForm categories={categories} />
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t('form.cancel')}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

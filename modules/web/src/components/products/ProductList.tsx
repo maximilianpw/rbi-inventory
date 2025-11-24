@@ -1,4 +1,5 @@
 'use client'
+import { useTranslation } from 'react-i18next'
 import { Spinner } from '../ui/spinner'
 import {
   useListProducts,
@@ -10,6 +11,7 @@ interface ProductListProps {
 }
 
 export function ProductList({ categoryId }: ProductListProps): React.JSX.Element {
+  const { t } = useTranslation()
   const {
     data: allProducts,
     isLoading: isLoadingAll,
@@ -40,12 +42,12 @@ export function ProductList({ categoryId }: ProductListProps): React.JSX.Element
 
   if (error) {
     return (
-      <p className="text-destructive">Error loading products: {error.error}</p>
+      <p className="text-destructive">{t('products.errorLoading')} {error.error}</p>
     )
   }
 
   if (products?.length === 0) {
-    return <p className="text-muted-foreground">No products found</p>
+    return <p className="text-muted-foreground">{t('products.noProducts')}</p>
   }
 
   return (
