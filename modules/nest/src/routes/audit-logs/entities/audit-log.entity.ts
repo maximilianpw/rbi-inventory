@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { AuditAction } from '../../common/enums';
+import { AuditAction } from '../../../common/enums';
 
 @Entity('audit_logs')
 export class AuditLog {

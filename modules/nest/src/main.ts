@@ -1,17 +1,17 @@
-import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { Client } from './clients/entities/client.entity';
-import { Location } from './locations/entities/location.entity';
-import { Supplier } from './suppliers/entities/supplier.entity';
-import { SupplierProduct } from './suppliers/entities/supplier-product.entity';
-import { AuditLog } from './audit-logs/entities/audit-log.entity';
-import { Inventory } from './inventory/entities/inventory.entity';
-import { Order } from './orders/entities/order.entity';
-import { OrderItem } from './orders/entities/order-item.entity';
-import { Photo } from './photos/entities/photo.entity';
-import { StockMovement } from './stock-movements/entities/stock-movement.entity';
+import { AuditLog } from './routes/audit-logs/entities/audit-log.entity';
+import { Inventory } from './routes/inventory/entities/inventory.entity';
+import { Location } from './routes/locations/entities/location.entity';
+import { OrderItem } from './routes/orders/entities/order-item.entity';
+import { Order } from './routes/orders/entities/order.entity';
+import { Photo } from './routes/photos/entities/photo.entity';
+import { StockMovement } from './routes/stock-movements/entities/stock-movement.entity';
+import { SupplierProduct } from './routes/suppliers/entities/supplier-product.entity';
+import { Supplier } from './routes/suppliers/entities/supplier.entity';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
