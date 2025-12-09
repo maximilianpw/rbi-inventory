@@ -7,7 +7,6 @@
 }: {
   # https://devenv.sh/basics/
   env.PGDATABASE = "rbi_inventory";
-  env.PGUSER = "postgres";
   env.NEST_PORT = "3001";
   env.NEXT_PUBLIC_API_URL = "http://localhost:3001";
 
@@ -43,11 +42,11 @@
   };
 
   # https://devenv.sh/processes/
-  processes.nest.exec = "cd modules/nest && pnpm start:dev";
+  processes.nest.exec = "cd modules/api && pnpm start:dev";
   processes.web.exec = "cd modules/web && pnpm dev";
 
   # https://devenv.sh/pre-commit-hooks/
-  pre-commit.hooks = {
+  git-hooks.hooks = {
     prettier.enable = true;
     nixfmt-rfc-style.enable = true;
   };
@@ -59,7 +58,6 @@
     echo ""
     echo "PostgreSQL:"
     echo "  Database: $PGDATABASE"
-    echo "  User: $PGUSER"
     echo ""
     echo "Services:"
     echo "  devenv up    - Start all services (PostgreSQL, NestJS, Next.js)"
