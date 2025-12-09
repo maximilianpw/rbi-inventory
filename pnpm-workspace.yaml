@@ -5,3 +5,5 @@ packages:
 
 onlyBuiltDependencies:
   - '@clerk/shared'
+packages:
+  - 'modules/*'

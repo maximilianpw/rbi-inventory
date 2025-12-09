@@ -17,7 +17,7 @@ import { ClerkClaims } from '../common/decorators/clerk-claims.decorator';
 @ApiTags('Auth')
 @ApiBearerAuth()
 @UseGuards(ClerkAuthGuard)
-@Controller('api/v1/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private configService: ConfigService) {}
 

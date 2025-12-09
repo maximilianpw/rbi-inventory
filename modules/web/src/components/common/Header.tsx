@@ -58,8 +58,6 @@ export default function AppSidebar(): React.JSX.Element {
         </Link>
       </SidebarHeader>
 
-      <SidebarSeparator />
-
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>

@@ -7,7 +7,9 @@
     "deliveries": "Lieferungen",
     "tags": "Tags",
     "report": "Bericht",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "stock": "Bestand",
+    "products": "Produkte"
   },
   "search": {
     "placeholder": "Suchen...",
@@ -36,15 +38,32 @@
     "quantity": "Artikelmenge",
     "totalValue": "Gesamtartikel",
     "noItemsFound": "Keine Artikel gefunden",
-    "noItemsFolder": "Keine Artikel in diesem Ordner"
+    "noItemsFolder": "Keine Artikel in diesem Ordner",
+    "price": "Preis"
   },
   "folders": {
     "title": "Ordner",
-    "noFolders": "Noch keine Ordner"
+    "noFolders": "Noch keine Ordner",
+    "error": "Fehler beim Laden von Ordnern",
+    "empty": "Noch keine Ordner"
   },
   "view": {
     "grid": "Rasteransicht",
     "list": "Listenansicht"
   },
-  "category": "Kategorie"
+  "category": "Kategorie",
+  "form": {
+    "categoryName": "Kategoriename",
+    "parentCategory": "Übergeordnete Kategorie",
+    "description": "Beschreibung",
+    "create": "Erstellen",
+    "submit": "Sie haben die folgenden Werte eingereicht:",
+    "createCategoryTitle": "Kategorie erstellen",
+    "createCategoryDescription": "Fügen Sie eine neue Kategorie hinzu, um Ihren Bestand zu organisieren.",
+    "cancel": "Abbrechen"
+  },
+  "products": {
+    "errorLoading": "Fehler beim Laden von Produkten:",
+    "noProducts": "Keine Produkte gefunden"
+  }
 }

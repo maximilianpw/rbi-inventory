@@ -7,7 +7,9 @@
     "deliveries": "Livraisons",
     "tags": "Étiquettes",
     "report": "Rapport",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "stock": "Stock",
+    "products": "Produits"
   },
   "search": {
     "placeholder": "Rechercher...",
@@ -36,15 +38,32 @@
     "quantity": "Quantité d'article",
     "totalValue": "Total des articles",
     "noItemsFound": "Aucun article trouvé",
-    "noItemsFolder": "Aucun article dans ce dossier"
+    "noItemsFolder": "Aucun article dans ce dossier",
+    "price": "Prix"
   },
   "folders": {
     "title": "Dossiers",
-    "noFolders": "Aucun dossier pour le moment"
+    "noFolders": "Aucun dossier pour le moment",
+    "error": "Erreur lors du chargement des dossiers",
+    "empty": "Aucun dossier pour le moment"
   },
   "view": {
     "grid": "Vue en grille",
     "list": "Vue en liste"
   },
-  "category": "Catégorie"
+  "category": "Catégorie",
+  "form": {
+    "categoryName": "Nom de la catégorie",
+    "parentCategory": "Catégorie parente",
+    "description": "Description",
+    "create": "Créer",
+    "submit": "Vous avez soumis les valeurs suivantes :",
+    "createCategoryTitle": "Créer une catégorie",
+    "createCategoryDescription": "Ajouter une nouvelle catégorie pour organiser votre inventaire.",
+    "cancel": "Annuler"
+  },
+  "products": {
+    "errorLoading": "Erreur lors du chargement des produits:",
+    "noProducts": "Aucun produit trouvé"
+  }
 }

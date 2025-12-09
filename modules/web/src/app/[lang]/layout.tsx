@@ -48,7 +48,7 @@ export default async function RootLayout({
               >
                 <SidebarProvider>
                   <AppSidebar />
-                  <main className="flex flex-1 flex-col p-4">{children}</main>
+                  <main className="flex flex-1 flex-col">{children}</main>
                   <Toaster />
                 </SidebarProvider>
               </body>

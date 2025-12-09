@@ -1,24 +1,64 @@
-import type { CategoryResponse } from '@/lib/data/generated'
+import { Folder, ChevronRight, ChevronDown } from 'lucide-react'
+import type { CategoryResponseDto } from '@/lib/data/generated'
 
 interface CategoryCardProps {
-  category: CategoryResponse
+  category: CategoryResponseDto
+  hasChildren: boolean
+  isExpanded: boolean
+  isSelected: boolean
+  onToggle: () => void
+  onClick: () => void
 }
 
 export function CategoryCard({
   category,
+  hasChildren,
+  isExpanded,
+  isSelected,
+  onToggle,
+  onClick,
 }: CategoryCardProps): React.JSX.Element {
   return (
-    <div className="group mb-1 cursor-pointer rounded-lg border border-gray-200 bg-white p-3 transition-all hover:border-gray-300 hover:shadow-sm">
-      <h4 className="text-sm font-medium text-gray-900 group-hover:text-gray-700">
+    <div
+      className={`group mb-1 flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 transition-all hover:bg-gray-100 ${
+        isSelected ? 'bg-gray-100' : ''
+      }`}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick()
+      }}
+    >
+      {hasChildren ? (
+        <button
+          className="flex-shrink-0 rounded p-0.5 hover:bg-gray-200"
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggle()
+          }}
+        >
+          {isExpanded ? (
+            <ChevronDown className="size-4 text-gray-500" />
+          ) : (
+            <ChevronRight className="size-4 text-gray-500" />
+          )}
+        </button>
+      ) : (
+        <div className="w-5" />
+      )}
+      <Folder
+        className={`size-4 shrink-0 ${
+          isSelected ? 'text-blue-600' : 'text-gray-600'
+        }`}
+      />
+      <span
+        className={`truncate text-sm ${
+          isSelected
+            ? 'font-semibold text-gray-900'
+            : 'font-medium text-gray-700'
+        }`}
+      >
         {category.name}
-      </h4>
-      {category.description !== null &&
-        category.description !== undefined &&
-        category.description.length > 0 && (
-          <p className="mt-1 line-clamp-2 text-xs text-gray-500">
-            {category.description}
-          </p>
-        )}
+      </span>
     </div>
   )
 }

@@ -8,9 +8,34 @@ import { CreateCategory } from './CreateCategory'
 import { Spinner } from '@/components/ui/spinner'
 import { useListCategories } from '@/lib/data/generated'
 
-export default function CategorySidebar(): React.JSX.Element {
+interface CategorySidebarProps {
+  selectedCategoryId: string | null
+  onSelectCategory: (categoryId: string | null) => void
+}
+
+export default function CategorySidebar({
+  selectedCategoryId,
+  onSelectCategory,
+}: CategorySidebarProps): React.JSX.Element {
   const { t } = useTranslation()
   const { data, isLoading, error } = useListCategories()
+  const [expandedIds, setExpandedIds] = React.useState<Set<string>>(new Set())
+
+  const handleToggle = (id: string): void => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
+
+  const handleSelect = (id: string): void => {
+    onSelectCategory(id)
+  }
 
   return (
     <aside className="bg-background flex h-full w-64 flex-col border-r">
@@ -36,8 +61,15 @@ export default function CategorySidebar(): React.JSX.Element {
         )}
         {!!data && (
           <>
-            {data.map((category, index) => (
-              <NestedCategory key={index} category={category} />
+            {data.map((category) => (
+              <NestedCategory
+                key={category.id}
+                category={category}
+                expandedIds={expandedIds}
+                selectedId={selectedCategoryId}
+                onSelect={handleSelect}
+                onToggle={handleToggle}
+              />
             ))}
           </>
         )}

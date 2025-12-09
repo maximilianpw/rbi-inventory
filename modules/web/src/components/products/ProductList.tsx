@@ -1,9 +1,36 @@
 'use client'
+import { useTranslation } from 'react-i18next'
 import { Spinner } from '../ui/spinner'
-import { useListProducts } from '@/lib/data/generated'
+import {
+  useListProducts,
+  useGetProductsByCategory,
+} from '@/lib/data/generated'
 
-export function ProductList(): React.JSX.Element {
-  const { data: products, isLoading, error } = useListProducts()
+interface ProductListProps {
+  categoryId?: string | null
+}
+
+export function ProductList({ categoryId }: ProductListProps): React.JSX.Element {
+  const { t } = useTranslation()
+  const {
+    data: allProducts,
+    isLoading: isLoadingAll,
+    error: errorAll,
+  } = useListProducts({
+    query: { enabled: !categoryId },
+  })
+
+  const {
+    data: categoryProducts,
+    isLoading: isLoadingCategory,
+    error: errorCategory,
+  } = useGetProductsByCategory(categoryId ?? '', {
+    query: { enabled: !!categoryId },
+  })
+
+  const products = categoryId !== null && categoryId !== undefined ? categoryProducts : allProducts
+  const isLoading = categoryId !== null && categoryId !== undefined ? isLoadingCategory : isLoadingAll
+  const error = categoryId !== null && categoryId !== undefined ? errorCategory : errorAll
 
   if (isLoading === true) {
     return (
@@ -15,12 +42,12 @@ export function ProductList(): React.JSX.Element {
 
   if (error) {
     return (
-      <p className="text-destructive">Error loading products: {error.error}</p>
+      <p className="text-destructive">{t('products.errorLoading')} {error.error}</p>
     )
   }
 
   if (products?.length === 0) {
-    return <p className="text-muted-foreground">No products found</p>
+    return <p className="text-muted-foreground">{t('products.noProducts')}</p>
   }
 
   return (
@@ -29,11 +56,9 @@ export function ProductList(): React.JSX.Element {
         <div key={product.id} className="rounded-lg border p-4">
           <h3 className="font-semibold">{product.name}</h3>
           <p className="text-muted-foreground text-sm">{product.sku}</p>
-          {product.description !== null &&
-            product.description !== undefined &&
-            product.description.length > 0 && (
-              <p className="mt-2 text-sm">{product.description}</p>
-            )}
+          {product.description !== null && product.description.length > 0 && (
+            <p className="mt-2 text-sm">{product.description}</p>
+          )}
         </div>
       ))}
     </div>

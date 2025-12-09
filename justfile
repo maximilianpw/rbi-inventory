@@ -2,11 +2,12 @@
 bootstrap:
   just modules/web/bootstrap
   cd modules/nest && pnpm install
+  just modules/nest/bootstrap
 
 # Decrypt environment variables for all apps
 decrypt:
   just modules/web/decrypt
-  just modules/api/decrypt
+  just modules/nest/decrypt
 
 # Start all services (PostgreSQL, NestJS, Next.js)
 dev:
@@ -59,3 +60,18 @@ migrate-down:
 
 migrate-status:
   just modules/api/migrate-status
+# Backend commands
+api:
+  just modules/nest/dev
+
+build-api:
+  just modules/nest/build
+
+start-api:
+  just modules/nest/start
+
+api-lint:
+  just modules/nest/lint
+
+api-test:
+  just modules/nest/test

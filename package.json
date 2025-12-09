@@ -26,3 +26,12 @@
   },
   "packageManager": "pnpm@10.0.0"
 }
+{
+  "name": "rbi-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "openapi:generate": "pnpm --filter rbi-api openapi:generate",
+    "api:generate": "pnpm openapi:generate && pnpm --filter next api:gen"
+  }
+}

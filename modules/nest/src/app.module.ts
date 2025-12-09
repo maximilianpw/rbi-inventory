@@ -1,17 +1,14 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { HealthModule } from './health/health.module';
+import { RouterModule } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { CategoriesModule } from './categories/categories.module';
-import { ProductsModule } from './products/products.module';
-import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import databaseConfig from './config/database.config';
+import { HealthModule } from './health/health.module';
+import { routes } from './app.routes';
 
 @Module({
   imports: [
@@ -27,13 +24,9 @@ import databaseConfig from './config/database.config';
     }),
     HealthModule,
     AuthModule,
-    UsersModule,
-    CategoriesModule,
-    ProductsModule,
+    RouterModule.register(routes),
   ],
-  controllers: [AppController],
   providers: [
-    AppService,
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,

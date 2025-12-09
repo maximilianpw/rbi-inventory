@@ -2,9 +2,28 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { Client } from './clients/entities/client.entity';
+import { Location } from './locations/entities/location.entity';
+import { Supplier } from './suppliers/entities/supplier.entity';
+import { SupplierProduct } from './suppliers/entities/supplier-product.entity';
+import { AuditLog } from './audit-logs/entities/audit-log.entity';
+import { Inventory } from './inventory/entities/inventory.entity';
+import { Order } from './orders/entities/order.entity';
+import { OrderItem } from './orders/entities/order-item.entity';
+import { Photo } from './photos/entities/photo.entity';
+import { StockMovement } from './stock-movements/entities/stock-movement.entity';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: '*',
+  });
+
+  // Set global prefix for all routes
+  app.setGlobalPrefix('api/v1', {
+    exclude: ['health-check'], // Exclude health check from prefix
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -30,15 +49,23 @@ async function bootstrap() {
       },
       'BearerAuth',
     )
-    .addTag('Health', 'System health endpoints')
-    .addTag('Auth', 'Authentication endpoints (Clerk JWT)')
-    .addTag('Users', 'User management endpoints')
-    .addTag('Categories', 'Product category management')
-    .addTag('Products', 'Product catalog management')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: [
+      Client,
+      Location,
+      Supplier,
+      SupplierProduct,
+      AuditLog,
+      Inventory,
+      Order,
+      OrderItem,
+      Photo,
+      StockMovement,
+    ],
+  });
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(process.env.PORT ?? 8080);
 }

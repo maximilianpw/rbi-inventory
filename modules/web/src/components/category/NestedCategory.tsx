@@ -1,16 +1,24 @@
 import * as React from 'react'
 
 import { CategoryCard } from './CategoryCard'
-import type { CategoryWithChildrenResponse } from '@/lib/data/generated'
+import type { CategoryWithChildrenResponseDto } from '@/lib/data/generated'
 
 interface NestedCategoryProps {
-  category: CategoryWithChildrenResponse
+  category: CategoryWithChildrenResponseDto
   depth?: number
+  expandedIds: Set<string>
+  selectedId: string | null
+  onToggle: (id: string) => void
+  onSelect: (id: string) => void
 }
 
 export function NestedCategory({
   category,
   depth = 0,
+  expandedIds,
+  selectedId,
+  onToggle,
+  onSelect,
 }: NestedCategoryProps): React.JSX.Element {
   const paddingClass =
     {
@@ -21,15 +29,34 @@ export function NestedCategory({
       4: 'pl-16',
     }[depth] ?? 'pl-20'
 
+  const hasChildren = category.children.length > 0
+  const isExpanded = expandedIds.has(category.id)
+  const isSelected = selectedId === category.id
+
   return (
     <div>
       <div className={paddingClass}>
-        <CategoryCard category={category} />
+        <CategoryCard
+          category={category}
+          hasChildren={hasChildren}
+          isExpanded={isExpanded}
+          isSelected={isSelected}
+          onClick={() => onSelect(category.id)}
+          onToggle={() => onToggle(category.id)}
+        />
       </div>
-      {category.children.length > 0 && (
+      {!!hasChildren && !!isExpanded && (
         <div>
           {category.children.map((child) => (
-            <NestedCategory key={child.id} category={child} depth={depth + 1} />
+            <NestedCategory
+              key={child.id}
+              category={child}
+              depth={depth + 1}
+              expandedIds={expandedIds}
+              selectedId={selectedId}
+              onSelect={onSelect}
+              onToggle={onToggle}
+            />
           ))}
         </div>
       )}

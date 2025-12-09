@@ -7,7 +7,9 @@
     "deliveries": "Deliveries",
     "tags": "Tags",
     "report": "Report",
-    "settings": "Settings"
+    "settings": "Settings",
+    "stock": "Stock",
+    "products": "Products"
   },
   "search": {
     "placeholder": "Search...",
@@ -36,15 +38,32 @@
     "quantity": "Item Quantity",
     "totalValue": "Total Items",
     "noItemsFound": "No Items Found",
-    "noItemsFolder": "No items in this folder"
+    "noItemsFolder": "No items in this folder",
+    "price": "Price"
   },
   "folders": {
     "title": "Folders",
-    "noFolders": "No folders yet"
+    "noFolders": "No folders yet",
+    "error": "Error loading folders",
+    "empty": "No folders yet"
   },
   "view": {
     "grid": "Grid view",
     "list": "List view"
   },
-  "category": "Category"
+  "category": "Category",
+  "form": {
+    "categoryName": "Category Name",
+    "parentCategory": "Parent Category",
+    "description": "Description",
+    "create": "Create",
+    "submit": "You submitted the following values:",
+    "createCategoryTitle": "Create Category",
+    "createCategoryDescription": "Add a new category to organize your inventory.",
+    "cancel": "Cancel"
+  },
+  "products": {
+    "errorLoading": "Error loading products:",
+    "noProducts": "No products found"
+  }
 }
