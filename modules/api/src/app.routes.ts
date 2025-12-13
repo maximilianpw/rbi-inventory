@@ -2,6 +2,7 @@ import { Routes } from '@nestjs/core';
 import { AuthModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { HealthModule } from './routes/health/health.module';
+import { ProductsModule } from './routes/products/products.module';
 
 /**
  * Application routes configuration
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'categories',
     module: CategoriesModule,
+  },
+  {
+    path: 'products',
+    module: ProductsModule,
   },
 ];
