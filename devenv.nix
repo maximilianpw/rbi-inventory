@@ -7,6 +7,7 @@
 }: {
   # https://devenv.sh/basics/
   env.PGDATABASE = "rbi_inventory";
+  env.DATABASE_URL = "postgresql://${builtins.getEnv "USER"}@127.0.0.1:5432/rbi_inventory?sslmode=disable";
   env.NEST_PORT = "3001";
   env.NEXT_PUBLIC_API_URL = "http://localhost:3001";
 
