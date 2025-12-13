@@ -3,11 +3,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { RouterModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './routes/auth/auth.module';
+import { CategoriesModule } from './routes/categories/categories.module';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import databaseConfig from './config/database.config';
-import { HealthModule } from './health/health.module';
+import { HealthModule } from './routes/health/health.module';
 import { routes } from './app.routes';
 
 @Module({
@@ -29,6 +30,7 @@ import { routes } from './app.routes';
     }),
     HealthModule,
     AuthModule,
+    CategoriesModule,
     RouterModule.register(routes),
   ],
   providers: [

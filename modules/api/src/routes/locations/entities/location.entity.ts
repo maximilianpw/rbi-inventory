@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { LocationType } from '../../common/enums';
+import { LocationType } from 'src/common/enums/location-type.enum';
 
 @Entity('locations')
 export class Location {
