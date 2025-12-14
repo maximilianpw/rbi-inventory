@@ -373,9 +373,14 @@ describe('ProductsService', () => {
       };
       categoryRepository.existsById.mockResolvedValue(true);
 
-      const result = await service.bulkCreate(bulkDtoWithDuplicates, 'user_123');
+      const result = await service.bulkCreate(
+        bulkDtoWithDuplicates,
+        'user_123',
+      );
 
-      expect(result.failures.some((f) => f.error === 'Duplicate SKU in request')).toBe(true);
+      expect(
+        result.failures.some((f) => f.error === 'Duplicate SKU in request'),
+      ).toBe(true);
     });
 
     it('should handle partial failures', async () => {
@@ -453,7 +458,7 @@ describe('ProductsService', () => {
     it('should allow updating to same SKU', async () => {
       const updateDto = { sku: mockProduct.sku };
       productRepository.findById.mockResolvedValue(mockProduct);
-      productRepository.update.mockResolvedValue(mockProduct);
+      productRepository.update.mockResolvedValue(1);
 
       await expect(
         service.update(mockProduct.id, updateDto, 'user_123'),
@@ -602,7 +607,7 @@ describe('ProductsService', () => {
         .mockResolvedValueOnce({ ...mockProduct, deleted_at: null });
       productRepository.restore.mockResolvedValue(undefined);
 
-      const result = await service.restore(mockProduct.id, 'user_123');
+      const result = await service.restore(mockProduct.id);
 
       expect(productRepository.restore).toHaveBeenCalledWith(mockProduct.id);
       expect(result.deleted_at).toBeNull();
@@ -611,20 +616,20 @@ describe('ProductsService', () => {
     it('should throw NotFoundException when product does not exist', async () => {
       productRepository.findById.mockResolvedValue(null);
 
-      await expect(
-        service.restore('non-existent-id', 'user_123'),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.restore('non-existent-id')).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw BadRequestException when product is not deleted', async () => {
       productRepository.findById.mockResolvedValue(mockProduct);
 
-      await expect(
-        service.restore(mockProduct.id, 'user_123'),
-      ).rejects.toThrow(BadRequestException);
-      await expect(
-        service.restore(mockProduct.id, 'user_123'),
-      ).rejects.toThrow('Product is not deleted');
+      await expect(service.restore(mockProduct.id)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(service.restore(mockProduct.id)).rejects.toThrow(
+        'Product is not deleted',
+      );
     });
   });
 
@@ -638,7 +643,7 @@ describe('ProductsService', () => {
       productRepository.findDeletedByIds.mockResolvedValue(deletedProducts);
       productRepository.restoreMany.mockResolvedValue(2);
 
-      const result = await service.bulkRestore(bulkDto, 'user_123');
+      const result = await service.bulkRestore(bulkDto);
 
       expect(result.success_count).toBe(2);
       expect(result.failure_count).toBe(0);
@@ -651,7 +656,7 @@ describe('ProductsService', () => {
       ]);
       productRepository.restoreMany.mockResolvedValue(1);
 
-      const result = await service.bulkRestore(bulkDto, 'user_123');
+      const result = await service.bulkRestore(bulkDto);
 
       expect(result.success_count).toBe(1);
       expect(result.failure_count).toBe(1);

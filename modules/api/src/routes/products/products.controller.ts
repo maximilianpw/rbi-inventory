@@ -42,11 +42,12 @@ import {
 } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import {
-  HateoasLinks,
-  PRODUCT_HATEOAS_LINKS,
-} from '../../common/hateoas/hateoas.decorator';
-
-const ProductHateoas = () => HateoasLinks(...PRODUCT_HATEOAS_LINKS);
+  ProductHateoas,
+  BulkOperationHateoas,
+  DeleteProductHateoas,
+  BulkDeleteHateoas,
+  BulkRestoreHateoas,
+} from './products.hateoas';
 
 @ApiTags('Products')
 @ApiBearerAuth()
@@ -157,6 +158,8 @@ export class ProductsController {
   }
 
   @Post('bulk')
+  @UseInterceptors(HateoasInterceptor)
+  @BulkOperationHateoas()
   @ApiOperation({
     summary: 'Bulk create products',
     operationId: 'bulkCreateProducts',
@@ -189,6 +192,8 @@ export class ProductsController {
   }
 
   @Patch('bulk/status')
+  @UseInterceptors(HateoasInterceptor)
+  @BulkOperationHateoas()
   @ApiOperation({
     summary: 'Bulk update product status',
     operationId: 'bulkUpdateProductStatus',
@@ -204,6 +209,8 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseInterceptors(HateoasInterceptor)
+  @DeleteProductHateoas()
   @ApiOperation({ summary: 'Delete product', operationId: 'deleteProduct' })
   @ApiParam({ name: 'id', description: 'Product UUID', type: String })
   @ApiQuery({
@@ -230,6 +237,8 @@ export class ProductsController {
   }
 
   @Delete('bulk')
+  @UseInterceptors(HateoasInterceptor)
+  @BulkDeleteHateoas()
   @ApiOperation({
     summary: 'Bulk delete products',
     operationId: 'bulkDeleteProducts',
@@ -258,12 +267,13 @@ export class ProductsController {
   @ApiResponse({ status: 404, type: ErrorResponseDto })
   async restoreProduct(
     @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: ClerkRequest,
   ): Promise<ProductResponseDto> {
-    return this.productsService.restore(id, req.auth?.userId);
+    return this.productsService.restore(id);
   }
 
   @Patch('bulk/restore')
+  @UseInterceptors(HateoasInterceptor)
+  @BulkRestoreHateoas()
   @ApiOperation({
     summary: 'Bulk restore products',
     operationId: 'bulkRestoreProducts',
@@ -273,8 +283,7 @@ export class ProductsController {
   @ApiResponse({ status: 401, type: ErrorResponseDto })
   async bulkRestoreProducts(
     @Body() bulkDto: BulkRestoreDto,
-    @Req() req: ClerkRequest,
   ): Promise<BulkOperationResultDto> {
-    return this.productsService.bulkRestore(bulkDto, req.auth?.userId);
+    return this.productsService.bulkRestore(bulkDto);
   }
 }

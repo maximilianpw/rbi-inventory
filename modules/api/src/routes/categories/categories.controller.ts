@@ -8,6 +8,7 @@ import {
   Param,
   ParseUUIDPipe,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -24,6 +25,11 @@ import { CategoryWithChildrenResponseDto } from './dto/category-with-children-re
 import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { MessageResponseDto } from '../../common/dto/message-response.dto';
 import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
+import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import {
+  CategoryHateoas,
+  DeleteCategoryHateoas,
+} from './categories.hateoas';
 
 @ApiTags('Categories')
 @ApiBearerAuth()
@@ -33,6 +39,8 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get()
+  @UseInterceptors(HateoasInterceptor)
+  @CategoryHateoas()
   @ApiOperation({
     summary: 'List all categories',
     description: 'Retrieves all product categories with their child categories',
@@ -58,6 +66,8 @@ export class CategoriesController {
   }
 
   @Post()
+  @UseInterceptors(HateoasInterceptor)
+  @CategoryHateoas()
   @ApiOperation({
     summary: 'Create category',
     description: 'Creates a new product category',
@@ -90,6 +100,8 @@ export class CategoriesController {
   }
 
   @Put(':id')
+  @UseInterceptors(HateoasInterceptor)
+  @CategoryHateoas()
   @ApiOperation({
     summary: 'Update category',
     description: 'Updates an existing product category',
@@ -133,6 +145,8 @@ export class CategoriesController {
   }
 
   @Delete(':id')
+  @UseInterceptors(HateoasInterceptor)
+  @DeleteCategoryHateoas()
   @ApiOperation({
     summary: 'Delete category',
     description: 'Deletes a product category',

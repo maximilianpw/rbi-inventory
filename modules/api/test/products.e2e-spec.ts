@@ -26,7 +26,11 @@ describe('ProductsController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideGuard(await import('../src/common/guards/clerk-auth.guard').then(m => m.ClerkAuthGuard))
+      .overrideGuard(
+        await import('../src/common/guards/clerk-auth.guard').then(
+          (m) => m.ClerkAuthGuard,
+        ),
+      )
       .useValue(mockClerkGuard)
       .compile();
 
@@ -202,7 +206,9 @@ describe('ProductsController (e2e)', () => {
 
     it('should paginate results correctly', async () => {
       for (let i = 0; i < 25; i++) {
-        await createTestProduct({ sku: `SKU-${i.toString().padStart(3, '0')}` });
+        await createTestProduct({
+          sku: `SKU-${i.toString().padStart(3, '0')}`,
+        });
       }
 
       const response = await request(app.getHttpServer())
@@ -222,7 +228,9 @@ describe('ProductsController (e2e)', () => {
   describe('GET /api/v1/products/all', () => {
     it('should return all products without pagination', async () => {
       for (let i = 0; i < 30; i++) {
-        await createTestProduct({ sku: `SKU-${i.toString().padStart(3, '0')}` });
+        await createTestProduct({
+          sku: `SKU-${i.toString().padStart(3, '0')}`,
+        });
       }
 
       const response = await request(app.getHttpServer())
@@ -368,7 +376,9 @@ describe('ProductsController (e2e)', () => {
         .send(createDto)
         .expect(400);
 
-      expect(response.body.message).toBe('A product with this SKU already exists');
+      expect(response.body.message).toBe(
+        'A product with this SKU already exists',
+      );
     });
 
     it('should return 400 when price is less than cost', async () => {
@@ -522,7 +532,9 @@ describe('ProductsController (e2e)', () => {
         .send({ sku: 'EXISTING-SKU' })
         .expect(400);
 
-      expect(response.body.message).toBe('A product with this SKU already exists');
+      expect(response.body.message).toBe(
+        'A product with this SKU already exists',
+      );
     });
   });
 

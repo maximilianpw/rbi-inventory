@@ -197,12 +197,12 @@ describe('CategoriesService', () => {
       const updateDto = { parent_id: mockCategory.id };
       categoryRepository.findById.mockResolvedValue(mockCategory);
 
-      await expect(
-        service.update(mockCategory.id, updateDto),
-      ).rejects.toThrow(BadRequestException);
-      await expect(
-        service.update(mockCategory.id, updateDto),
-      ).rejects.toThrow('Category cannot be its own parent');
+      await expect(service.update(mockCategory.id, updateDto)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(service.update(mockCategory.id, updateDto)).rejects.toThrow(
+        'Category cannot be its own parent',
+      );
     });
 
     it('should throw BadRequestException when parent does not exist', async () => {
@@ -210,12 +210,12 @@ describe('CategoriesService', () => {
       categoryRepository.findById.mockResolvedValue(mockCategory);
       categoryRepository.existsById.mockResolvedValue(false);
 
-      await expect(
-        service.update(mockCategory.id, updateDto),
-      ).rejects.toThrow(BadRequestException);
-      await expect(
-        service.update(mockCategory.id, updateDto),
-      ).rejects.toThrow('Parent category not found');
+      await expect(service.update(mockCategory.id, updateDto)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(service.update(mockCategory.id, updateDto)).rejects.toThrow(
+        'Parent category not found',
+      );
     });
 
     it('should throw BadRequestException when update would create circular reference', async () => {
@@ -234,9 +234,9 @@ describe('CategoriesService', () => {
         .mockResolvedValueOnce({ parent_id: mockChildCategory.id }) // grandchild's parent
         .mockResolvedValueOnce({ parent_id: mockCategory.id }); // child's parent - this creates the cycle
 
-      await expect(
-        service.update(mockCategory.id, updateDto),
-      ).rejects.toThrow('Cannot set parent: would create a circular reference');
+      await expect(service.update(mockCategory.id, updateDto)).rejects.toThrow(
+        'Cannot set parent: would create a circular reference',
+      );
     });
 
     it('should allow setting parent to null (make root)', async () => {
@@ -258,7 +258,10 @@ describe('CategoriesService', () => {
 
     it('should update description', async () => {
       const updateDto = { description: 'New description' };
-      const updatedCategory = { ...mockCategory, description: 'New description' };
+      const updatedCategory = {
+        ...mockCategory,
+        description: 'New description',
+      };
       categoryRepository.findById
         .mockResolvedValueOnce(mockCategory)
         .mockResolvedValueOnce(updatedCategory);

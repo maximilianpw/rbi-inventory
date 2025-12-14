@@ -23,7 +23,11 @@ describe('CategoriesController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideGuard(await import('../src/common/guards/clerk-auth.guard').then(m => m.ClerkAuthGuard))
+      .overrideGuard(
+        await import('../src/common/guards/clerk-auth.guard').then(
+          (m) => m.ClerkAuthGuard,
+        ),
+      )
       .useValue(mockClerkGuard)
       .compile();
 
@@ -86,9 +90,7 @@ describe('CategoriesController (e2e)', () => {
     it('should return 401 without authorization', async () => {
       mockClerkGuard.canActivate.mockReturnValueOnce(false);
 
-      await request(app.getHttpServer())
-        .get('/api/v1/categories')
-        .expect(403);
+      await request(app.getHttpServer()).get('/api/v1/categories').expect(403);
     });
   });
 
