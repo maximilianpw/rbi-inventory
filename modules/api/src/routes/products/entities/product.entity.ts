@@ -2,16 +2,20 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Category } from '../../categories/entities/category.entity';
+import { Supplier } from '../../suppliers/entities/supplier.entity';
+import { BaseAuditEntity } from '../../../common/entities/base-audit.entity';
 
 @Entity('products')
-export class Product {
+@Index(['deleted_at'])
+@Index(['is_active', 'deleted_at'])
+@Index(['category_id', 'deleted_at'])
+export class Product extends BaseAuditEntity {
   @ApiProperty({
     description: 'Unique identifier',
     format: 'uuid',
@@ -114,6 +118,10 @@ export class Product {
   @Column({ type: 'uuid', nullable: true })
   primary_supplier_id: string | null;
 
+  @ManyToOne(() => Supplier, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'primary_supplier_id' })
+  primary_supplier: Supplier | null;
+
   @ApiProperty({
     description: 'Supplier SKU',
     nullable: true,
@@ -139,14 +147,6 @@ export class Product {
   })
   @Column({ type: 'text', nullable: true })
   notes: string | null;
-
-  @ApiProperty({ description: 'Creation timestamp' })
-  @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
-
-  @ApiProperty({ description: 'Last update timestamp' })
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
 
   @ManyToOne(() => Category, {
     onDelete: 'RESTRICT',

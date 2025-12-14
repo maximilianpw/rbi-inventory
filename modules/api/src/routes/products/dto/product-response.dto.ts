@@ -1,7 +1,68 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Product } from '../entities/product.entity';
+import { HateoasLink } from '../../../common/hateoas/hateoas-link.dto';
+import { BaseAuditResponseDto } from '../../../common/dto/base-response.dto';
 
-export class ProductResponseDto implements Partial<Product> {
+export class CategorySummaryDto {
+  @ApiProperty({
+    description: 'Category ID',
+    format: 'uuid',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  id: string;
+
+  @ApiProperty({
+    description: 'Category name',
+    example: 'Electronics',
+  })
+  name: string;
+
+  @ApiProperty({
+    description: 'Parent category ID',
+    format: 'uuid',
+    nullable: true,
+  })
+  parent_id: string | null;
+}
+
+export class SupplierSummaryDto {
+  @ApiProperty({
+    description: 'Supplier ID',
+    format: 'uuid',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  id: string;
+
+  @ApiProperty({
+    description: 'Supplier name',
+    example: 'Acme Corp',
+  })
+  name: string;
+}
+
+export class ProductLinksDto {
+  @ApiProperty({ description: 'Link to this product', type: HateoasLink })
+  self: HateoasLink;
+
+  @ApiProperty({
+    description: 'Link to update this product',
+    type: HateoasLink,
+  })
+  update: HateoasLink;
+
+  @ApiProperty({
+    description: 'Link to delete this product',
+    type: HateoasLink,
+  })
+  delete: HateoasLink;
+
+  @ApiProperty({
+    description: 'Link to the product category',
+    type: HateoasLink,
+  })
+  category: HateoasLink;
+}
+
+export class ProductResponseDto extends BaseAuditResponseDto {
   @ApiProperty({
     description: 'Unique identifier',
     format: 'uuid',
@@ -34,6 +95,14 @@ export class ProductResponseDto implements Partial<Product> {
   category_id: string;
 
   @ApiProperty({
+    description: 'Nested category information',
+    type: CategorySummaryDto,
+    nullable: true,
+    required: false,
+  })
+  category?: CategorySummaryDto | null;
+
+  @ApiProperty({
     description: 'Brand ID',
     format: 'uuid',
     nullable: true,
@@ -53,9 +122,9 @@ export class ProductResponseDto implements Partial<Product> {
   weight_kg: number | null;
 
   @ApiProperty({
-    description: 'Dimensions in cm',
+    description: 'Dimensions in cm (format: LxWxH)',
     nullable: true,
-    example: '10x10x5',
+    example: '10x20x5',
   })
   dimensions_cm: string | null;
 
@@ -91,6 +160,14 @@ export class ProductResponseDto implements Partial<Product> {
   primary_supplier_id: string | null;
 
   @ApiProperty({
+    description: 'Nested supplier information',
+    type: SupplierSummaryDto,
+    nullable: true,
+    required: false,
+  })
+  primary_supplier?: SupplierSummaryDto | null;
+
+  @ApiProperty({
     description: 'Supplier SKU',
     nullable: true,
   })
@@ -113,14 +190,9 @@ export class ProductResponseDto implements Partial<Product> {
   notes: string | null;
 
   @ApiProperty({
-    description: 'Creation timestamp',
-    format: 'date-time',
+    description: 'HATEOAS links',
+    type: ProductLinksDto,
+    required: false,
   })
-  created_at: Date;
-
-  @ApiProperty({
-    description: 'Last update timestamp',
-    format: 'date-time',
-  })
-  updated_at: Date;
+  _links?: ProductLinksDto;
 }

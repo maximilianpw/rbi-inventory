@@ -9,8 +9,36 @@ import {
   MinLength,
   Min,
   Max,
+  Matches,
+  Validate,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
 } from 'class-validator';
-import { Product } from 'dist/routes/products/entities/product.entity';
+import { Transform } from 'class-transformer';
+import { Product } from '../entities/product.entity';
+
+@ValidatorConstraint({ name: 'updatePriceGreaterThanCost', async: false })
+export class UpdatePriceGreaterThanCostConstraint
+  implements ValidatorConstraintInterface
+{
+  validate(_value: any, args: ValidationArguments) {
+    const obj = args.object as UpdateProductDto;
+    if (
+      obj.standard_price !== undefined &&
+      obj.standard_price !== null &&
+      obj.standard_cost !== undefined &&
+      obj.standard_cost !== null
+    ) {
+      return obj.standard_price >= obj.standard_cost;
+    }
+    return true;
+  }
+
+  defaultMessage() {
+    return 'Standard price must be greater than or equal to standard cost';
+  }
+}
 
 export class UpdateProductDto implements Partial<Product> {
   @ApiProperty({
@@ -21,6 +49,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value?.trim())
   @MinLength(1)
   @MaxLength(50)
   sku?: string;
@@ -33,6 +62,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value?.trim())
   @MinLength(1)
   @MaxLength(200)
   name?: string;
@@ -45,6 +75,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value?.trim() || null)
   @MaxLength(1000)
   description?: string | null;
 
@@ -91,14 +122,20 @@ export class UpdateProductDto implements Partial<Product> {
   weight_kg?: number | null;
 
   @ApiProperty({
-    description: 'Dimensions in cm',
+    description: 'Dimensions in cm (format: LxWxH, e.g., 10x20x5)',
     maxLength: 50,
     nullable: true,
     required: false,
+    example: '10x20x5',
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value?.trim() || null)
   @MaxLength(50)
+  @Matches(/^\d+(\.\d+)?x\d+(\.\d+)?x\d+(\.\d+)?$/, {
+    message:
+      'Dimensions must be in format LxWxH (e.g., 10x20x5 or 10.5x20.25x5)',
+  })
   dimensions_cm?: string | null;
 
   @ApiProperty({
@@ -113,7 +150,7 @@ export class UpdateProductDto implements Partial<Product> {
   standard_cost?: number | null;
 
   @ApiProperty({
-    description: 'Standard price',
+    description: 'Standard price (must be >= standard_cost)',
     nullable: true,
     required: false,
     minimum: 0,
@@ -121,6 +158,7 @@ export class UpdateProductDto implements Partial<Product> {
   @IsOptional()
   @IsNumber()
   @Min(0)
+  @Validate(UpdatePriceGreaterThanCostConstraint)
   standard_price?: number | null;
 
   @ApiProperty({
@@ -165,6 +203,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value?.trim() || null)
   @MaxLength(50)
   supplier_sku?: string | null;
 
@@ -194,6 +233,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value?.trim() || null)
   @MaxLength(500)
   notes?: string | null;
 }

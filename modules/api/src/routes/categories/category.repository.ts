@@ -48,4 +48,22 @@ export class CategoryRepository {
   async findOne(options: any): Promise<Category | null> {
     return this.repository.findOne(options);
   }
+
+  async findAllDescendantIds(parentId: string): Promise<string[]> {
+    const allCategories = await this.repository.find({
+      select: ['id', 'parent_id'],
+    });
+
+    const childIds: string[] = [];
+    const findChildren = (currentParentId: string) => {
+      for (const category of allCategories) {
+        if (category.parent_id === currentParentId) {
+          childIds.push(category.id);
+          findChildren(category.id);
+        }
+      }
+    };
+    findChildren(parentId);
+    return childIds;
+  }
 }
