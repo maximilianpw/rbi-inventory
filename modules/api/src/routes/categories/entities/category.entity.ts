@@ -2,16 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseEntity } from '../../../common/entities/base.entity';
 
 @Entity('categories')
-export class Category {
+export class Category extends BaseEntity {
   @ApiProperty({
     description: 'Unique identifier',
     format: 'uuid',
@@ -39,14 +38,6 @@ export class Category {
   })
   @Column({ type: 'varchar', length: 500, nullable: true })
   description: string | null;
-
-  @ApiProperty({ description: 'Creation timestamp' })
-  @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
-
-  @ApiProperty({ description: 'Last update timestamp' })
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
 
   @ManyToOne(() => Category, (category) => category.children, {
     nullable: true,

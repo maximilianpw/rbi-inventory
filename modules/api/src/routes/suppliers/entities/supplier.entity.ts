@@ -1,14 +1,9 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseEntity } from '../../../common/entities/base.entity';
 
 @Entity('suppliers')
-export class Supplier {
+export class Supplier extends BaseEntity {
   @ApiProperty({ description: 'Unique identifier', format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -44,12 +39,4 @@ export class Supplier {
   @ApiProperty({ description: 'Whether the supplier is active', default: true })
   @Column({ type: 'boolean', default: true })
   is_active: boolean;
-
-  @ApiProperty({ description: 'Creation timestamp' })
-  @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
-
-  @ApiProperty({ description: 'Last update timestamp' })
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
 }

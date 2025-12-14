@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseResponseDto } from '../../../common/dto/base-response.dto';
 
-export class CategoryWithChildrenResponseDto {
+export class CategoryWithChildrenResponseDto extends BaseResponseDto {
   @ApiProperty({
     description: 'Unique identifier',
     format: 'uuid',
@@ -27,18 +28,6 @@ export class CategoryWithChildrenResponseDto {
     example: 'Electronic equipment and components',
   })
   description: string | null;
-
-  @ApiProperty({
-    description: 'Creation timestamp',
-    format: 'date-time',
-  })
-  created_at: Date;
-
-  @ApiProperty({
-    description: 'Last update timestamp',
-    format: 'date-time',
-  })
-  updated_at: Date;
 
   @ApiProperty({
     description: 'Child categories',
