@@ -1,5 +1,6 @@
 import z from 'zod'
 import { useForm } from '@tanstack/react-form'
+import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import {
@@ -14,6 +15,7 @@ import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
 import { CategorySelector } from './CategorySelector'
 import {
+  getListCategoriesQueryKey,
   useCreateCategory,
   type CategoryResponseDto,
 } from '@/lib/data/generated'
@@ -33,9 +35,21 @@ const formSchema = z.object({
     .max(500, 'Description must be shorter than 500 characters'),
 })
 
-function useCategoryForm() {
+function useCategoryForm(queryClient: ReturnType<typeof useQueryClient>) {
   const { t } = useTranslation()
-  const mutation = useCreateCategory()
+  const mutation = useCreateCategory({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({
+          queryKey: getListCategoriesQueryKey(),
+        })
+        toast.success(t('form.categoryCreated'))
+      },
+      onError: () => {
+        toast.error(t('form.categoryCreateError'))
+      },
+    },
+  })
 
   return useForm({
     defaultValues: {
@@ -53,23 +67,6 @@ function useCategoryForm() {
           parent_id: value.parent_id || undefined,
         },
       })
-
-      if (process.env.NODE_ENV === 'development') {
-        toast(t('form.submit'), {
-          description: (
-            <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-              <code>{JSON.stringify(value, null, 2)}</code>
-            </pre>
-          ),
-          position: 'bottom-right',
-          classNames: {
-            content: 'flex flex-col gap-2',
-          },
-          style: {
-            '--border-radius': 'calc(var(--radius) + 4px)',
-          } as React.CSSProperties,
-        })
-      }
     },
   })
 }
@@ -78,7 +75,8 @@ export function CategoryForm({
   categories,
 }: CategoryFormProps): React.JSX.Element {
   const { t } = useTranslation()
-  const form = useCategoryForm()
+  const queryClient = useQueryClient()
+  const form = useCategoryForm(queryClient)
 
   return (
     <form

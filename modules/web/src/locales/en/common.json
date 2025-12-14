@@ -60,7 +60,10 @@
     "submit": "You submitted the following values:",
     "createCategoryTitle": "Create Category",
     "createCategoryDescription": "Add a new category to organize your inventory.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "categoryCreated": "Category created successfully",
+    "categoryCreateError": "Failed to create category",
+    "noParent": "No parent"
   },
   "products": {
     "errorLoading": "Error loading products:",
