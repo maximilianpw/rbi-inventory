@@ -28,6 +28,14 @@ export class CategoriesService {
       }
     }
 
+    const nameExists = await this.categoryRepository.existsByName(
+      createCategoryDto.name,
+      createCategoryDto.parent_id,
+    );
+    if (nameExists) {
+      throw new BadRequestException('Category with this name already exists');
+    }
+
     return this.categoryRepository.create({
       name: createCategoryDto.name,
       parent_id: createCategoryDto.parent_id ?? null,

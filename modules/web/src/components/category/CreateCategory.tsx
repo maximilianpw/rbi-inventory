@@ -1,3 +1,5 @@
+'use client'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CategoryForm } from './CategoryForm'
 import { Button } from '@/components/ui/button'
@@ -21,8 +23,10 @@ export function CreateCategory({
   categories,
 }: CreateCategoryProps): React.JSX.Element {
   const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="rounded-t-none" variant="outline">
           {t('form.createCategoryTitle')}
@@ -35,11 +39,17 @@ export function CreateCategory({
             {t('form.createCategoryDescription')}
           </DialogDescription>
         </DialogHeader>
-        <CategoryForm categories={categories} />
+        <CategoryForm
+          categories={categories}
+          onSuccess={() => setOpen(false)}
+        />
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">{t('form.cancel')}</Button>
           </DialogClose>
+          <Button form="create-category-form" type="submit">
+            {t('form.create')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1144,12 +1144,12 @@ components:
           minLength: 1
           maxLength: 100
         parent_id:
-          type: object
+          type: string
           description: Parent category ID
           format: uuid
           nullable: true
         description:
-          type: object
+          type: string
           description: Category description
           maxLength: 500
           nullable: true
@@ -1201,12 +1201,12 @@ components:
           minLength: 1
           maxLength: 100
         parent_id:
-          type: object
+          type: string
           description: Parent category ID
           format: uuid
           nullable: true
         description:
-          type: object
+          type: string
           description: Category description
           maxLength: 500
           nullable: true

@@ -24,6 +24,14 @@ export class CategoryRepository {
     return this.repository.existsBy({ id });
   }
 
+  async existsByName(name: string, parentId?: string | null): Promise<boolean> {
+    const count = await this.repository.countBy({
+      name: name,
+      parent_id: parentId || undefined,
+    });
+    return count > 0;
+  }
+
   async create(createData: Partial<Category>): Promise<Category> {
     const category = this.repository.create(createData);
     return this.repository.save(category);

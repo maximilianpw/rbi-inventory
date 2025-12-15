@@ -60,7 +60,11 @@
     "submit": "Sie haben die folgenden Werte eingereicht:",
     "createCategoryTitle": "Kategorie erstellen",
     "createCategoryDescription": "Fügen Sie eine neue Kategorie hinzu, um Ihren Bestand zu organisieren.",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "noParent": "Keine übergeordnete Kategorie",
+    "categoryCreated": "Kategorie erfolgreich erstellt",
+    "categoryError": "Kategorie konnte nicht erstellt werden",
+    "categoryDuplicateError": "Eine Kategorie mit diesem Namen existiert bereits unter der ausgewählten übergeordneten Kategorie"
   },
   "products": {
     "errorLoading": "Fehler beim Laden von Produkten:",
