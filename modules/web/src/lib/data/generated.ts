@@ -76,19 +76,6 @@ export interface CategoryWithChildrenResponseDto {
   children: CategoryWithChildrenResponseDto[]
 }
 
-/**
- * Parent category ID
- * @nullable
- */
-export type CreateCategoryDtoParentId = { [key: string]: unknown } | null
-
-/**
- * Category description
- * @maxLength 500
- * @nullable
- */
-export type CreateCategoryDtoDescription = { [key: string]: unknown } | null
-
 export interface CreateCategoryDto {
   /**
    * Category name
@@ -100,13 +87,13 @@ export interface CreateCategoryDto {
    * Parent category ID
    * @nullable
    */
-  parent_id?: CreateCategoryDtoParentId
+  parent_id?: string | null
   /**
    * Category description
    * @maxLength 500
    * @nullable
    */
-  description?: CreateCategoryDtoDescription
+  description?: string | null
 }
 
 /**
@@ -142,19 +129,6 @@ export interface CategoryResponseDto {
   description: CategoryResponseDtoDescription
 }
 
-/**
- * Parent category ID
- * @nullable
- */
-export type UpdateCategoryDtoParentId = { [key: string]: unknown } | null
-
-/**
- * Category description
- * @maxLength 500
- * @nullable
- */
-export type UpdateCategoryDtoDescription = { [key: string]: unknown } | null
-
 export interface UpdateCategoryDto {
   /**
    * Category name
@@ -166,13 +140,13 @@ export interface UpdateCategoryDto {
    * Parent category ID
    * @nullable
    */
-  parent_id?: UpdateCategoryDtoParentId
+  parent_id?: string | null
   /**
    * Category description
    * @maxLength 500
    * @nullable
    */
-  description?: UpdateCategoryDtoDescription
+  description?: string | null
 }
 
 export interface MessageResponseDto {
@@ -877,6 +851,121 @@ export interface BulkRestoreDto {
   ids: string[]
 }
 
+/**
+ * User ID who performed the action
+ * @nullable
+ */
+export type AuditLogResponseDtoUserId = { [key: string]: unknown } | null
+
+/**
+ * Action performed
+ */
+export type AuditLogResponseDtoAction =
+  (typeof AuditLogResponseDtoAction)[keyof typeof AuditLogResponseDtoAction]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AuditLogResponseDtoAction = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  RESTORE: 'RESTORE',
+  ADJUST_QUANTITY: 'ADJUST_QUANTITY',
+  ADD_PHOTO: 'ADD_PHOTO',
+  STATUS_CHANGE: 'STATUS_CHANGE',
+} as const
+
+/**
+ * Type of entity affected
+ */
+export type AuditLogResponseDtoEntityType =
+  (typeof AuditLogResponseDtoEntityType)[keyof typeof AuditLogResponseDtoEntityType]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AuditLogResponseDtoEntityType = {
+  PRODUCT: 'PRODUCT',
+  CATEGORY: 'CATEGORY',
+  SUPPLIER: 'SUPPLIER',
+  ORDER: 'ORDER',
+  ORDER_ITEM: 'ORDER_ITEM',
+  INVENTORY: 'INVENTORY',
+  LOCATION: 'LOCATION',
+  STOCK_MOVEMENT: 'STOCK_MOVEMENT',
+  PHOTO: 'PHOTO',
+} as const
+
+/**
+ * Changes made (before/after)
+ * @nullable
+ */
+export type AuditLogResponseDtoChanges = { [key: string]: unknown } | null
+
+/**
+ * IP address of the requester
+ * @nullable
+ */
+export type AuditLogResponseDtoIpAddress = { [key: string]: unknown } | null
+
+/**
+ * User agent of the requester
+ * @nullable
+ */
+export type AuditLogResponseDtoUserAgent = { [key: string]: unknown } | null
+
+export interface AuditLogResponseDto {
+  /** Unique identifier */
+  id: string
+  /**
+   * User ID who performed the action
+   * @nullable
+   */
+  user_id: AuditLogResponseDtoUserId
+  /** Action performed */
+  action: AuditLogResponseDtoAction
+  /** Type of entity affected */
+  entity_type: AuditLogResponseDtoEntityType
+  /** ID of the affected entity */
+  entity_id: string
+  /**
+   * Changes made (before/after)
+   * @nullable
+   */
+  changes: AuditLogResponseDtoChanges
+  /**
+   * IP address of the requester
+   * @nullable
+   */
+  ip_address: AuditLogResponseDtoIpAddress
+  /**
+   * User agent of the requester
+   * @nullable
+   */
+  user_agent: AuditLogResponseDtoUserAgent
+  /** Creation timestamp */
+  created_at: string
+}
+
+export interface PaginationMetaDto {
+  /** Current page number */
+  page: number
+  /** Number of items per page */
+  limit: number
+  /** Total number of items */
+  total: number
+  /** Total number of pages */
+  total_pages: number
+  /** Whether there is a next page */
+  has_next: boolean
+  /** Whether there is a previous page */
+  has_previous: boolean
+}
+
+export interface PaginatedAuditLogsResponseDto {
+  /** Array of audit log entries */
+  data: AuditLogResponseDto[]
+  /** Pagination metadata */
+  meta: PaginationMetaDto
+}
+
 export type HealthCheck200 = {
   status?: string
   timestamp?: string
@@ -978,6 +1067,74 @@ export type DeleteProductParams = {
    */
   permanent?: boolean
 }
+
+export type ListAuditLogsParams = {
+  /**
+   * Page number (1-based)
+   * @minimum 1
+   */
+  page?: number
+  /**
+   * Number of items per page
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number
+  /**
+   * Filter by entity type
+   */
+  entity_type?: ListAuditLogsEntityType
+  /**
+   * Filter by entity ID
+   */
+  entity_id?: string
+  /**
+   * Filter by user ID
+   */
+  user_id?: string
+  /**
+   * Filter by action
+   */
+  action?: ListAuditLogsAction
+  /**
+   * Filter from date (ISO 8601)
+   */
+  from_date?: string
+  /**
+   * Filter to date (ISO 8601)
+   */
+  to_date?: string
+}
+
+export type ListAuditLogsEntityType =
+  (typeof ListAuditLogsEntityType)[keyof typeof ListAuditLogsEntityType]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListAuditLogsEntityType = {
+  PRODUCT: 'PRODUCT',
+  CATEGORY: 'CATEGORY',
+  SUPPLIER: 'SUPPLIER',
+  ORDER: 'ORDER',
+  ORDER_ITEM: 'ORDER_ITEM',
+  INVENTORY: 'INVENTORY',
+  LOCATION: 'LOCATION',
+  STOCK_MOVEMENT: 'STOCK_MOVEMENT',
+  PHOTO: 'PHOTO',
+} as const
+
+export type ListAuditLogsAction =
+  (typeof ListAuditLogsAction)[keyof typeof ListAuditLogsAction]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListAuditLogsAction = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  RESTORE: 'RESTORE',
+  ADJUST_QUANTITY: 'ADJUST_QUANTITY',
+  ADD_PHOTO: 'ADD_PHOTO',
+  STATUS_CHANGE: 'STATUS_CHANGE',
+} as const
 
 /**
  * Returns the health status of the API
@@ -1762,7 +1919,6 @@ export const useDeleteCategory = <
 }
 
 /**
- * Retrieves products with pagination, filtering by various fields, and sorting options
  * @summary List products with pagination and filtering
  */
 export const listProducts = (
@@ -1901,7 +2057,6 @@ export function useListProducts<
 }
 
 /**
- * Creates a new product in the catalog
  * @summary Create product
  */
 export const createProduct = (
@@ -1985,7 +2140,6 @@ export const useCreateProduct = <TError = ErrorResponseDto, TContext = unknown>(
 }
 
 /**
- * Retrieves all products in the catalog without pagination
  * @summary List all products without pagination
  */
 export const listAllProducts = (signal?: AbortSignal) => {
@@ -2129,7 +2283,6 @@ export function useListAllProducts<
 }
 
 /**
- * Retrieves a specific product by UUID
  * @summary Get product by ID
  */
 export const getProduct = (
@@ -2282,7 +2435,6 @@ export function useGetProduct<
 }
 
 /**
- * Updates an existing product
  * @summary Update product
  */
 export const updateProduct = (
@@ -2365,7 +2517,6 @@ export const useUpdateProduct = <TError = ErrorResponseDto, TContext = unknown>(
 }
 
 /**
- * Soft deletes a product from the catalog (use permanent=true for hard delete)
  * @summary Delete product
  */
 export const deleteProduct = (id: string, params?: DeleteProductParams) => {
@@ -2444,7 +2595,6 @@ export const useDeleteProduct = <TError = ErrorResponseDto, TContext = unknown>(
 }
 
 /**
- * Retrieves all products in a specific category
  * @summary Get products by category
  */
 export const getProductsByCategory = (
@@ -2608,7 +2758,6 @@ export function useGetProductsByCategory<
 }
 
 /**
- * Retrieves all products in a category and its child categories
  * @summary Get products by category tree
  */
 export const getProductsByCategoryTree = (
@@ -2775,7 +2924,6 @@ export function useGetProductsByCategoryTree<
 }
 
 /**
- * Creates multiple products in a single request
  * @summary Bulk create products
  */
 export const bulkCreateProducts = (
@@ -2862,7 +3010,6 @@ export const useBulkCreateProducts = <
 }
 
 /**
- * Deletes multiple products in a single request
  * @summary Bulk delete products
  */
 export const bulkDeleteProducts = (bulkDeleteDto: BulkDeleteDto) => {
@@ -2945,7 +3092,6 @@ export const useBulkDeleteProducts = <
 }
 
 /**
- * Updates the active status of multiple products
  * @summary Bulk update product status
  */
 export const bulkUpdateProductStatus = (
@@ -3030,7 +3176,6 @@ export const useBulkUpdateProductStatus = <
 }
 
 /**
- * Restores a soft-deleted product
  * @summary Restore deleted product
  */
 export const restoreProduct = (id: string) => {
@@ -3111,7 +3256,6 @@ export const useRestoreProduct = <
 }
 
 /**
- * Restores multiple soft-deleted products
  * @summary Bulk restore products
  */
 export const bulkRestoreProducts = (bulkRestoreDto: BulkRestoreDto) => {
@@ -3194,81 +3338,678 @@ export const useBulkRestoreProducts = <
 }
 
 /**
- * Manually refresh the category cache used for product queries
- * @summary Refresh category cache
+ * @summary List audit logs with pagination and filtering
  */
-export const refreshCategoryCache = (signal?: AbortSignal) => {
-  return getAxiosInstance<MessageResponseDto>({
-    url: `/products/cache/refresh`,
-    method: 'POST',
+export const listAuditLogs = (
+  params?: ListAuditLogsParams,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<PaginatedAuditLogsResponseDto>({
+    url: `/audit-logs`,
+    method: 'GET',
+    params,
     signal,
   })
 }
 
-export const getRefreshCategoryCacheMutationOptions = <
-  TError = ErrorResponseDto,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof refreshCategoryCache>>,
-    TError,
-    void,
-    TContext
-  >
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof refreshCategoryCache>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationKey = ['refreshCategoryCache']
-  const { mutation: mutationOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof refreshCategoryCache>>,
-    void
-  > = () => {
-    return refreshCategoryCache()
-  }
-
-  return { mutationFn, ...mutationOptions }
+export const getListAuditLogsQueryKey = (params?: ListAuditLogsParams) => {
+  return [`/audit-logs`, ...(params ? [params] : [])] as const
 }
 
-export type RefreshCategoryCacheMutationResult = NonNullable<
-  Awaited<ReturnType<typeof refreshCategoryCache>>
->
-
-export type RefreshCategoryCacheMutationError = ErrorResponseDto
-
-/**
- * @summary Refresh category cache
- */
-export const useRefreshCategoryCache = <
+export const getListAuditLogsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listAuditLogs>>,
   TError = ErrorResponseDto,
-  TContext = unknown,
 >(
+  params?: ListAuditLogsParams,
   options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof refreshCategoryCache>>,
-      TError,
-      void,
-      TContext
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listAuditLogs>>, TError, TData>
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getListAuditLogsQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listAuditLogs>>> = ({
+    signal,
+  }) => listAuditLogs(params, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listAuditLogs>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListAuditLogsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listAuditLogs>>
+>
+export type ListAuditLogsQueryError = ErrorResponseDto
+
+export function useListAuditLogs<
+  TData = Awaited<ReturnType<typeof listAuditLogs>>,
+  TError = ErrorResponseDto,
+>(
+  params: undefined | ListAuditLogsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listAuditLogs>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAuditLogs>>,
+          TError,
+          Awaited<ReturnType<typeof listAuditLogs>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuditLogs<
+  TData = Awaited<ReturnType<typeof listAuditLogs>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListAuditLogsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listAuditLogs>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAuditLogs>>,
+          TError,
+          Awaited<ReturnType<typeof listAuditLogs>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAuditLogs<
+  TData = Awaited<ReturnType<typeof listAuditLogs>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListAuditLogsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listAuditLogs>>, TError, TData>
     >
   },
   queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof refreshCategoryCache>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationOptions = getRefreshCategoryCacheMutationOptions(options)
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary List audit logs with pagination and filtering
+ */
 
-  return useMutation(mutationOptions, queryClient)
+export function useListAuditLogs<
+  TData = Awaited<ReturnType<typeof listAuditLogs>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListAuditLogsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listAuditLogs>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getListAuditLogsQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get audit log by ID
+ */
+export const getAuditLog = (id: string, signal?: AbortSignal) => {
+  return getAxiosInstance<AuditLogResponseDto>({
+    url: `/audit-logs/${id}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getGetAuditLogQueryKey = (id?: string) => {
+  return [`/audit-logs/${id}`] as const
+}
+
+export const getGetAuditLogQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAuditLog>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAuditLog>>, TError, TData>
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetAuditLogQueryKey(id)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuditLog>>> = ({
+    signal,
+  }) => getAuditLog(id, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAuditLog>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuditLogQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAuditLog>>
+>
+export type GetAuditLogQueryError = ErrorResponseDto
+
+export function useGetAuditLog<
+  TData = Awaited<ReturnType<typeof getAuditLog>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAuditLog>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuditLog>>,
+          TError,
+          Awaited<ReturnType<typeof getAuditLog>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAuditLog<
+  TData = Awaited<ReturnType<typeof getAuditLog>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAuditLog>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuditLog>>,
+          TError,
+          Awaited<ReturnType<typeof getAuditLog>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAuditLog<
+  TData = Awaited<ReturnType<typeof getAuditLog>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAuditLog>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get audit log by ID
+ */
+
+export function useGetAuditLog<
+  TData = Awaited<ReturnType<typeof getAuditLog>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAuditLog>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetAuditLogQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get audit history for a specific entity
+ */
+export const getEntityAuditHistory = (
+  entityType:
+    | 'PRODUCT'
+    | 'CATEGORY'
+    | 'SUPPLIER'
+    | 'ORDER'
+    | 'ORDER_ITEM'
+    | 'INVENTORY'
+    | 'LOCATION'
+    | 'STOCK_MOVEMENT'
+    | 'PHOTO',
+  entityId: string,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<AuditLogResponseDto[]>({
+    url: `/audit-logs/entity/${entityType}/${entityId}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getGetEntityAuditHistoryQueryKey = (
+  entityType?:
+    | 'PRODUCT'
+    | 'CATEGORY'
+    | 'SUPPLIER'
+    | 'ORDER'
+    | 'ORDER_ITEM'
+    | 'INVENTORY'
+    | 'LOCATION'
+    | 'STOCK_MOVEMENT'
+    | 'PHOTO',
+  entityId?: string,
+) => {
+  return [`/audit-logs/entity/${entityType}/${entityId}`] as const
+}
+
+export const getGetEntityAuditHistoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getEntityAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  entityType:
+    | 'PRODUCT'
+    | 'CATEGORY'
+    | 'SUPPLIER'
+    | 'ORDER'
+    | 'ORDER_ITEM'
+    | 'INVENTORY'
+    | 'LOCATION'
+    | 'STOCK_MOVEMENT'
+    | 'PHOTO',
+  entityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEntityAuditHistory>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetEntityAuditHistoryQueryKey(entityType, entityId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getEntityAuditHistory>>
+  > = ({ signal }) => getEntityAuditHistory(entityType, entityId, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(entityType && entityId),
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getEntityAuditHistory>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEntityAuditHistoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getEntityAuditHistory>>
+>
+export type GetEntityAuditHistoryQueryError = ErrorResponseDto
+
+export function useGetEntityAuditHistory<
+  TData = Awaited<ReturnType<typeof getEntityAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  entityType:
+    | 'PRODUCT'
+    | 'CATEGORY'
+    | 'SUPPLIER'
+    | 'ORDER'
+    | 'ORDER_ITEM'
+    | 'INVENTORY'
+    | 'LOCATION'
+    | 'STOCK_MOVEMENT'
+    | 'PHOTO',
+  entityId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEntityAuditHistory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEntityAuditHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getEntityAuditHistory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEntityAuditHistory<
+  TData = Awaited<ReturnType<typeof getEntityAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  entityType:
+    | 'PRODUCT'
+    | 'CATEGORY'
+    | 'SUPPLIER'
+    | 'ORDER'
+    | 'ORDER_ITEM'
+    | 'INVENTORY'
+    | 'LOCATION'
+    | 'STOCK_MOVEMENT'
+    | 'PHOTO',
+  entityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEntityAuditHistory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEntityAuditHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getEntityAuditHistory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEntityAuditHistory<
+  TData = Awaited<ReturnType<typeof getEntityAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  entityType:
+    | 'PRODUCT'
+    | 'CATEGORY'
+    | 'SUPPLIER'
+    | 'ORDER'
+    | 'ORDER_ITEM'
+    | 'INVENTORY'
+    | 'LOCATION'
+    | 'STOCK_MOVEMENT'
+    | 'PHOTO',
+  entityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEntityAuditHistory>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get audit history for a specific entity
+ */
+
+export function useGetEntityAuditHistory<
+  TData = Awaited<ReturnType<typeof getEntityAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  entityType:
+    | 'PRODUCT'
+    | 'CATEGORY'
+    | 'SUPPLIER'
+    | 'ORDER'
+    | 'ORDER_ITEM'
+    | 'INVENTORY'
+    | 'LOCATION'
+    | 'STOCK_MOVEMENT'
+    | 'PHOTO',
+  entityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEntityAuditHistory>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetEntityAuditHistoryQueryOptions(
+    entityType,
+    entityId,
+    options,
+  )
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get audit history for a specific user
+ */
+export const getUserAuditHistory = (userId: string, signal?: AbortSignal) => {
+  return getAxiosInstance<AuditLogResponseDto[]>({
+    url: `/audit-logs/user/${userId}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getGetUserAuditHistoryQueryKey = (userId?: string) => {
+  return [`/audit-logs/user/${userId}`] as const
+}
+
+export const getGetUserAuditHistoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUserAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserAuditHistory>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetUserAuditHistoryQueryKey(userId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getUserAuditHistory>>
+  > = ({ signal }) => getUserAuditHistory(userId, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!userId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getUserAuditHistory>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserAuditHistoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUserAuditHistory>>
+>
+export type GetUserAuditHistoryQueryError = ErrorResponseDto
+
+export function useGetUserAuditHistory<
+  TData = Awaited<ReturnType<typeof getUserAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  userId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserAuditHistory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserAuditHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getUserAuditHistory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetUserAuditHistory<
+  TData = Awaited<ReturnType<typeof getUserAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserAuditHistory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserAuditHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getUserAuditHistory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetUserAuditHistory<
+  TData = Awaited<ReturnType<typeof getUserAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserAuditHistory>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get audit history for a specific user
+ */
+
+export function useGetUserAuditHistory<
+  TData = Awaited<ReturnType<typeof getUserAuditHistory>>,
+  TError = ErrorResponseDto,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserAuditHistory>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetUserAuditHistoryQueryOptions(userId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
 }

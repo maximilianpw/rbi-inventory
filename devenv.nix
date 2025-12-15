@@ -18,7 +18,6 @@
     pkgs.docker
     pkgs.docker-compose
     pkgs.typescript
-    pkgs.nodePackages.typescript-language-server
     pkgs.nodePackages.prettier
   ];
 

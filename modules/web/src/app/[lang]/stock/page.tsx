@@ -40,7 +40,7 @@ export default function ItemsPage(): React.JSX.Element {
   const [displayType, setDisplayType] = useState<DisplayType>(DisplayType.GRID)
 
   const { data: productsResponse } = useListProducts()
-  const items = productsResponse ?? []
+  const items = productsResponse?.data ?? []
 
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),

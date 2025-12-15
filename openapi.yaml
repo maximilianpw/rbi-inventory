@@ -246,9 +246,6 @@ paths:
         - Categories
   /products:
     get:
-      description: >-
-        Retrieves products with pagination, filtering by various fields, and
-        sorting options
       operationId: listProducts
       parameters:
         - name: page
@@ -355,19 +352,13 @@ paths:
               - DESC
       responses:
         '200':
-          description: Products retrieved successfully
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductsResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -378,7 +369,6 @@ paths:
       tags:
         - Products
     post:
-      description: Creates a new product in the catalog
       operationId: createProduct
       parameters: []
       requestBody:
@@ -389,25 +379,19 @@ paths:
               $ref: '#/components/schemas/CreateProductDto'
       responses:
         '201':
-          description: Product created successfully
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductResponseDto'
         '400':
-          description: Invalid request body
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -419,12 +403,11 @@ paths:
         - Products
   /products/all:
     get:
-      description: Retrieves all products in the catalog without pagination
       operationId: listAllProducts
       parameters: []
       responses:
         '200':
-          description: Products retrieved successfully
+          description: ''
           content:
             application/json:
               schema:
@@ -432,13 +415,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -450,7 +427,6 @@ paths:
         - Products
   /products/{id}:
     get:
-      description: Retrieves a specific product by UUID
       operationId: getProduct
       parameters:
         - name: id
@@ -467,31 +443,25 @@ paths:
             type: boolean
       responses:
         '200':
-          description: Product retrieved successfully
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductResponseDto'
         '400':
-          description: Invalid UUID format
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '404':
-          description: Product not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -502,7 +472,6 @@ paths:
       tags:
         - Products
     put:
-      description: Updates an existing product
       operationId: updateProduct
       parameters:
         - name: id
@@ -519,31 +488,25 @@ paths:
               $ref: '#/components/schemas/UpdateProductDto'
       responses:
         '200':
-          description: Product updated successfully
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductResponseDto'
         '400':
-          description: Invalid request
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '404':
-          description: Product not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -554,9 +517,6 @@ paths:
       tags:
         - Products
     delete:
-      description: >-
-        Soft deletes a product from the catalog (use permanent=true for hard
-        delete)
       operationId: deleteProduct
       parameters:
         - name: id
@@ -573,25 +533,19 @@ paths:
             type: boolean
       responses:
         '200':
-          description: Product deleted successfully
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MessageResponseDto'
         '400':
-          description: Invalid UUID format
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -603,7 +557,6 @@ paths:
         - Products
   /products/category/{categoryId}:
     get:
-      description: Retrieves all products in a specific category
       operationId: getProductsByCategory
       parameters:
         - name: categoryId
@@ -614,7 +567,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Products retrieved successfully
+          description: ''
           content:
             application/json:
               schema:
@@ -622,19 +575,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductResponseDto'
         '400':
-          description: Invalid UUID format
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -646,7 +593,6 @@ paths:
         - Products
   /products/category/{categoryId}/tree:
     get:
-      description: Retrieves all products in a category and its child categories
       operationId: getProductsByCategoryTree
       parameters:
         - name: categoryId
@@ -657,7 +603,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Products retrieved successfully
+          description: ''
           content:
             application/json:
               schema:
@@ -665,19 +611,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductResponseDto'
         '400':
-          description: Invalid UUID format
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -689,7 +629,6 @@ paths:
         - Products
   /products/bulk:
     post:
-      description: Creates multiple products in a single request
       operationId: bulkCreateProducts
       parameters: []
       requestBody:
@@ -700,25 +639,19 @@ paths:
               $ref: '#/components/schemas/BulkCreateProductsDto'
       responses:
         '201':
-          description: Bulk operation completed
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkOperationResultDto'
         '400':
-          description: Invalid request body
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -729,7 +662,6 @@ paths:
       tags:
         - Products
     delete:
-      description: Deletes multiple products in a single request
       operationId: bulkDeleteProducts
       parameters: []
       requestBody:
@@ -740,25 +672,19 @@ paths:
               $ref: '#/components/schemas/BulkDeleteDto'
       responses:
         '200':
-          description: Bulk operation completed
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkOperationResultDto'
         '400':
-          description: Invalid request body
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -770,7 +696,6 @@ paths:
         - Products
   /products/bulk/status:
     patch:
-      description: Updates the active status of multiple products
       operationId: bulkUpdateProductStatus
       parameters: []
       requestBody:
@@ -781,25 +706,19 @@ paths:
               $ref: '#/components/schemas/BulkUpdateStatusDto'
       responses:
         '200':
-          description: Bulk operation completed
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkOperationResultDto'
         '400':
-          description: Invalid request body
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -811,7 +730,6 @@ paths:
         - Products
   /products/{id}/restore:
     patch:
-      description: Restores a soft-deleted product
       operationId: restoreProduct
       parameters:
         - name: id
@@ -822,31 +740,25 @@ paths:
             type: string
       responses:
         '200':
-          description: Product restored successfully
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductResponseDto'
         '400':
-          description: Product is not deleted
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '404':
-          description: Product not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -858,7 +770,6 @@ paths:
         - Products
   /products/bulk/restore:
     patch:
-      description: Restores multiple soft-deleted products
       operationId: bulkRestoreProducts
       parameters: []
       requestBody:
@@ -869,25 +780,19 @@ paths:
               $ref: '#/components/schemas/BulkRestoreDto'
       responses:
         '200':
-          description: Bulk operation completed
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkOperationResultDto'
         '400':
-          description: Invalid request body
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
@@ -897,35 +802,231 @@ paths:
       summary: Bulk restore products
       tags:
         - Products
-  /products/cache/refresh:
-    post:
-      description: Manually refresh the category cache used for product queries
-      operationId: refreshCategoryCache
-      parameters: []
+  /audit-logs:
+    get:
+      operationId: listAuditLogs
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Page number (1-based)
+          schema:
+            minimum: 1
+            default: 1
+            type: number
+        - name: limit
+          required: false
+          in: query
+          description: Number of items per page
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 20
+            type: number
+        - name: entity_type
+          required: false
+          in: query
+          description: Filter by entity type
+          schema:
+            type: string
+            enum:
+              - PRODUCT
+              - CATEGORY
+              - SUPPLIER
+              - ORDER
+              - ORDER_ITEM
+              - INVENTORY
+              - LOCATION
+              - STOCK_MOVEMENT
+              - PHOTO
+        - name: entity_id
+          required: false
+          in: query
+          description: Filter by entity ID
+          schema:
+            format: uuid
+            type: string
+        - name: user_id
+          required: false
+          in: query
+          description: Filter by user ID
+          schema:
+            format: uuid
+            type: string
+        - name: action
+          required: false
+          in: query
+          description: Filter by action
+          schema:
+            type: string
+            enum:
+              - CREATE
+              - UPDATE
+              - DELETE
+              - RESTORE
+              - ADJUST_QUANTITY
+              - ADD_PHOTO
+              - STATUS_CHANGE
+        - name: from_date
+          required: false
+          in: query
+          description: Filter from date (ISO 8601)
+          schema:
+            format: date-time
+            type: string
+        - name: to_date
+          required: false
+          in: query
+          description: Filter to date (ISO 8601)
+          schema:
+            format: date-time
+            type: string
       responses:
         '200':
-          description: Cache refreshed successfully
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponseDto'
+                $ref: '#/components/schemas/PaginatedAuditLogsResponseDto'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-        '500':
-          description: Internal server error
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDto'
       security:
         - bearer: []
-      summary: Refresh category cache
+      summary: List audit logs with pagination and filtering
       tags:
-        - Products
+        - Audit Logs
+  /audit-logs/{id}:
+    get:
+      operationId: getAuditLog
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Audit log UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get audit log by ID
+      tags:
+        - Audit Logs
+  /audit-logs/entity/{entityType}/{entityId}:
+    get:
+      operationId: getEntityAuditHistory
+      parameters:
+        - name: entityType
+          required: true
+          in: path
+          description: Entity type
+          schema:
+            enum:
+              - PRODUCT
+              - CATEGORY
+              - SUPPLIER
+              - ORDER
+              - ORDER_ITEM
+              - INVENTORY
+              - LOCATION
+              - STOCK_MOVEMENT
+              - PHOTO
+            type: string
+        - name: entityId
+          required: true
+          in: path
+          description: Entity UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLogResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get audit history for a specific entity
+      tags:
+        - Audit Logs
+  /audit-logs/user/{userId}:
+    get:
+      operationId: getUserAuditHistory
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          description: User UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLogResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get audit history for a specific user
+      tags:
+        - Audit Logs
 info:
   title: RBI Inventory API
   description: REST API for RBI Inventory Management System
@@ -1043,12 +1144,12 @@ components:
           minLength: 1
           maxLength: 100
         parent_id:
-          type: object
+          type: string
           description: Parent category ID
           format: uuid
           nullable: true
         description:
-          type: object
+          type: string
           description: Category description
           maxLength: 500
           nullable: true
@@ -1100,12 +1201,12 @@ components:
           minLength: 1
           maxLength: 100
         parent_id:
-          type: object
+          type: string
           description: Parent category ID
           format: uuid
           nullable: true
         description:
-          type: object
+          type: string
           description: Category description
           maxLength: 500
           nullable: true
@@ -1644,3 +1745,117 @@ components:
             format: uuid
       required:
         - ids
+    AuditLogResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          format: uuid
+        user_id:
+          type: object
+          description: User ID who performed the action
+          format: uuid
+          nullable: true
+        action:
+          type: string
+          description: Action performed
+          enum:
+            - CREATE
+            - UPDATE
+            - DELETE
+            - RESTORE
+            - ADJUST_QUANTITY
+            - ADD_PHOTO
+            - STATUS_CHANGE
+        entity_type:
+          type: string
+          description: Type of entity affected
+          enum:
+            - PRODUCT
+            - CATEGORY
+            - SUPPLIER
+            - ORDER
+            - ORDER_ITEM
+            - INVENTORY
+            - LOCATION
+            - STOCK_MOVEMENT
+            - PHOTO
+        entity_id:
+          type: string
+          description: ID of the affected entity
+          format: uuid
+        changes:
+          type: object
+          description: Changes made (before/after)
+          nullable: true
+          example:
+            before:
+              name: Old Name
+            after:
+              name: New Name
+        ip_address:
+          type: object
+          description: IP address of the requester
+          nullable: true
+        user_agent:
+          type: object
+          description: User agent of the requester
+          nullable: true
+        created_at:
+          format: date-time
+          type: string
+          description: Creation timestamp
+      required:
+        - id
+        - user_id
+        - action
+        - entity_type
+        - entity_id
+        - changes
+        - ip_address
+        - user_agent
+        - created_at
+    PaginationMetaDto:
+      type: object
+      properties:
+        page:
+          type: number
+          description: Current page number
+        limit:
+          type: number
+          description: Number of items per page
+        total:
+          type: number
+          description: Total number of items
+        total_pages:
+          type: number
+          description: Total number of pages
+        has_next:
+          type: boolean
+          description: Whether there is a next page
+        has_previous:
+          type: boolean
+          description: Whether there is a previous page
+      required:
+        - page
+        - limit
+        - total
+        - total_pages
+        - has_next
+        - has_previous
+    PaginatedAuditLogsResponseDto:
+      type: object
+      properties:
+        data:
+          description: Array of audit log entries
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogResponseDto'
+        meta:
+          description: Pagination metadata
+          allOf:
+            - $ref: '#/components/schemas/PaginationMetaDto'
+      required:
+        - data
+        - meta

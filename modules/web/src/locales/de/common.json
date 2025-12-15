@@ -63,7 +63,9 @@
     "cancel": "Abbrechen",
     "categoryCreated": "Kategorie erfolgreich erstellt",
     "categoryCreateError": "Kategorie konnte nicht erstellt werden",
-    "noParent": "Keine übergeordnete Kategorie"
+    "noParent": "Keine übergeordnete Kategorie",
+    "categoryError": "Kategorie konnte nicht erstellt werden",
+    "categoryDuplicateError": "Eine Kategorie mit diesem Namen existiert bereits unter der ausgewählten übergeordneten Kategorie"
   },
   "products": {
     "errorLoading": "Fehler beim Laden von Produkten:",

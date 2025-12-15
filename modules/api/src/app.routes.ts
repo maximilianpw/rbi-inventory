@@ -3,6 +3,7 @@ import { AuthModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { HealthModule } from './routes/health/health.module';
 import { ProductsModule } from './routes/products/products.module';
+import { AuditLogsModule } from './routes/audit-logs/audit-logs.module';
 
 /**
  * Application routes configuration
@@ -25,5 +26,9 @@ export const routes: Routes = [
   {
     path: 'products',
     module: ProductsModule,
+  },
+  {
+    path: 'audit-logs',
+    module: AuditLogsModule,
   },
 ];

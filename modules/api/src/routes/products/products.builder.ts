@@ -37,6 +37,8 @@ export class ProductBuilder {
       reorder_point: product.reorder_point,
       primary_supplier_id: product.primary_supplier_id,
       supplier_sku: product.supplier_sku,
+      barcode: product.barcode,
+      unit: product.unit,
       is_active: product.is_active,
       is_perishable: product.is_perishable,
       notes: product.notes,

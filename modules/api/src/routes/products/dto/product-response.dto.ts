@@ -174,6 +174,20 @@ export class ProductResponseDto extends BaseAuditResponseDto {
   supplier_sku: string | null;
 
   @ApiProperty({
+    description: 'Product barcode',
+    nullable: true,
+    example: '0641628607549',
+  })
+  barcode: string | null;
+
+  @ApiProperty({
+    description: 'Unit of measure',
+    nullable: true,
+    example: 'units',
+  })
+  unit: string | null;
+
+  @ApiProperty({
     description: 'Whether the product is active',
   })
   is_active: boolean;

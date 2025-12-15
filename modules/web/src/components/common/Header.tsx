@@ -2,7 +2,7 @@
 import Link from 'next/link'
 
 import { SignedOut, SignInButton } from '@clerk/nextjs'
-import { LayoutDashboard, Package, Settings } from 'lucide-react'
+import { LayoutDashboard, Package, Settings, Logs } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -40,6 +40,11 @@ function useRoutes(): {
       name: t('navigation.products'),
       route: '/products',
       icon: Package,
+    },
+    {
+      name: t('navigation.auditLogs'),
+      route: '/audit-logs',
+      icon: Logs,
     },
   ]
 }

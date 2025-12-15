@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { ProductsModule } from './routes/products/products.module';
+import { AuditLogsModule } from './routes/audit-logs/audit-logs.module';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import databaseConfig from './config/database.config';
@@ -33,6 +34,7 @@ import { routes } from './app.routes';
     AuthModule,
     CategoriesModule,
     ProductsModule,
+    AuditLogsModule,
     RouterModule.register(routes),
   ],
   providers: [

@@ -8,4 +8,3 @@ export const HateoasLinks = (...links: LinkDefinition[]) =>
 
 export const SelfLink = (href: string | ((data: any) => string)) =>
   HateoasLinks({ rel: 'self', href, method: 'GET' });
-

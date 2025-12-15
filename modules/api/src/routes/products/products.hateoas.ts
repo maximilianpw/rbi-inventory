@@ -38,6 +38,7 @@ export const BulkOperationHateoas = () =>
   HateoasLinks(...BULK_OPERATION_HATEOAS_LINKS);
 export const DeleteProductHateoas = () =>
   HateoasLinks(...DELETE_PRODUCT_HATEOAS_LINKS);
-export const BulkDeleteHateoas = () => HateoasLinks(...BULK_DELETE_HATEOAS_LINKS);
+export const BulkDeleteHateoas = () =>
+  HateoasLinks(...BULK_DELETE_HATEOAS_LINKS);
 export const BulkRestoreHateoas = () =>
   HateoasLinks(...BULK_RESTORE_HATEOAS_LINKS);

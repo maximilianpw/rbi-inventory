@@ -41,6 +41,9 @@ import {
   ClerkRequest,
 } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { AuditInterceptor } from '../../common/interceptors/audit.interceptor';
+import { Auditable } from '../../common/decorators/auditable.decorator';
+import { AuditAction, AuditEntityType } from '../../common/enums';
 import {
   ProductHateoas,
   BulkOperationHateoas,
@@ -144,8 +147,13 @@ export class ProductsController {
   }
 
   @Post()
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @ProductHateoas()
+  @Auditable({
+    action: AuditAction.CREATE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdFromResponse: 'id',
+  })
   @ApiOperation({ summary: 'Create product', operationId: 'createProduct' })
   @ApiResponse({ status: 201, type: ProductResponseDto })
   @ApiResponse({ status: 400, type: ErrorResponseDto })
@@ -158,8 +166,13 @@ export class ProductsController {
   }
 
   @Post('bulk')
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkOperationHateoas()
+  @Auditable({
+    action: AuditAction.CREATE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdFromResponse: 'succeeded',
+  })
   @ApiOperation({
     summary: 'Bulk create products',
     operationId: 'bulkCreateProducts',
@@ -175,8 +188,13 @@ export class ProductsController {
   }
 
   @Put(':id')
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @ProductHateoas()
+  @Auditable({
+    action: AuditAction.UPDATE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdParam: 'id',
+  })
   @ApiOperation({ summary: 'Update product', operationId: 'updateProduct' })
   @ApiParam({ name: 'id', description: 'Product UUID', type: String })
   @ApiResponse({ status: 200, type: ProductResponseDto })
@@ -192,8 +210,13 @@ export class ProductsController {
   }
 
   @Patch('bulk/status')
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkOperationHateoas()
+  @Auditable({
+    action: AuditAction.STATUS_CHANGE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdFromResponse: 'succeeded',
+  })
   @ApiOperation({
     summary: 'Bulk update product status',
     operationId: 'bulkUpdateProductStatus',
@@ -209,8 +232,13 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @DeleteProductHateoas()
+  @Auditable({
+    action: AuditAction.DELETE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdParam: 'id',
+  })
   @ApiOperation({ summary: 'Delete product', operationId: 'deleteProduct' })
   @ApiParam({ name: 'id', description: 'Product UUID', type: String })
   @ApiQuery({
@@ -237,8 +265,13 @@ export class ProductsController {
   }
 
   @Delete('bulk')
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkDeleteHateoas()
+  @Auditable({
+    action: AuditAction.DELETE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdFromResponse: 'succeeded',
+  })
   @ApiOperation({
     summary: 'Bulk delete products',
     operationId: 'bulkDeleteProducts',
@@ -254,8 +287,13 @@ export class ProductsController {
   }
 
   @Patch(':id/restore')
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @ProductHateoas()
+  @Auditable({
+    action: AuditAction.RESTORE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdParam: 'id',
+  })
   @ApiOperation({
     summary: 'Restore deleted product',
     operationId: 'restoreProduct',
@@ -272,8 +310,13 @@ export class ProductsController {
   }
 
   @Patch('bulk/restore')
-  @UseInterceptors(HateoasInterceptor)
+  @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkRestoreHateoas()
+  @Auditable({
+    action: AuditAction.RESTORE,
+    entityType: AuditEntityType.PRODUCT,
+    entityIdFromResponse: 'succeeded',
+  })
   @ApiOperation({
     summary: 'Bulk restore products',
     operationId: 'bulkRestoreProducts',

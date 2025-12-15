@@ -10,6 +10,7 @@ import {
 export class UpdateCategoryDto {
   @ApiProperty({
     description: 'Category name',
+    type: String,
     minLength: 1,
     maxLength: 100,
     required: false,
@@ -22,6 +23,7 @@ export class UpdateCategoryDto {
 
   @ApiProperty({
     description: 'Parent category ID',
+    type: String,
     format: 'uuid',
     nullable: true,
     required: false,
@@ -32,6 +34,7 @@ export class UpdateCategoryDto {
 
   @ApiProperty({
     description: 'Category description',
+    type: String,
     maxLength: 500,
     nullable: true,
     required: false,

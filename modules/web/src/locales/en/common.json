@@ -60,10 +60,12 @@
     "submit": "You submitted the following values:",
     "createCategoryTitle": "Create Category",
     "createCategoryDescription": "Add a new category to organize your inventory.",
-    "cancel": "Cancel",
-    "categoryCreated": "Category created successfully",
     "categoryCreateError": "Failed to create category",
-    "noParent": "No parent"
+    "cancel": "Cancel",
+    "noParent": "No Parent",
+    "categoryCreated": "Category created successfully",
+    "categoryError": "Failed to create category",
+    "categoryDuplicateError": "A category with this name already exists under the selected parent"
   },
   "products": {
     "errorLoading": "Error loading products:",

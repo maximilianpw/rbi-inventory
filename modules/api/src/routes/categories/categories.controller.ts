@@ -26,10 +26,7 @@ import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { MessageResponseDto } from '../../common/dto/message-response.dto';
 import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
-import {
-  CategoryHateoas,
-  DeleteCategoryHateoas,
-} from './categories.hateoas';
+import { CategoryHateoas, DeleteCategoryHateoas } from './categories.hateoas';
 
 @ApiTags('Categories')
 @ApiBearerAuth()

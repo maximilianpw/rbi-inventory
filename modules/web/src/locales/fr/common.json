@@ -60,10 +60,12 @@
     "submit": "Vous avez soumis les valeurs suivantes :",
     "createCategoryTitle": "Créer une catégorie",
     "createCategoryDescription": "Ajouter une nouvelle catégorie pour organiser votre inventaire.",
-    "cancel": "Annuler",
     "categoryCreated": "Catégorie créée avec succès",
     "categoryCreateError": "Échec de la création de la catégorie",
-    "noParent": "Aucune catégorie parente"
+    "cancel": "Annuler",
+    "noParent": "Aucune catégorie parente",
+    "categoryError": "Échec de la création de la catégorie",
+    "categoryDuplicateError": "Une catégorie avec ce nom existe déjà sous la catégorie parente sélectionnée"
   },
   "products": {
     "errorLoading": "Erreur lors du chargement des produits:",

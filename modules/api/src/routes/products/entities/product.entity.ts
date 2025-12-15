@@ -130,6 +130,22 @@ export class Product extends BaseAuditEntity {
   supplier_sku: string | null;
 
   @ApiProperty({
+    description: 'Product barcode',
+    nullable: true,
+    example: '0641628607549',
+  })
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  barcode: string | null;
+
+  @ApiProperty({
+    description: 'Unit of measure',
+    nullable: true,
+    example: 'units',
+  })
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  unit: string | null;
+
+  @ApiProperty({
     description: 'Whether the product is active',
   })
   @Column({ type: 'boolean', default: true })

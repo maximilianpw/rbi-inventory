@@ -12,16 +12,46 @@ import {
 } from '../ui/field'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { Button } from '../ui/button'
 import { CategorySelector } from './CategorySelector'
 import {
   getListCategoriesQueryKey,
   useCreateCategory,
   type CategoryResponseDto,
+  type CategoryWithChildrenResponseDto,
 } from '@/lib/data/generated'
 
 interface CategoryFormProps {
-  categories?: CategoryResponseDto[]
+  categories?: CategoryWithChildrenResponseDto[]
+  onSuccess?: () => void
+}
+
+interface CategoryWithPath extends CategoryResponseDto {
+  path: string
+}
+
+function flattenCategoriesWithPath(
+  categories: CategoryWithChildrenResponseDto[],
+  separator: string = ' > ',
+): CategoryWithPath[] {
+  const result: CategoryWithPath[] = []
+
+  function traverse(
+    categories: CategoryWithChildrenResponseDto[],
+    parentPath: string = '',
+  ) {
+    for (const cat of categories) {
+      const currentPath = parentPath
+        ? `${parentPath}${separator}${cat.name}`
+        : cat.name
+      result.push({ ...cat, path: currentPath })
+      if (cat.children.length > 0) {
+        traverse(cat.children, currentPath)
+      }
+    }
+  }
+
+  traverse(categories)
+  return result
 }
 
 const formSchema = z.object({
@@ -32,24 +62,50 @@ const formSchema = z.object({
   parent_id: z.string().optional(),
   description: z
     .string()
-    .max(500, 'Description must be shorter than 500 characters'),
+    .max(500, 'Description must be shorter than 500 characters')
+    .optional(),
 })
 
-function useCategoryForm(queryClient: ReturnType<typeof useQueryClient>) {
+function useCategoryForm(
+  categories: CategoryWithChildrenResponseDto[] | undefined,
+  onSuccess?: () => void,
+) {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
+
   const mutation = useCreateCategory({
     mutation: {
-      onSuccess: () => {
-        void queryClient.invalidateQueries({
+      onSuccess: async () => {
+        toast.success(
+          t('form.categoryCreated') || 'Category created successfully',
+        )
+        await queryClient.invalidateQueries({
           queryKey: getListCategoriesQueryKey(),
         })
-        toast.success(t('form.categoryCreated'))
+        onSuccess?.()
       },
-      onError: () => {
-        toast.error(t('form.categoryCreateError'))
+      onError: (error) => {
+        toast.error(t('form.categoryError') || 'Failed to create category')
+        console.error('Category creation error:', error)
       },
     },
   })
+
+  // Helper to check if category name + parent combination exists
+  const isDuplicateCategory = (name: string, parentId: string): boolean => {
+    if (!categories) return false
+
+    const normalizedName = name.trim().toLowerCase()
+    const normalizedParentId = parentId === '' ? null : parentId
+
+    const allCategories = flattenCategoriesWithPath(categories)
+    return allCategories.some(
+      (cat) =>
+        cat.name.toLowerCase() === normalizedName &&
+        (cat.parent_id === null ? null : cat.parent_id.toString()) ===
+          normalizedParentId,
+    )
+  }
 
   return useForm({
     defaultValues: {
@@ -58,14 +114,37 @@ function useCategoryForm(queryClient: ReturnType<typeof useQueryClient>) {
       description: '',
     },
     validators: {
-      onSubmit: ({ value }) => formSchema.safeParse(value),
+      onSubmit: ({ value }) => {
+        const result = formSchema.safeParse(value)
+        if (!result.success) {
+          return result.error.format()
+        }
+
+        // Check for duplicate category
+        if (isDuplicateCategory(value.name, value.parent_id || '')) {
+          return {
+            form:
+              t('form.categoryDuplicateError') ||
+              'A category with this name already exists under the selected parent',
+          }
+        }
+
+        return undefined
+      },
     },
-    onSubmit: ({ value }) => {
-      mutation.mutate({
-        data: {
-          ...value,
-          parent_id: value.parent_id || undefined,
-        },
+    onSubmit: async ({ value }) => {
+      const payload = {
+        name: value.name,
+        parent_id:
+          value.parent_id && value.parent_id !== '' ? value.parent_id : null,
+        description:
+          value.description && value.description !== ''
+            ? value.description
+            : null,
+      }
+
+      await mutation.mutateAsync({
+        data: payload,
       })
     },
   })
@@ -73,10 +152,10 @@ function useCategoryForm(queryClient: ReturnType<typeof useQueryClient>) {
 
 export function CategoryForm({
   categories,
+  onSuccess,
 }: CategoryFormProps): React.JSX.Element {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
-  const form = useCategoryForm(queryClient)
+  const form = useCategoryForm(categories, onSuccess)
 
   return (
     <form
@@ -86,6 +165,11 @@ export function CategoryForm({
         await form.handleSubmit()
       }}
     >
+      {form.state.errors.length > 0 && (
+        <div className="bg-destructive/10 text-destructive mb-4 rounded-md p-3 text-sm">
+          {form.state.errors.join(', ')}
+        </div>
+      )}
       <FieldGroup>
         <form.Field name="name">
           {(field) => (
@@ -120,9 +204,9 @@ export function CategoryForm({
                     value={field.state.value}
                     categories={[
                       { value: '', label: t('form.noParent') },
-                      ...categories.map((cat) => ({
+                      ...flattenCategoriesWithPath(categories).map((cat) => ({
                         value: cat.id.toString(),
-                        label: cat.name,
+                        label: cat.path,
                       })),
                     ]}
                     onValueChange={field.handleChange}
@@ -154,12 +238,6 @@ export function CategoryForm({
             </Field>
           )}
         </form.Field>
-
-        <Field>
-          <Button form="create-category-form" type="submit">
-            {t('form.create')}
-          </Button>
-        </Field>
       </FieldGroup>
     </form>
   )

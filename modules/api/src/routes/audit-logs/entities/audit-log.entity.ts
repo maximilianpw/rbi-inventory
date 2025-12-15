@@ -3,11 +3,20 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { AuditAction } from 'src/common/enums';
+import { AuditAction, AuditEntityType } from 'src/common/enums';
+
+export interface AuditChanges {
+  before?: Record<string, unknown>;
+  after?: Record<string, unknown>;
+}
 
 @Entity('audit_logs')
+@Index(['entity_type', 'entity_id'])
+@Index(['user_id'])
+@Index(['created_at'])
 export class AuditLog {
   @ApiProperty({ description: 'Unique identifier', format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
@@ -28,21 +37,31 @@ export class AuditLog {
   })
   action: AuditAction;
 
-  @ApiProperty({ description: 'Type of entity affected' })
-  @Column({ type: 'varchar' })
-  entity_type: string;
+  @ApiProperty({
+    description: 'Type of entity affected',
+    enum: AuditEntityType,
+  })
+  @Column({
+    type: 'enum',
+    enum: AuditEntityType,
+  })
+  entity_type: AuditEntityType;
 
   @ApiProperty({ description: 'ID of the affected entity', format: 'uuid' })
   @Column({ type: 'uuid' })
   entity_id: string;
 
-  @ApiProperty({ description: 'Changes made', nullable: true })
+  @ApiProperty({ description: 'Changes made (before/after)', nullable: true })
   @Column({ type: 'jsonb', nullable: true })
-  changes: object | null;
+  changes: AuditChanges | null;
 
   @ApiProperty({ description: 'IP address of the requester', nullable: true })
   @Column({ type: 'varchar', nullable: true })
   ip_address: string | null;
+
+  @ApiProperty({ description: 'User agent of the requester', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
+  user_agent: string | null;
 
   @ApiProperty({ description: 'Creation timestamp' })
   @CreateDateColumn({ type: 'timestamptz' })

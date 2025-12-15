@@ -208,6 +208,32 @@ export class UpdateProductDto implements Partial<Product> {
   supplier_sku?: string | null;
 
   @ApiProperty({
+    description: 'Product barcode',
+    maxLength: 100,
+    nullable: true,
+    required: false,
+    example: '0641628607549',
+  })
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => value?.trim() || null)
+  @MaxLength(100)
+  barcode?: string | null;
+
+  @ApiProperty({
+    description: 'Unit of measure',
+    maxLength: 50,
+    nullable: true,
+    required: false,
+    example: 'units',
+  })
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => value?.trim() || null)
+  @MaxLength(50)
+  unit?: string | null;
+
+  @ApiProperty({
     description: 'Whether the product is active',
     nullable: true,
     required: false,
