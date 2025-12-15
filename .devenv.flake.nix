@@ -3,21 +3,21 @@
     let
       vars = {
   version = "1.11.1";
-  system = "x86_64-linux";
-  devenv_root = "/home/maxpw/local/rbi-inventory";
-  project_input_ref = "path:/home/maxpw/local/rbi-inventory";
-  devenv_dotfile = "/home/maxpw/local/rbi-inventory/.devenv";
+  system = "aarch64-darwin";
+  devenv_root = "/Users/max-vev/Local/rbi";
+  project_input_ref = "path:/Users/max-vev/Local/rbi";
+  devenv_dotfile = "/Users/max-vev/Local/rbi/.devenv";
   devenv_dotfile_path = ./.devenv;
-  devenv_tmpdir = "/run/user/1000";
-  devenv_runtime = "/run/user/1000/devenv-aad3f5c";
+  devenv_tmpdir = "/var/folders/28/027240191fggn7th39m9yg8m0000gn/T/";
+  devenv_runtime = "/var/folders/28/027240191fggn7th39m9yg8m0000gn/T/devenv-ce22f48";
   devenv_istesting = false;
   devenv_direnvrc_latest_version = 1;
   container_name = null;
   active_profiles = [
   ];
-  hostname = "main-pc";
-  username = "maxpw";
-  git_root = "/home/maxpw/local/rbi-inventory";
+  hostname = "Maximilians-MacBook-Pro.local";
+  username = "max-vev";
+  git_root = "/Users/max-vev/Local/rbi";
   secretspec = null;
 };
     in
@@ -40,21 +40,21 @@
     let
       vars = {
   version = "1.11.1";
-  system = "x86_64-linux";
-  devenv_root = "/home/maxpw/local/rbi-inventory";
-  project_input_ref = "path:/home/maxpw/local/rbi-inventory";
-  devenv_dotfile = "/home/maxpw/local/rbi-inventory/.devenv";
+  system = "aarch64-darwin";
+  devenv_root = "/Users/max-vev/Local/rbi";
+  project_input_ref = "path:/Users/max-vev/Local/rbi";
+  devenv_dotfile = "/Users/max-vev/Local/rbi/.devenv";
   devenv_dotfile_path = ./.devenv;
-  devenv_tmpdir = "/run/user/1000";
-  devenv_runtime = "/run/user/1000/devenv-aad3f5c";
+  devenv_tmpdir = "/var/folders/28/027240191fggn7th39m9yg8m0000gn/T/";
+  devenv_runtime = "/var/folders/28/027240191fggn7th39m9yg8m0000gn/T/devenv-ce22f48";
   devenv_istesting = false;
   devenv_direnvrc_latest_version = 1;
   container_name = null;
   active_profiles = [
   ];
-  hostname = "main-pc";
-  username = "maxpw";
-  git_root = "/home/maxpw/local/rbi-inventory";
+  hostname = "Maximilians-MacBook-Pro.local";
+  username = "max-vev";
+  git_root = "/Users/max-vev/Local/rbi";
   secretspec = null;
 };
       devenv =
