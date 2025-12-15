@@ -21,6 +21,7 @@ export class CreateCategoryDto {
 
   @ApiProperty({
     description: 'Parent category ID',
+    type: String,
     format: 'uuid',
     nullable: true,
     required: false,
@@ -31,6 +32,7 @@ export class CreateCategoryDto {
 
   @ApiProperty({
     description: 'Category description',
+    type: String,
     maxLength: 500,
     nullable: true,
     required: false,
