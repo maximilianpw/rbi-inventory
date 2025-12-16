@@ -39,31 +39,31 @@ export default async function RootLayout({
   const { lang } = await params
 
   return (
-    <ClerkProvider>
-      <AuthProvider>
-        <ReactQueryProvider>
-          <I18nProvider>
-            <ThemeProvider
-              disableTransitionOnChange
-              enableSystem
-              attribute="class"
-              defaultTheme="system"
-            >
-              <html lang={lang}>
-                <body
-                  className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+    <html lang={lang} suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ClerkProvider>
+          <AuthProvider>
+            <ReactQueryProvider>
+              <I18nProvider>
+                <ThemeProvider
+                  disableTransitionOnChange
+                  enableSystem
+                  attribute="class"
+                  defaultTheme="system"
                 >
                   <SidebarProvider>
                     <AppSidebar />
                     <main className="flex flex-1 flex-col">{children}</main>
                     <Toaster />
                   </SidebarProvider>
-                </body>
-              </html>
-            </ThemeProvider>
-          </I18nProvider>
-        </ReactQueryProvider>
-      </AuthProvider>
-    </ClerkProvider>
+                </ThemeProvider>
+              </I18nProvider>
+            </ReactQueryProvider>
+          </AuthProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   )
 }
