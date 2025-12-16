@@ -11,6 +11,7 @@ import { I18nProvider } from '@/hooks/providers/I18nProvider'
 import { ReactQueryProvider } from '@/hooks/providers/ReactQueryProvider'
 
 import '../globals.css'
+import { ThemeProvider } from '@/hooks/providers/ThemeProvider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -42,17 +43,24 @@ export default async function RootLayout({
       <AuthProvider>
         <ReactQueryProvider>
           <I18nProvider>
-            <html lang={lang}>
-              <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-              >
-                <SidebarProvider>
-                  <AppSidebar />
-                  <main className="flex flex-1 flex-col">{children}</main>
-                  <Toaster />
-                </SidebarProvider>
-              </body>
-            </html>
+            <ThemeProvider
+              disableTransitionOnChange
+              enableSystem
+              attribute="class"
+              defaultTheme="system"
+            >
+              <html lang={lang}>
+                <body
+                  className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                >
+                  <SidebarProvider>
+                    <AppSidebar />
+                    <main className="flex flex-1 flex-col">{children}</main>
+                    <Toaster />
+                  </SidebarProvider>
+                </body>
+              </html>
+            </ThemeProvider>
           </I18nProvider>
         </ReactQueryProvider>
       </AuthProvider>
