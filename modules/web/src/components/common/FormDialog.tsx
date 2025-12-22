@@ -66,7 +66,7 @@ export function FormDialog({
       <DialogContent className={contentClassName}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
+          {!!description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
 
         {children}
@@ -88,4 +88,3 @@ export function FormDialog({
     </Dialog>
   )
 }
-

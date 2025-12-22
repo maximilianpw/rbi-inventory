@@ -79,9 +79,9 @@ export function ProductForm({
                     />
                     <InputGroupAddon align="inline-end">
                       <InputGroupButton
-                        onClick={() => setScanOpen(true)}
                         type="button"
                         variant="ghost"
+                        onClick={() => setScanOpen(true)}
                       >
                         {t('form.scanQrCode') || 'Scan QR code'}
                       </InputGroupButton>
@@ -128,8 +128,8 @@ export function ProductForm({
                 <FieldContent>
                   {!!categories && (
                     <CategoryPathSelector
-                      value={field.state.value}
                       categories={categories}
+                      value={field.state.value}
                       emptyOptionLabel={
                         t('form.selectCategoryPlaceholder') ||
                         'Select a category'

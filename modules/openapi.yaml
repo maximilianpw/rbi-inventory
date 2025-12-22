@@ -1,0 +1,1897 @@
+openapi: 3.0.0
+paths:
+  /health-check:
+    get:
+      description: Returns the health status of the API
+      operationId: healthCheck
+      parameters: []
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  timestamp:
+                    type: string
+                    format: date-time
+      summary: Health check endpoint
+      tags:
+        - Health
+  /auth/auth/profile:
+    get:
+      description: Retrieves the current user profile from Clerk
+      operationId: getProfile
+      parameters: []
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponseDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get user profile
+      tags:
+        - Auth
+  /auth/auth/session-claims:
+    get:
+      description: Retrieves the current session JWT claims
+      operationId: getSessionClaims
+      parameters: []
+      responses:
+        '200':
+          description: Session claims retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionClaimsResponseDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get session claims
+      tags:
+        - Auth
+  /categories:
+    get:
+      description: Retrieves all product categories with their child categories
+      operationId: listCategories
+      parameters: []
+      responses:
+        '200':
+          description: Categories retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryWithChildrenResponseDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: List all categories
+      tags:
+        - Categories
+    post:
+      description: Creates a new product category
+      operationId: createCategory
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryDto'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponseDto'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Create category
+      tags:
+        - Categories
+  /categories/{id}:
+    put:
+      description: Updates an existing product category
+      operationId: updateCategory
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Category UUID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCategoryDto'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponseDto'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Update category
+      tags:
+        - Categories
+    delete:
+      description: Deletes a product category
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Category UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Category deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponseDto'
+        '400':
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Delete category
+      tags:
+        - Categories
+  /products:
+    get:
+      operationId: listProducts
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Page number (1-based)
+          schema:
+            minimum: 1
+            default: 1
+            type: number
+        - name: limit
+          required: false
+          in: query
+          description: Number of items per page
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 20
+            type: number
+        - name: search
+          required: false
+          in: query
+          description: Search term for name or SKU
+          schema:
+            type: string
+        - name: category_id
+          required: false
+          in: query
+          description: Filter by category ID
+          schema:
+            format: uuid
+            type: string
+        - name: brand_id
+          required: false
+          in: query
+          description: Filter by brand ID
+          schema:
+            format: uuid
+            type: string
+        - name: primary_supplier_id
+          required: false
+          in: query
+          description: Filter by primary supplier ID
+          schema:
+            format: uuid
+            type: string
+        - name: is_active
+          required: false
+          in: query
+          description: Filter by active status
+          schema:
+            type: boolean
+        - name: is_perishable
+          required: false
+          in: query
+          description: Filter by perishable status
+          schema:
+            type: boolean
+        - name: min_price
+          required: false
+          in: query
+          description: Minimum price filter
+          schema:
+            minimum: 0
+            type: number
+        - name: max_price
+          required: false
+          in: query
+          description: Maximum price filter
+          schema:
+            minimum: 0
+            type: number
+        - name: include_deleted
+          required: false
+          in: query
+          description: Include soft-deleted products
+          schema:
+            default: false
+            type: boolean
+        - name: sort_by
+          required: false
+          in: query
+          description: Field to sort by
+          schema:
+            default: name
+            type: string
+            enum:
+              - name
+              - sku
+              - created_at
+              - updated_at
+              - standard_price
+              - standard_cost
+              - reorder_point
+        - name: sort_order
+          required: false
+          in: query
+          description: Sort order
+          schema:
+            default: ASC
+            type: string
+            enum:
+              - ASC
+              - DESC
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductsResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: List products with pagination and filtering
+      tags:
+        - Products
+    post:
+      operationId: createProduct
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Create product
+      tags:
+        - Products
+  /products/all:
+    get:
+      operationId: listAllProducts
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: List all products without pagination
+      tags:
+        - Products
+  /products/{id}:
+    get:
+      operationId: getProduct
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Product UUID
+          schema:
+            type: string
+        - name: include_deleted
+          required: false
+          in: query
+          description: Include soft-deleted products
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get product by ID
+      tags:
+        - Products
+    put:
+      operationId: updateProduct
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Product UUID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Update product
+      tags:
+        - Products
+    delete:
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Product UUID
+          schema:
+            type: string
+        - name: permanent
+          required: false
+          in: query
+          description: Permanently delete instead of soft delete
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Delete product
+      tags:
+        - Products
+  /products/category/{categoryId}:
+    get:
+      operationId: getProductsByCategory
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          description: Category UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get products by category
+      tags:
+        - Products
+  /products/category/{categoryId}/tree:
+    get:
+      operationId: getProductsByCategoryTree
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          description: Category UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get products by category tree
+      tags:
+        - Products
+  /products/bulk:
+    post:
+      operationId: bulkCreateProducts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkCreateProductsDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResultDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Bulk create products
+      tags:
+        - Products
+    delete:
+      operationId: bulkDeleteProducts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkDeleteDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResultDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Bulk delete products
+      tags:
+        - Products
+  /products/bulk/status:
+    patch:
+      operationId: bulkUpdateProductStatus
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkUpdateStatusDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResultDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Bulk update product status
+      tags:
+        - Products
+  /products/{id}/restore:
+    patch:
+      operationId: restoreProduct
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Product UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Restore deleted product
+      tags:
+        - Products
+  /products/bulk/restore:
+    patch:
+      operationId: bulkRestoreProducts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkRestoreDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResultDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Bulk restore products
+      tags:
+        - Products
+  /audit-logs:
+    get:
+      operationId: listAuditLogs
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Page number (1-based)
+          schema:
+            minimum: 1
+            default: 1
+            type: number
+        - name: limit
+          required: false
+          in: query
+          description: Number of items per page
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 20
+            type: number
+        - name: entity_type
+          required: false
+          in: query
+          description: Filter by entity type
+          schema:
+            type: string
+            enum:
+              - PRODUCT
+              - CATEGORY
+              - SUPPLIER
+              - ORDER
+              - ORDER_ITEM
+              - INVENTORY
+              - LOCATION
+              - STOCK_MOVEMENT
+              - PHOTO
+        - name: entity_id
+          required: false
+          in: query
+          description: Filter by entity ID
+          schema:
+            format: uuid
+            type: string
+        - name: user_id
+          required: false
+          in: query
+          description: Filter by user ID
+          schema:
+            format: uuid
+            type: string
+        - name: action
+          required: false
+          in: query
+          description: Filter by action
+          schema:
+            type: string
+            enum:
+              - CREATE
+              - UPDATE
+              - DELETE
+              - RESTORE
+              - ADJUST_QUANTITY
+              - ADD_PHOTO
+              - STATUS_CHANGE
+        - name: from_date
+          required: false
+          in: query
+          description: Filter from date (ISO 8601)
+          schema:
+            format: date-time
+            type: string
+        - name: to_date
+          required: false
+          in: query
+          description: Filter to date (ISO 8601)
+          schema:
+            format: date-time
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogsResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: List audit logs with pagination and filtering
+      tags:
+        - Audit Logs
+  /audit-logs/{id}:
+    get:
+      operationId: getAuditLog
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Audit log UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get audit log by ID
+      tags:
+        - Audit Logs
+  /audit-logs/entity/{entityType}/{entityId}:
+    get:
+      operationId: getEntityAuditHistory
+      parameters:
+        - name: entityType
+          required: true
+          in: path
+          description: Entity type
+          schema:
+            enum:
+              - PRODUCT
+              - CATEGORY
+              - SUPPLIER
+              - ORDER
+              - ORDER_ITEM
+              - INVENTORY
+              - LOCATION
+              - STOCK_MOVEMENT
+              - PHOTO
+            type: string
+        - name: entityId
+          required: true
+          in: path
+          description: Entity UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLogResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get audit history for a specific entity
+      tags:
+        - Audit Logs
+  /audit-logs/user/{userId}:
+    get:
+      operationId: getUserAuditHistory
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          description: User UUID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLogResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Get audit history for a specific user
+      tags:
+        - Audit Logs
+info:
+  title: RBI Inventory API
+  description: REST API for RBI Inventory Management System
+  version: 1.0.0
+  contact:
+    name: API Support
+    url: ''
+    email: ''
+  license:
+    name: MIT
+    url: ''
+tags:
+  - name: Health
+    description: System health endpoints
+  - name: Auth
+    description: Authentication endpoints (Clerk JWT)
+  - name: Users
+    description: User management endpoints
+  - name: Categories
+    description: Product category management
+  - name: Products
+    description: Product catalog management
+servers:
+  - url: http://localhost:8080
+    description: Development Server
+  - url: https://api.rbi-inventory.com
+    description: Production Server
+components:
+  securitySchemes:
+    BearerAuth:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: Clerk JWT token
+  schemas:
+    ProfileResponseDto:
+      type: object
+      properties: {}
+    ErrorResponseDto:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Resource not found
+      required:
+        - error
+    SessionClaimsResponseDto:
+      type: object
+      properties:
+        user_id:
+          type: string
+        session_id:
+          type: string
+        expires_at:
+          type: number
+          format: int64
+        issued_at:
+          type: number
+          format: int64
+      required:
+        - user_id
+        - session_id
+        - expires_at
+        - issued_at
+    CategoryWithChildrenResponseDto:
+      type: object
+      properties:
+        created_at:
+          format: date-time
+          type: string
+          description: Creation timestamp
+        updated_at:
+          format: date-time
+          type: string
+          description: Last update timestamp
+        id:
+          type: string
+          description: Unique identifier
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          description: Category name
+          example: Electronics
+        parent_id:
+          type: object
+          description: Parent category ID
+          format: uuid
+          nullable: true
+        description:
+          type: object
+          description: Category description
+          nullable: true
+          example: Electronic equipment and components
+        children:
+          description: Child categories
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryWithChildrenResponseDto'
+      required:
+        - created_at
+        - updated_at
+        - id
+        - name
+        - parent_id
+        - description
+        - children
+    CreateCategoryDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Category name
+          example: Electronics
+          minLength: 1
+          maxLength: 100
+        parent_id:
+          type: string
+          description: Parent category ID
+          format: uuid
+          nullable: true
+        description:
+          type: string
+          description: Category description
+          maxLength: 500
+          nullable: true
+      required:
+        - name
+    CategoryResponseDto:
+      type: object
+      properties:
+        created_at:
+          format: date-time
+          type: string
+          description: Creation timestamp
+        updated_at:
+          format: date-time
+          type: string
+          description: Last update timestamp
+        id:
+          type: string
+          description: Unique identifier
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          description: Category name
+          example: Electronics
+        parent_id:
+          type: object
+          description: Parent category ID
+          format: uuid
+          nullable: true
+        description:
+          type: object
+          description: Category description
+          nullable: true
+          example: Electronic equipment and components
+      required:
+        - created_at
+        - updated_at
+        - id
+        - name
+        - parent_id
+        - description
+    UpdateCategoryDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Category name
+          minLength: 1
+          maxLength: 100
+        parent_id:
+          type: string
+          description: Parent category ID
+          format: uuid
+          nullable: true
+        description:
+          type: string
+          description: Category description
+          maxLength: 500
+          nullable: true
+    MessageResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Operation completed successfully
+      required:
+        - message
+    CategorySummaryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Category ID
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          description: Category name
+          example: Electronics
+        parent_id:
+          type: object
+          description: Parent category ID
+          format: uuid
+          nullable: true
+      required:
+        - id
+        - name
+        - parent_id
+    SupplierSummaryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Supplier ID
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          description: Supplier name
+          example: Acme Corp
+      required:
+        - id
+        - name
+    HateoasLink:
+      type: object
+      properties:
+        href:
+          type: string
+          description: The URL of the linked resource
+        method:
+          type: string
+          description: HTTP method for this link
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+      required:
+        - href
+    ProductLinksDto:
+      type: object
+      properties:
+        self:
+          description: Link to this product
+          allOf:
+            - $ref: '#/components/schemas/HateoasLink'
+        update:
+          description: Link to update this product
+          allOf:
+            - $ref: '#/components/schemas/HateoasLink'
+        delete:
+          description: Link to delete this product
+          allOf:
+            - $ref: '#/components/schemas/HateoasLink'
+        category:
+          description: Link to the product category
+          allOf:
+            - $ref: '#/components/schemas/HateoasLink'
+      required:
+        - self
+        - update
+        - delete
+        - category
+    ProductResponseDto:
+      type: object
+      properties:
+        created_at:
+          format: date-time
+          type: string
+          description: Creation timestamp
+        updated_at:
+          format: date-time
+          type: string
+          description: Last update timestamp
+        deleted_at:
+          type: object
+          description: Deletion timestamp (for soft-deleted records)
+          format: date-time
+          nullable: true
+        created_by:
+          type: object
+          description: User ID who created the record
+          nullable: true
+        updated_by:
+          type: object
+          description: User ID who last updated the record
+          nullable: true
+        deleted_by:
+          type: object
+          description: User ID who deleted the record
+          nullable: true
+        id:
+          type: string
+          description: Unique identifier
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        sku:
+          type: string
+          description: Product SKU
+          example: PROD-001
+        name:
+          type: string
+          description: Product name
+          example: Marine Pump
+        description:
+          type: object
+          description: Product description
+          nullable: true
+        category_id:
+          type: string
+          description: Category ID
+          format: uuid
+        category:
+          description: Nested category information
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/CategorySummaryDto'
+        brand_id:
+          type: object
+          description: Brand ID
+          format: uuid
+          nullable: true
+        volume_ml:
+          type: object
+          description: Volume in milliliters
+          nullable: true
+        weight_kg:
+          type: object
+          description: Weight in kilograms
+          nullable: true
+        dimensions_cm:
+          type: object
+          description: 'Dimensions in cm (format: LxWxH)'
+          nullable: true
+          example: 10x20x5
+        standard_cost:
+          type: object
+          description: Standard cost
+          nullable: true
+        standard_price:
+          type: object
+          description: Standard price
+          nullable: true
+        markup_percentage:
+          type: object
+          description: Markup percentage
+          nullable: true
+        reorder_point:
+          type: number
+          description: Reorder point threshold
+          example: 10
+        primary_supplier_id:
+          type: object
+          description: Primary supplier ID
+          format: uuid
+          nullable: true
+        primary_supplier:
+          description: Nested supplier information
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/SupplierSummaryDto'
+        supplier_sku:
+          type: object
+          description: Supplier SKU
+          nullable: true
+        barcode:
+          type: object
+          description: Product barcode
+          nullable: true
+          example: '0641628607549'
+        unit:
+          type: object
+          description: Unit of measure
+          nullable: true
+          example: units
+        is_active:
+          type: boolean
+          description: Whether the product is active
+        is_perishable:
+          type: boolean
+          description: Whether the product is perishable
+        notes:
+          type: object
+          description: Additional notes
+          nullable: true
+        _links:
+          description: HATEOAS links
+          allOf:
+            - $ref: '#/components/schemas/ProductLinksDto'
+      required:
+        - created_at
+        - updated_at
+        - id
+        - sku
+        - name
+        - description
+        - category_id
+        - brand_id
+        - volume_ml
+        - weight_kg
+        - dimensions_cm
+        - standard_cost
+        - standard_price
+        - markup_percentage
+        - reorder_point
+        - primary_supplier_id
+        - supplier_sku
+        - barcode
+        - unit
+        - is_active
+        - is_perishable
+        - notes
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: number
+          description: Current page number
+        limit:
+          type: number
+          description: Number of items per page
+        total:
+          type: number
+          description: Total number of items
+        total_pages:
+          type: number
+          description: Total number of pages
+        has_next:
+          type: boolean
+          description: Whether there is a next page
+        has_previous:
+          type: boolean
+          description: Whether there is a previous page
+      required:
+        - page
+        - limit
+        - total
+        - total_pages
+        - has_next
+        - has_previous
+    PaginatedProductsResponseDto:
+      type: object
+      properties:
+        data:
+          description: List of products
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResponseDto'
+        meta:
+          description: Pagination metadata
+          allOf:
+            - $ref: '#/components/schemas/PaginationMeta'
+      required:
+        - data
+        - meta
+    CreateProductDto:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: Product SKU
+          example: PROD-001
+          minLength: 1
+          maxLength: 50
+        name:
+          type: string
+          description: Product name
+          example: Marine Pump
+          minLength: 1
+          maxLength: 200
+        description:
+          type: object
+          description: Product description
+          maxLength: 1000
+          nullable: true
+        category_id:
+          type: string
+          description: Category ID
+          format: uuid
+        brand_id:
+          type: object
+          description: Brand ID
+          format: uuid
+          nullable: true
+        volume_ml:
+          type: object
+          description: Volume in milliliters
+          nullable: true
+          minimum: 1
+        weight_kg:
+          type: object
+          description: Weight in kilograms
+          nullable: true
+          minimum: 0
+        dimensions_cm:
+          type: object
+          description: 'Dimensions in cm (format: LxWxH, e.g., 10x20x5)'
+          maxLength: 50
+          nullable: true
+          example: 10x20x5
+        standard_cost:
+          type: object
+          description: Standard cost
+          nullable: true
+          minimum: 0
+        standard_price:
+          type: object
+          description: Standard price (must be >= standard_cost)
+          nullable: true
+          minimum: 0
+        markup_percentage:
+          type: object
+          description: Markup percentage
+          nullable: true
+          minimum: 0
+          maximum: 1000
+        reorder_point:
+          type: number
+          description: Reorder point threshold
+          example: 10
+          minimum: 0
+        primary_supplier_id:
+          type: object
+          description: Primary supplier ID
+          format: uuid
+          nullable: true
+        supplier_sku:
+          type: object
+          description: Supplier SKU
+          maxLength: 50
+          nullable: true
+        barcode:
+          type: object
+          description: Product barcode
+          maxLength: 100
+          nullable: true
+          example: '0641628607549'
+        unit:
+          type: object
+          description: Unit of measure
+          maxLength: 50
+          nullable: true
+          example: units
+        is_active:
+          type: boolean
+          description: Whether the product is active
+        is_perishable:
+          type: boolean
+          description: Whether the product is perishable
+        notes:
+          type: object
+          description: Additional notes
+          maxLength: 500
+          nullable: true
+      required:
+        - sku
+        - name
+        - category_id
+        - reorder_point
+        - is_active
+        - is_perishable
+    BulkCreateProductsDto:
+      type: object
+      properties:
+        products:
+          description: Array of products to create
+          minItems: 1
+          maxItems: 100
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateProductDto'
+      required:
+        - products
+    BulkOperationResultDto:
+      type: object
+      properties:
+        success_count:
+          type: number
+          description: Number of successfully processed items
+        failure_count:
+          type: number
+          description: Number of failed items
+        succeeded:
+          description: IDs that were successfully processed
+          type: array
+          items:
+            type: string
+        failures:
+          type: array
+          description: Details of failed operations
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              error:
+                type: string
+      required:
+        - success_count
+        - failure_count
+        - succeeded
+        - failures
+    UpdateProductDto:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: Product SKU
+          minLength: 1
+          maxLength: 50
+        name:
+          type: string
+          description: Product name
+          minLength: 1
+          maxLength: 200
+        description:
+          type: object
+          description: Product description
+          maxLength: 1000
+          nullable: true
+        category_id:
+          type: string
+          description: Category ID
+          format: uuid
+          nullable: true
+        brand_id:
+          type: object
+          description: Brand ID
+          format: uuid
+          nullable: true
+        volume_ml:
+          type: object
+          description: Volume in milliliters
+          nullable: true
+          minimum: 1
+        weight_kg:
+          type: object
+          description: Weight in kilograms
+          nullable: true
+          minimum: 0
+        dimensions_cm:
+          type: object
+          description: 'Dimensions in cm (format: LxWxH, e.g., 10x20x5)'
+          maxLength: 50
+          nullable: true
+          example: 10x20x5
+        standard_cost:
+          type: object
+          description: Standard cost
+          nullable: true
+          minimum: 0
+        standard_price:
+          type: object
+          description: Standard price (must be >= standard_cost)
+          nullable: true
+          minimum: 0
+        markup_percentage:
+          type: object
+          description: Markup percentage
+          nullable: true
+          minimum: 0
+          maximum: 1000
+        reorder_point:
+          type: number
+          description: Reorder point threshold
+          nullable: true
+          minimum: 0
+        primary_supplier_id:
+          type: object
+          description: Primary supplier ID
+          format: uuid
+          nullable: true
+        supplier_sku:
+          type: object
+          description: Supplier SKU
+          maxLength: 50
+          nullable: true
+        barcode:
+          type: object
+          description: Product barcode
+          maxLength: 100
+          nullable: true
+          example: '0641628607549'
+        unit:
+          type: object
+          description: Unit of measure
+          maxLength: 50
+          nullable: true
+          example: units
+        is_active:
+          type: boolean
+          description: Whether the product is active
+          nullable: true
+        is_perishable:
+          type: boolean
+          description: Whether the product is perishable
+          nullable: true
+        notes:
+          type: object
+          description: Additional notes
+          maxLength: 500
+          nullable: true
+    BulkUpdateStatusDto:
+      type: object
+      properties:
+        ids:
+          description: Array of product IDs to update
+          minItems: 1
+          maxItems: 100
+          type: array
+          items:
+            type: string
+            format: uuid
+        is_active:
+          type: boolean
+          description: New active status
+      required:
+        - ids
+        - is_active
+    BulkDeleteDto:
+      type: object
+      properties:
+        ids:
+          description: Array of product IDs to delete
+          minItems: 1
+          maxItems: 100
+          type: array
+          items:
+            type: string
+            format: uuid
+        permanent:
+          type: boolean
+          description: Permanently delete (hard delete) instead of soft delete
+          default: false
+      required:
+        - ids
+    BulkRestoreDto:
+      type: object
+      properties:
+        ids:
+          description: Array of product IDs to restore
+          minItems: 1
+          maxItems: 100
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+        - ids
+    AuditLogResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          format: uuid
+        user_id:
+          type: object
+          description: User ID who performed the action
+          format: uuid
+          nullable: true
+        action:
+          type: string
+          description: Action performed
+          enum:
+            - CREATE
+            - UPDATE
+            - DELETE
+            - RESTORE
+            - ADJUST_QUANTITY
+            - ADD_PHOTO
+            - STATUS_CHANGE
+        entity_type:
+          type: string
+          description: Type of entity affected
+          enum:
+            - PRODUCT
+            - CATEGORY
+            - SUPPLIER
+            - ORDER
+            - ORDER_ITEM
+            - INVENTORY
+            - LOCATION
+            - STOCK_MOVEMENT
+            - PHOTO
+        entity_id:
+          type: string
+          description: ID of the affected entity
+          format: uuid
+        changes:
+          type: object
+          description: Changes made (before/after)
+          nullable: true
+          example:
+            before:
+              name: Old Name
+            after:
+              name: New Name
+        ip_address:
+          type: object
+          description: IP address of the requester
+          nullable: true
+        user_agent:
+          type: object
+          description: User agent of the requester
+          nullable: true
+        created_at:
+          format: date-time
+          type: string
+          description: Creation timestamp
+      required:
+        - id
+        - user_id
+        - action
+        - entity_type
+        - entity_id
+        - changes
+        - ip_address
+        - user_agent
+        - created_at
+    PaginationMetaDto:
+      type: object
+      properties:
+        page:
+          type: number
+          description: Current page number
+        limit:
+          type: number
+          description: Number of items per page
+        total:
+          type: number
+          description: Total number of items
+        total_pages:
+          type: number
+          description: Total number of pages
+        has_next:
+          type: boolean
+          description: Whether there is a next page
+        has_previous:
+          type: boolean
+          description: Whether there is a previous page
+      required:
+        - page
+        - limit
+        - total
+        - total_pages
+        - has_next
+        - has_previous
+    PaginatedAuditLogsResponseDto:
+      type: object
+      properties:
+        data:
+          description: Array of audit log entries
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogResponseDto'
+        meta:
+          description: Pagination metadata
+          allOf:
+            - $ref: '#/components/schemas/PaginationMetaDto'
+      required:
+        - data
+        - meta

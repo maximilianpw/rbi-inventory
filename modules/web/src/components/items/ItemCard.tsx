@@ -20,20 +20,20 @@ export function ItemCard({
   if (displayType === DisplayType.LIST) {
     return (
       <Card className="flex gap-4 p-4">
-        <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
+        <div className="bg-muted h-16 w-16 shrink-0 overflow-hidden rounded-md">
           <ImagePlaceholder icon={Package} iconSize={'sm'} />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-medium text-foreground">{item.name}</h3>
-          <div className="mt-1 flex items-center gap-4 text-sm text-muted-foreground">
+          <h3 className="text-foreground truncate font-medium">{item.name}</h3>
+          <div className="text-muted-foreground mt-1 flex items-center gap-4 text-sm">
             <span>SKU: {item.sku}</span>
             <span>
               {t('items.price')}: ${price.toLocaleString()}
             </span>
           </div>
           {!!item.description && (
-            <p className="mt-2 truncate text-xs text-muted-foreground">
-              {item.description}
+            <p className="text-muted-foreground mt-2 truncate text-xs">
+              {String(item.description)}
             </p>
           )}
         </div>
@@ -43,17 +43,21 @@ export function ItemCard({
 
   return (
     <Card>
-      <div className="aspect-square w-full overflow-hidden bg-muted">
+      <div className="bg-muted aspect-square w-full overflow-hidden">
         <ImagePlaceholder icon={Package} iconSize={'lg'} />
       </div>
       <CardContent className="pt-4">
-        <h3 className="mb-1 truncate font-medium text-foreground">{item.name}</h3>
-        <p className="mb-2 text-xs text-muted-foreground">{item.sku}</p>
-        <div className="space-y-1 text-sm text-muted-foreground">
-          <p className="font-medium text-foreground">${price.toLocaleString()}</p>
-          {item.description !== null && item.description.length > 0 && (
-            <p className="line-clamp-2 text-xs text-muted-foreground">
-              {item.description}
+        <h3 className="text-foreground mb-1 truncate font-medium">
+          {item.name}
+        </h3>
+        <p className="text-muted-foreground mb-2 text-xs">{item.sku}</p>
+        <div className="text-muted-foreground space-y-1 text-sm">
+          <p className="text-foreground font-medium">
+            ${price.toLocaleString()}
+          </p>
+          {!!item.description && String(item.description).length > 0 && (
+            <p className="text-muted-foreground line-clamp-2 text-xs">
+              {String(item.description)}
             </p>
           )}
         </div>

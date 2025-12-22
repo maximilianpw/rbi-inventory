@@ -3,11 +3,41 @@ import * as React from 'react'
 import CategorySidebar from '@/components/category/CategorySidebar'
 import { CreateProductButton } from '@/components/products/CreateProductButton'
 import { ProductList } from '@/components/products/ProductList'
+import {
+  useListCategories,
+  type CategoryWithChildrenResponseDto,
+} from '@/lib/data/generated'
+
+function findCategoryById(
+  categories: CategoryWithChildrenResponseDto[],
+  id: string,
+): CategoryWithChildrenResponseDto | null {
+  for (const category of categories) {
+    if (category.id === id) {
+      return category
+    }
+    if (category.children.length > 0) {
+      const found = findCategoryById(category.children, id)
+      if (found) return found
+    }
+  }
+  return null
+}
 
 export default function ProductPage(): React.JSX.Element {
   const [selectedCategoryId, setSelectedCategoryId] = React.useState<
     string | null
   >(null)
+
+  const { data: categories = [] } = useListCategories()
+
+  const subcategories = React.useMemo(() => {
+    if (!selectedCategoryId) {
+      return categories
+    }
+    const selectedCategory = findCategoryById(categories, selectedCategoryId)
+    return selectedCategory?.children ?? []
+  }, [categories, selectedCategoryId])
 
   return (
     <div className="flex h-full w-full">
@@ -19,7 +49,11 @@ export default function ProductPage(): React.JSX.Element {
         <div className="flex justify-end pb-4">
           <CreateProductButton defaultCategoryId={selectedCategoryId} />
         </div>
-        <ProductList categoryId={selectedCategoryId} />
+        <ProductList
+          categoryId={selectedCategoryId}
+          subcategories={subcategories}
+          onSelectCategory={setSelectedCategoryId}
+        />
       </div>
     </div>
   )

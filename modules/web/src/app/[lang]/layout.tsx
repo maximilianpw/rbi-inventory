@@ -39,7 +39,7 @@ export default async function RootLayout({
   const { lang } = await params
 
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html suppressHydrationWarning lang={lang}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "openapi:generate": "ts-node -r tsconfig-paths/register src/generate-openapi.ts",
+    "openapi:generate": "ts-node -r tsconfig-paths/register src/scripts/generate-openapi.ts",
     "import:sortly": "ts-node -r tsconfig-paths/register src/scripts/import-sortly.ts",
     "seed": "ts-node -r tsconfig-paths/register src/scripts/seed-database.ts"
   },

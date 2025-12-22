@@ -266,7 +266,8 @@ async function seedProducts(
       reorder_point: faker.number.int({ min: 0, max: 50 }),
       primary_supplier_id: supplier.id,
       supplier_sku: faker.helpers.maybe(
-        () => `SUP-${faker.string.alphanumeric({ length: 8, casing: 'upper' })}`,
+        () =>
+          `SUP-${faker.string.alphanumeric({ length: 8, casing: 'upper' })}`,
         { probability: 0.8 },
       ),
       is_active: faker.helpers.maybe(() => false, { probability: 0.1 }) ?? true,

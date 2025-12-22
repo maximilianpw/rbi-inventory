@@ -30,9 +30,6 @@ nest-test:
 # Linting
 lint:
   just modules/web/lint
-
-lint-all:
-  just modules/web/lint
   cd modules/api && pnpm lint
 
 # Testing

@@ -23,7 +23,7 @@ export function ImagePlaceholder({
   return (
     <div
       className={clsx(
-        'flex h-full w-full items-center justify-center text-muted-foreground',
+        'text-muted-foreground flex h-full w-full items-center justify-center',
         className,
       )}
     >

@@ -34,7 +34,9 @@ export function CreateProductButton({
       open={open}
       submitLabel={t('form.create')}
       title={t('form.createProductTitle')}
-      trigger={<Button variant="outline">{t('form.createProductTitle')}</Button>}
+      trigger={
+        <Button variant="outline">{t('form.createProductTitle')}</Button>
+      }
       onOpenChange={setOpen}
     >
       {isLoading === true && (
