@@ -182,7 +182,18 @@ export class ProductRepository {
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.category', 'category')
       .leftJoinAndSelect('product.primary_supplier', 'supplier')
-      .where('product.category_id = :categoryId', { categoryId })
+      .where(
+        `product.category_id IN (
+          WITH RECURSIVE category_tree AS (
+            SELECT id FROM categories WHERE id = :categoryId
+            UNION ALL
+            SELECT c.id FROM categories c
+            INNER JOIN category_tree ct ON c.parent_id = ct.id
+          )
+          SELECT id FROM category_tree
+        )`,
+        { categoryId },
+      )
       .orderBy('product.name', 'ASC');
 
     if (!includeDeleted) {
