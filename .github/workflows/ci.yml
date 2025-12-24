@@ -203,7 +203,7 @@ jobs:
         run: pnpm --filter @rbi/api build
 
       - name: Upload API build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: api-dist
           path: modules/api/dist/
@@ -244,7 +244,7 @@ jobs:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_dummy
 
       - name: Upload Web build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: web-dist
           path: modules/web/.next/
