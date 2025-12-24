@@ -16,7 +16,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { ClerkAuthMode } from '@/lib/enums/clerk-auth-mode.enum'
 
 function useRoutes(): {
   name: string
