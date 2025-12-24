@@ -1,0 +1,44 @@
+# Automatic PR labeling based on changed files
+
+'api':
+  - changed-files:
+    - any-glob-to-any-file: 'modules/api/**/*'
+
+'web':
+  - changed-files:
+    - any-glob-to-any-file: 'modules/web/**/*'
+
+'types':
+  - changed-files:
+    - any-glob-to-any-file: 'packages/types/**/*'
+
+'config':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'packages/tsconfig/**/*'
+      - 'packages/eslint-config/**/*'
+
+'dependencies':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '**/package.json'
+
+'documentation':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'CLAUDE.md'
+      - 'modules/*/CLAUDE.md'
+
+'ci/cd':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**/*'
+      - 'devenv.nix'
+      - 'devenv.lock'
+
+'openapi':
+  - changed-files:
+    - any-glob-to-any-file: 'openapi.yaml'

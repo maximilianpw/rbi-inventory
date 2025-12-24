@@ -1,0 +1,90 @@
+name: OpenAPI Validation
+
+on:
+  pull_request:
+    paths:
+      - 'openapi.yaml'
+      - 'modules/api/src/**/*.ts'
+      - '.github/workflows/openapi.yml'
+
+jobs:
+  validate:
+    name: Validate OpenAPI Spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate OpenAPI spec
+        run: pnpm --filter @rbi/api openapi:generate
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+          CLERK_SECRET_KEY: sk_test_dummy_key_for_openapi_generation
+
+      - name: Check if OpenAPI spec is up to date
+        run: |
+          if git diff --exit-code openapi.yaml; then
+            echo "✅ OpenAPI spec is up to date"
+          else
+            echo "❌ OpenAPI spec is out of date. Please run 'pnpm --filter @rbi/api openapi:generate' and commit the changes."
+            echo ""
+            echo "Differences:"
+            git diff openapi.yaml
+            exit 1
+          fi
+
+      - name: Validate OpenAPI spec format
+        uses: char0n/swagger-editor-validate@v1
+        with:
+          definition-file: openapi.yaml
+
+  check-frontend-sync:
+    name: Check Frontend API Client
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Regenerate frontend API client
+        run: pnpm --filter @rbi/web api:gen
+
+      - name: Check if generated client is up to date
+        run: |
+          if git diff --exit-code modules/web/src/lib/data/generated.ts; then
+            echo "✅ Frontend API client is up to date"
+          else
+            echo "❌ Frontend API client is out of date. Please run 'pnpm --filter @rbi/web api:gen' and commit the changes."
+            echo ""
+            echo "Run these commands:"
+            echo "  pnpm --filter @rbi/api openapi:generate"
+            echo "  pnpm --filter @rbi/web api:gen"
+            exit 1
+          fi
