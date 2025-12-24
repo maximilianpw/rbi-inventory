@@ -33,7 +33,7 @@
     "peerDependencyRules": {
       "ignoreMissing": [],
       "allowedVersions": {
-        "eslint-config-next>eslint": "8"
+        "eslint-config-next>eslint": "9"
       }
     },
     "onlyBuiltDependencies": [
