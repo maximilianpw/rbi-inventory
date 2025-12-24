@@ -39,6 +39,8 @@ describe('ProductsService', () => {
     reorder_point: 10,
     primary_supplier_id: null,
     supplier_sku: null,
+    barcode: null,
+    unit: null,
     is_active: true,
     is_perishable: false,
     notes: null,

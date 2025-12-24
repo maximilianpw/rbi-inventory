@@ -35,6 +35,7 @@ describe('CategoriesService', () => {
       findAll: jest.fn(),
       findById: jest.fn(),
       existsById: jest.fn(),
+      existsByName: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -231,8 +232,8 @@ describe('CategoriesService', () => {
       categoryRepository.existsById.mockResolvedValue(true);
       // Simulate circular path: grandchild -> child -> mockCategory (creates cycle)
       categoryRepository.findOne
-        .mockResolvedValueOnce({ parent_id: mockChildCategory.id }) // grandchild's parent
-        .mockResolvedValueOnce({ parent_id: mockCategory.id }); // child's parent - this creates the cycle
+        .mockResolvedValueOnce({ ...grandchildCategory, parent_id: mockChildCategory.id }) // grandchild's parent
+        .mockResolvedValueOnce({ ...mockChildCategory, parent_id: mockCategory.id }); // child's parent - this creates the cycle
 
       await expect(service.update(mockCategory.id, updateDto)).rejects.toThrow(
         'Cannot set parent: would create a circular reference',
