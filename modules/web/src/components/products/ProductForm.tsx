@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import Image from 'next/image'
 import { CategoryPathSelector } from '@/components/category/CategoryPathSelector'
 import { BooleanSelect } from '@/components/common/BooleanSelect'
 import { FormErrorBanner } from '@/components/common/FormErrorBanner'
@@ -205,11 +206,12 @@ export function ProductForm({
           <div className="text-sm font-medium">
             {t('form.productImage') || 'Product image'}
           </div>
-          <div className="bg-muted aspect-square overflow-hidden rounded-lg border">
+          <div className="bg-muted relative aspect-square overflow-hidden rounded-lg border">
             {imageUrl ? (
-              <img
+              <Image
                 alt={t('form.productImage') || 'Product image'}
                 className="h-full w-full object-cover"
+                fill={true}
                 src={imageUrl}
               />
             ) : (
