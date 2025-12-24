@@ -16,7 +16,9 @@ export function ItemCard({
   displayType: DisplayType
 }): React.JSX.Element {
   const { t } = useTranslation()
-  const price = item.standard_price ?? 0
+  const price = Number(item.standard_price ?? 0)
+  // Type assertion: description is actually string | null at runtime despite incorrect generated types
+  const description = (item.description as unknown as string | null) ?? null
 
   if (displayType === DisplayType.LIST) {
     return (
@@ -32,9 +34,9 @@ export function ItemCard({
               {t('items.price')}: ${price.toLocaleString()}
             </span>
           </div>
-          {!!item.description && (
+          {Boolean(description) && (
             <p className="text-muted-foreground mt-2 truncate text-xs">
-              {String(item.description)}
+              {description}
             </p>
           )}
         </div>
@@ -56,9 +58,9 @@ export function ItemCard({
           <p className="text-foreground font-medium">
             ${price.toLocaleString()}
           </p>
-          {!!item.description && String(item.description).length > 0 && (
+          {Boolean(description) && (
             <p className="text-muted-foreground line-clamp-2 text-xs">
-              {String(item.description)}
+              {description}
             </p>
           )}
         </div>

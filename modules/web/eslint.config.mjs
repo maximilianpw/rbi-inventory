@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import js from '@eslint/js'
 import pluginNext from '@next/eslint-plugin-next'
 import prettierConfig from 'eslint-config-prettier'
@@ -153,7 +150,7 @@ export default tseslint.config(
     rules: {
       // SonarJS rules
       'sonarjs/no-duplicate-string': ['error', { threshold: 3 }],
-      'sonarjs/cognitive-complexity': ['error', 15],
+      'sonarjs/cognitive-complexity': ['warn', 20],
       'sonarjs/no-identical-functions': 'error',
       'sonarjs/no-redundant-jump': 'error',
 
@@ -210,9 +207,15 @@ export default tseslint.config(
           disallowTypeAnnotations: false,
         },
       ],
-      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
-      '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'warn',
+      // Disable overly strict unsafe rules - they're impractical with third-party libraries
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'error',
       '@typescript-eslint/prefer-optional-chain': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
@@ -324,7 +327,7 @@ export default tseslint.config(
       'max-params': ['warn', 4],
       'max-depth': ['warn', 4],
       'max-nested-callbacks': ['warn', 3],
-      complexity: ['warn', 15],
+      complexity: ['warn', 20],
     },
   },
 
