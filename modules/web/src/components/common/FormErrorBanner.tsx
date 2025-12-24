@@ -30,7 +30,10 @@ function formatFormError(error: unknown): string | null {
   if (typeof error === 'number' || typeof error === 'boolean') {
     return String(error)
   }
-  if (typeof error !== 'object') return String(error)
+  if (typeof error !== 'object') {
+    // Handle edge cases like symbols, functions, etc.
+    return safeStringify(error)
+  }
 
   const obj = error as Record<string, unknown>
 

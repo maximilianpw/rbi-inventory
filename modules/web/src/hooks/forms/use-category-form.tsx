@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form'
+import { type FormApi, useForm } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -21,11 +21,13 @@ const formSchema = z.object({
     .optional(),
 })
 
+type FormValues = z.infer<typeof formSchema>
+
 export function useCategoryForm(
   categories: CategoryWithChildrenResponseDto[] | undefined,
   defaultParentId?: string | null,
   onSuccess?: () => void,
-) {
+): FormApi<FormValues> {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
@@ -60,7 +62,9 @@ export function useCategoryForm(
       if (!current) continue
 
       const currentParentId =
-        current.parent_id === null ? null : String(current.parent_id)
+        current.parent_id === null || typeof current.parent_id !== 'string'
+          ? null
+          : current.parent_id
 
       if (
         current.name.toLowerCase() === normalizedName &&

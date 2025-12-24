@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form'
+import { type FormApi, useForm } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -35,11 +35,13 @@ const formSchema = z.object({
   is_perishable: z.boolean(),
 })
 
+type FormValues = z.infer<typeof formSchema>
+
 export function useProductForm(
   categories: CategoryWithChildrenResponseDto[] | undefined,
   defaultCategoryId: string | undefined,
   onSuccess?: () => void,
-) {
+): FormApi<FormValues> {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
