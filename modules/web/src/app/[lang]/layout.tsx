@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 
 import { ClerkProvider } from '@clerk/nextjs'
 
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 import AppSidebar from '@/components/common/Header'
 import { SidebarProvider } from '@/components/ui/sidebar'
@@ -24,9 +24,24 @@ const geistMono = Geist_Mono({
 })
 
 // eslint-disable-next-line react-refresh/only-export-components
+export const viewport: Viewport = {
+  themeColor: '#0d9488',
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
   title: 'Rivierabeauty Inventory',
-  description: 'Inventory management system',
+  description: 'Inventory management system for yacht provisioning',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'RBI',
+  },
+  icons: {
+    icon: '/icons/icon-192x192.png',
+    apple: '/icons/apple-touch-icon.png',
+  },
 }
 
 export default async function RootLayout({

@@ -24,8 +24,8 @@ function getLocale(request: NextRequest): string {
 export default clerkMiddleware((_, request: NextRequest) => {
   const { pathname } = request.nextUrl
 
-  // Skip locale handling for specific routes
-  const skipLocaleRoutes = ['/monitoring', '/api']
+  // Skip locale handling for specific routes and static files
+  const skipLocaleRoutes = ['/monitoring', '/api', '/manifest.json', '/icons', '/sw.js']
   if (skipLocaleRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.next()
   }
