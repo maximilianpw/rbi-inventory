@@ -14,13 +14,15 @@ self.addEventListener('install', (event) => {
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) =>
-      Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name)),
+    caches
+      .keys()
+      .then((cacheNames) =>
+        Promise.all(
+          cacheNames
+            .filter((name) => name !== CACHE_NAME)
+            .map((name) => caches.delete(name)),
+        ),
       ),
-    ),
   )
   self.clients.claim()
 })
@@ -45,9 +47,20 @@ self.addEventListener('fetch', (event) => {
         }
         return response
       })
-      .catch(() => {
+      .catch(async () => {
         // Fallback to cache on network failure
-        return caches.match(event.request)
+        const cachedResponse = await caches.match(event.request)
+        if (cachedResponse) {
+          return cachedResponse
+        }
+        return new Response(
+          'You are offline and the requested resource is not available in the cache.',
+          {
+            status: 503,
+            statusText: 'Service Unavailable',
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+          },
+        )
       }),
   )
 })

@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(import.meta.dirname, '../../'),
   },
-  async headers() {
+  headers() {
     return [
       {
         source: '/sw.js',
@@ -36,6 +36,6 @@ export default withSentryConfig(nextConfig, {
     treeshake: {
       removeDebugLogging: true,
     },
-    automaticVercelMonitors: true,
   },
+  automaticVercelMonitors: true,
 })
