@@ -32,7 +32,6 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Rivierabeauty Inventory',
   description: 'Inventory management system for yacht provisioning',
-  manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

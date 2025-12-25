@@ -1,4 +1,4 @@
-import { type FormApi, useForm } from '@tanstack/react-form'
+import { useForm } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -21,13 +21,12 @@ const formSchema = z.object({
     .optional(),
 })
 
-type FormValues = z.infer<typeof formSchema>
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useCategoryForm(
   categories: CategoryWithChildrenResponseDto[] | undefined,
   defaultParentId?: string | null,
   onSuccess?: () => void,
-): FormApi<FormValues> {
+) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
