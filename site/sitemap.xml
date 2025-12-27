@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://docs.rbi-inventory.com/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/roadmap/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/roadmap/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/roadmap/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/contributing/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/contributing/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/contributing/guidelines/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/contributing/guidelines/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/contributing/guidelines/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/contributing/pull-requests/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/contributing/pull-requests/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/contributing/pull-requests/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/api-development/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/api-development/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/api-development/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/architecture/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/architecture/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/ci-cd/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/ci-cd/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/ci-cd/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/code-style/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/code-style/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/frontend-development/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/frontend-development/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/frontend-development/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/setup/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/setup/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/setup/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/development/testing/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/testing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/testing/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/getting-started/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/getting-started/configuration/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/configuration/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/getting-started/installation/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/getting-started/quick-start/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/quick-start/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/quick-start/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/reference/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/reference/cli-commands/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/cli-commands/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/cli-commands/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/reference/environment-variables/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/environment-variables/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/environment-variables/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/reference/troubleshooting/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/troubleshooting/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/troubleshooting/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/user-guide/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/user-guide/audit-logs/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/audit-logs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/audit-logs/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/user-guide/categories/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/categories/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/categories/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/user-guide/orders/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/orders/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/orders/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/user-guide/products/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/products/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/products/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/roadmap/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/roadmap/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/roadmap/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/contributing/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/contributing/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/contributing/guidelines/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/contributing/guidelines/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/contributing/guidelines/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/contributing/pull-requests/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/contributing/pull-requests/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/contributing/pull-requests/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/api-development/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/api-development/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/api-development/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/architecture/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/architecture/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/ci-cd/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/ci-cd/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/ci-cd/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/code-style/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/code-style/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/frontend-development/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/frontend-development/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/frontend-development/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/setup/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/setup/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/setup/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/development/testing/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/development/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/development/testing/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/getting-started/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/getting-started/configuration/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/configuration/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/getting-started/installation/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/getting-started/quick-start/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/getting-started/quick-start/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/getting-started/quick-start/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/reference/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/reference/cli-commands/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/cli-commands/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/cli-commands/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/reference/environment-variables/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/environment-variables/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/environment-variables/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/reference/troubleshooting/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/reference/troubleshooting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/reference/troubleshooting/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/user-guide/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/user-guide/audit-logs/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/audit-logs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/audit-logs/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/user-guide/categories/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/categories/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/categories/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/user-guide/orders/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/orders/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/orders/"/>
+    </url>
+    <url>
+        <loc>https://docs.rbi-inventory.com/fr/user-guide/products/</loc>
+        <lastmod>1980-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://docs.rbi-inventory.com/fr/user-guide/products/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.rbi-inventory.com/user-guide/products/"/>
+    </url>
+</urlset>

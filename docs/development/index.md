@@ -1,0 +1,47 @@
+# Development
+
+This section covers everything you need to contribute to the RBI Inventory codebase.
+
+## Overview
+
+RBI Inventory is a pnpm monorepo containing:
+
+- **@rbi/api** - NestJS backend
+- **@rbi/web** - Next.js frontend
+- **@rbi/types** - Shared TypeScript types
+
+## Quick Links
+
+- [Architecture](architecture.md) - System design and tech stack
+- [Setup](setup.md) - Development environment configuration
+- [Code Style](code-style.md) - ESLint, Prettier, and conventions
+- [Testing](testing.md) - Jest test patterns
+- [API Development](api-development.md) - NestJS patterns
+- [Frontend Development](frontend-development.md) - Next.js patterns
+- [CI/CD](ci-cd.md) - GitHub Actions workflows
+
+## Development Workflow
+
+1. **Start the environment**
+
+    ```bash
+    devenv up
+    ```
+
+2. **Make changes** to the codebase
+
+3. **Regenerate API client** (if API changed)
+
+    ```bash
+    pnpm --filter @rbi/api openapi:generate
+    pnpm --filter @rbi/web api:gen
+    ```
+
+4. **Run tests and lint**
+
+    ```bash
+    pnpm test
+    pnpm lint
+    ```
+
+5. **Submit a pull request**
