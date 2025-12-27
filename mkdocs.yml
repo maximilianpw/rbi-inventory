@@ -65,6 +65,9 @@ plugins:
             Overview: Aperçu
             Products: Produits
             Categories: Catégories
+            Locations: Emplacements
+            Areas: Zones
+            Inventory: Inventaire
             Orders: Commandes
             Audit Logs: Journaux d'audit
             Development: Développement
@@ -137,6 +140,9 @@ nav:
       - user-guide/index.md
       - Products: user-guide/products.md
       - Categories: user-guide/categories.md
+      - Locations: user-guide/locations.md
+      - Areas: user-guide/areas.md
+      - Inventory: user-guide/inventory.md
       - Orders: user-guide/orders.md
       - Audit Logs: user-guide/audit-logs.md
   - Development:

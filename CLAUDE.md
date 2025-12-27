@@ -86,6 +86,17 @@ pnpm --filter @rbi/web <cmd>
 pnpm --filter @rbi/types build
 ```
 
+## Domain Model
+
+```
+Product   ← what an item is (SKU, name, category)
+Location  ← where items are stored (warehouse, supplier, client)
+Area      ← specific spot within a location (zone, shelf, bin)
+Inventory ← how many of a product exist at a location/area
+```
+
+Products are catalog items. Inventory tracks quantities at locations. Areas provide optional granular placement within locations.
+
 ## Key Patterns
 
 | Pattern         | Location                        | Purpose                    |
