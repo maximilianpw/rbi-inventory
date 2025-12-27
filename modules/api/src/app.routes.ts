@@ -3,6 +3,7 @@ import { AuthModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { HealthModule } from './routes/health/health.module';
 import { ProductsModule } from './routes/products/products.module';
+import { LocationsModule } from './routes/locations/locations.module';
 import { AuditLogsModule } from './routes/audit-logs/audit-logs.module';
 
 /**
@@ -26,6 +27,10 @@ export const routes: Routes = [
   {
     path: 'products',
     module: ProductsModule,
+  },
+  {
+    path: 'locations',
+    module: LocationsModule,
   },
   {
     path: 'audit-logs',
