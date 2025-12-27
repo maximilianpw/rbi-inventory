@@ -1,0 +1,52 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { BaseResponseDto } from '../../../common/dto/base-response.dto';
+import { LocationType } from '../../../common/enums/location-type.enum';
+
+export class LocationResponseDto extends BaseResponseDto {
+  @ApiProperty({
+    description: 'Unique identifier',
+    format: 'uuid',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  id: string;
+
+  @ApiProperty({
+    description: 'Location name',
+    example: 'Main Warehouse',
+  })
+  name: string;
+
+  @ApiProperty({
+    description: 'Location type',
+    enum: LocationType,
+    example: LocationType.WAREHOUSE,
+  })
+  type: LocationType;
+
+  @ApiProperty({
+    description: 'Physical address',
+    nullable: true,
+    example: '123 Harbor Drive, Miami, FL 33101',
+  })
+  address: string | null;
+
+  @ApiProperty({
+    description: 'Contact person name',
+    nullable: true,
+    example: 'John Smith',
+  })
+  contact_person: string | null;
+
+  @ApiProperty({
+    description: 'Phone number',
+    nullable: true,
+    example: '+1-555-123-4567',
+  })
+  phone: string | null;
+
+  @ApiProperty({
+    description: 'Whether the location is active',
+    example: true,
+  })
+  is_active: boolean;
+}

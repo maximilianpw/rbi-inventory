@@ -40,6 +40,7 @@ async function generateOpenApi() {
     .addTag('Users', 'User management endpoints')
     .addTag('Categories', 'Product category management')
     .addTag('Products', 'Product catalog management')
+    .addTag('Locations', 'Location management (warehouses, suppliers, etc.)')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
