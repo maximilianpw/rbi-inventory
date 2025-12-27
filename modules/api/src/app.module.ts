@@ -7,6 +7,7 @@ import { AuthModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { ProductsModule } from './routes/products/products.module';
 import { LocationsModule } from './routes/locations/locations.module';
+import { InventoryModule } from './routes/inventory/inventory.module';
 import { AuditLogsModule } from './routes/audit-logs/audit-logs.module';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
@@ -36,6 +37,7 @@ import { routes } from './app.routes';
     CategoriesModule,
     ProductsModule,
     LocationsModule,
+    InventoryModule,
     AuditLogsModule,
     RouterModule.register(routes),
   ],

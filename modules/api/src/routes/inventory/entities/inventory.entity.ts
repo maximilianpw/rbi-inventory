@@ -2,14 +2,20 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Location } from '../../locations/entities/location.entity';
+import { Product } from '../../products/entities/product.entity';
 
 @Entity('inventory')
+@Index(['product_id'])
+@Index(['location_id'])
+@Index(['product_id', 'location_id'])
 export class Inventory {
   @ApiProperty({ description: 'Unique identifier', format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
@@ -18,6 +24,11 @@ export class Inventory {
   @ApiProperty({ description: 'Product ID', format: 'uuid' })
   @Column({ type: 'uuid' })
   product_id: string;
+
+  @ApiProperty({ description: 'Product relation', type: () => Product })
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 
   @ApiProperty({ description: 'Location ID', format: 'uuid' })
   @Column({ type: 'uuid' })
@@ -47,6 +58,10 @@ export class Inventory {
   @ApiProperty({ description: 'Date when received', nullable: true })
   @Column({ type: 'timestamptz', nullable: true })
   received_date: Date | null;
+
+  @ApiProperty({ description: 'Creation timestamp' })
+  @CreateDateColumn({ type: 'timestamptz' })
+  created_at: Date;
 
   @ApiProperty({ description: 'Last update timestamp' })
   @UpdateDateColumn({ type: 'timestamptz' })
