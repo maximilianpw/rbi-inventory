@@ -10,6 +10,8 @@ REST API for RBI Inventory Management System built with NestJS.
 - 🏷️ **TypeScript** - Full type safety
 - 📊 **Logging** - Structured logging with request IDs
 - 🎯 **Guards & Decorators** - Custom auth guards and user decorators
+- 🔗 **HATEOAS** - Hypermedia links in API responses
+- 📦 **Inventory Management** - Track products across locations and areas
 
 ## Getting Started
 
@@ -81,6 +83,21 @@ src/
 │   ├── products.controller.ts
 │   ├── products.service.ts
 │   └── products.module.ts
+├── locations/             # Locations module
+│   ├── dto/
+│   ├── locations.controller.ts
+│   ├── locations.service.ts
+│   └── locations.module.ts
+├── areas/                 # Areas module (zones within locations)
+│   ├── dto/
+│   ├── areas.controller.ts
+│   ├── areas.service.ts
+│   └── areas.module.ts
+├── inventory/             # Inventory module
+│   ├── dto/
+│   ├── inventory.controller.ts
+│   ├── inventory.service.ts
+│   └── inventory.module.ts
 ├── health/                # Health check module
 │   ├── health.controller.ts
 │   └── health.module.ts
@@ -173,13 +190,46 @@ getClaims(@ClerkClaims() claims: any) {
 
 ### Products
 
-- `GET /api/v1/products` - List all products
+- `GET /api/v1/products` - List all products (paginated)
+- `GET /api/v1/products/all` - List all products
 - `POST /api/v1/products` - Create product
+- `POST /api/v1/products/bulk` - Bulk create products
 - `GET /api/v1/products/:id` - Get product by ID
 - `PUT /api/v1/products/:id` - Update product
-- `DELETE /api/v1/products/:id` - Delete product
-- `GET /api/v1/products/category/:categoryId` - Get products by category
-- `GET /api/v1/products/category/:categoryId/tree` - Get products by category tree
+- `DELETE /api/v1/products/:id` - Delete product (soft delete)
+- `DELETE /api/v1/products/bulk` - Bulk delete products
+- `PATCH /api/v1/products/:id/restore` - Restore deleted product
+- `PATCH /api/v1/products/bulk/restore` - Bulk restore products
+
+### Locations
+
+- `GET /api/v1/locations` - List all locations (paginated)
+- `POST /api/v1/locations` - Create location
+- `GET /api/v1/locations/:id` - Get location by ID
+- `PUT /api/v1/locations/:id` - Update location
+- `DELETE /api/v1/locations/:id` - Delete location
+
+### Areas
+
+Areas represent zones/shelves/bins within a Location.
+
+- `GET /api/v1/areas` - List areas (with filters)
+- `POST /api/v1/areas` - Create area
+- `GET /api/v1/areas/:id` - Get area by ID
+- `GET /api/v1/areas/:id/children` - Get area with children
+- `PUT /api/v1/areas/:id` - Update area
+- `DELETE /api/v1/areas/:id` - Delete area (cascades to children)
+
+### Inventory
+
+Inventory tracks quantities of products at locations/areas.
+
+- `GET /api/v1/inventory` - List inventory (paginated)
+- `POST /api/v1/inventory` - Create inventory record
+- `GET /api/v1/inventory/:id` - Get inventory by ID
+- `PUT /api/v1/inventory/:id` - Update inventory
+- `PATCH /api/v1/inventory/:id/adjust` - Adjust quantity (+/-)
+- `DELETE /api/v1/inventory/:id` - Delete inventory record
 
 ## Development
 

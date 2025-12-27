@@ -27,6 +27,10 @@ modules/api/src/
     ├── auth/               # /api/v1/auth/*
     ├── categories/         # /api/v1/categories/*
     ├── products/           # /api/v1/products/*
+    ├── locations/          # /api/v1/locations/*
+    ├── areas/              # /api/v1/areas/*
+    ├── inventory/          # /api/v1/inventory/*
+    ├── audit-logs/         # /api/v1/audit-logs/*
     ├── suppliers/          # Entity only, no endpoints yet
     └── health/             # /health-check (no auth)
 ```
@@ -100,11 +104,16 @@ Products use soft delete via `BaseAuditEntity`. Repositories filter `deleted_at 
 
 ### Foreign Keys
 
-| Relationship        | On Delete | Effect                               |
-| ------------------- | --------- | ------------------------------------ |
-| Product → Category  | RESTRICT  | Cannot delete category with products |
-| Product → Supplier  | SET NULL  | Clears reference                     |
-| Category → Category | SET NULL  | Children become root                 |
+| Relationship          | On Delete | Effect                                |
+| --------------------- | --------- | ------------------------------------- |
+| Product → Category    | RESTRICT  | Cannot delete category with products  |
+| Product → Supplier    | SET NULL  | Clears reference                      |
+| Category → Category   | SET NULL  | Children become root                  |
+| Area → Location       | CASCADE   | Deleting location deletes its areas   |
+| Area → Area           | CASCADE   | Deleting parent deletes children      |
+| Inventory → Product   | (default) | Reference required                    |
+| Inventory → Location  | (default) | Reference required                    |
+| Inventory → Area      | SET NULL  | Clears area reference                 |
 
 ## Adding a New Entity
 
@@ -131,25 +140,69 @@ Products use soft delete via `BaseAuditEntity`. Repositories filter `deleted_at 
 
 ## API Routes
 
-| Method | Path                            | Description              |
-| ------ | ------------------------------- | ------------------------ |
-| GET    | `/health-check`                 | Health (no auth)         |
-| GET    | `/api/v1/auth/profile`          | Clerk user profile       |
-| GET    | `/api/v1/categories`            | List (hierarchical tree) |
-| POST   | `/api/v1/categories`            | Create                   |
-| PUT    | `/api/v1/categories/:id`        | Update                   |
-| DELETE | `/api/v1/categories/:id`        | Delete                   |
-| GET    | `/api/v1/products`              | List (paginated)         |
-| GET    | `/api/v1/products/all`          | List all                 |
-| GET    | `/api/v1/products/:id`          | Get one                  |
-| POST   | `/api/v1/products`              | Create                   |
-| POST   | `/api/v1/products/bulk`         | Bulk create              |
-| PUT    | `/api/v1/products/:id`          | Update                   |
-| PATCH  | `/api/v1/products/bulk/status`  | Bulk update status       |
-| DELETE | `/api/v1/products/:id`          | Delete (soft)            |
-| DELETE | `/api/v1/products/bulk`         | Bulk delete              |
-| PATCH  | `/api/v1/products/:id/restore`  | Restore                  |
-| PATCH  | `/api/v1/products/bulk/restore` | Bulk restore             |
+### Health & Auth
+
+| Method | Path                   | Description        |
+| ------ | ---------------------- | ------------------ |
+| GET    | `/health-check`        | Health (no auth)   |
+| GET    | `/api/v1/auth/profile` | Clerk user profile |
+
+### Categories
+
+| Method | Path                     | Description              |
+| ------ | ------------------------ | ------------------------ |
+| GET    | `/api/v1/categories`     | List (hierarchical tree) |
+| POST   | `/api/v1/categories`     | Create                   |
+| PUT    | `/api/v1/categories/:id` | Update                   |
+| DELETE | `/api/v1/categories/:id` | Delete                   |
+
+### Products
+
+| Method | Path                            | Description        |
+| ------ | ------------------------------- | ------------------ |
+| GET    | `/api/v1/products`              | List (paginated)   |
+| GET    | `/api/v1/products/all`          | List all           |
+| GET    | `/api/v1/products/:id`          | Get one            |
+| POST   | `/api/v1/products`              | Create             |
+| POST   | `/api/v1/products/bulk`         | Bulk create        |
+| PUT    | `/api/v1/products/:id`          | Update             |
+| PATCH  | `/api/v1/products/bulk/status`  | Bulk update status |
+| DELETE | `/api/v1/products/:id`          | Delete (soft)      |
+| DELETE | `/api/v1/products/bulk`         | Bulk delete        |
+| PATCH  | `/api/v1/products/:id/restore`  | Restore            |
+| PATCH  | `/api/v1/products/bulk/restore` | Bulk restore       |
+
+### Locations
+
+| Method | Path                     | Description      |
+| ------ | ------------------------ | ---------------- |
+| GET    | `/api/v1/locations`      | List (paginated) |
+| GET    | `/api/v1/locations/:id`  | Get one          |
+| POST   | `/api/v1/locations`      | Create           |
+| PUT    | `/api/v1/locations/:id`  | Update           |
+| DELETE | `/api/v1/locations/:id`  | Delete           |
+
+### Areas
+
+| Method | Path                        | Description         |
+| ------ | --------------------------- | ------------------- |
+| GET    | `/api/v1/areas`             | List with filters   |
+| GET    | `/api/v1/areas/:id`         | Get one             |
+| GET    | `/api/v1/areas/:id/children`| Get with children   |
+| POST   | `/api/v1/areas`             | Create              |
+| PUT    | `/api/v1/areas/:id`         | Update              |
+| DELETE | `/api/v1/areas/:id`         | Delete (cascades)   |
+
+### Inventory
+
+| Method | Path                         | Description         |
+| ------ | ---------------------------- | ------------------- |
+| GET    | `/api/v1/inventory`          | List (paginated)    |
+| GET    | `/api/v1/inventory/:id`      | Get one             |
+| POST   | `/api/v1/inventory`          | Create              |
+| PUT    | `/api/v1/inventory/:id`      | Update              |
+| PATCH  | `/api/v1/inventory/:id/adjust` | Adjust quantity   |
+| DELETE | `/api/v1/inventory/:id`      | Delete              |
 
 ## Environment Variables
 
@@ -182,4 +235,44 @@ npm run openapi:generate # Generate openapi.yaml
 
 **Bulk operation:** `{ success_count, failure_count, succeeded: [...ids], failures: [{ id?, sku?, error }] }`
 
-**Error:** `{ statusCode, message, error }```
+**Error:** `{ statusCode, message, error }`
+
+## Inventory Data Model
+
+The inventory system uses a three-level hierarchy to track stock:
+
+```
+Product (what)     → defines item metadata (SKU, name, category, reorder point)
+Location (where)   → physical place (warehouse, supplier, client, in-transit)
+Area (where within)→ specific spot inside a location (zone, shelf, bin)
+Inventory (how many) → quantity of a product at a location/area
+```
+
+### Design Decisions
+
+1. **Product vs Inventory separation**: Products define *what* an item is (catalog). Inventory tracks *how many* exist at each location. This allows the same product to exist in multiple locations with different quantities.
+
+2. **Location types**: `WAREHOUSE`, `SUPPLIER`, `IN_TRANSIT`, `CLIENT` — describes the category of place, not its position in a hierarchy.
+
+3. **Areas are optional**: Inventory can reference just a Location, or optionally an Area within that Location for precise placement tracking.
+
+4. **Area hierarchy**: Areas support parent-child relationships (Zone A → Shelf A1 → Bin A1-1). All areas must belong to the same Location.
+
+5. **Unique constraint**: One inventory record per (product, location, area) combination. Use `PATCH /inventory/:id/adjust` to modify quantities.
+
+### Entity Relationships
+
+```
+┌─────────────┐      ┌─────────────┐
+│   Product   │      │  Category   │
+│  (catalog)  │──────│  (tree)     │
+└──────┬──────┘      └─────────────┘
+       │ 1:N
+       ▼
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│  Inventory  │──────│  Location   │──────│    Area     │
+│ (quantity)  │ N:1  │  (place)    │ 1:N  │  (spot)     │
+└─────────────┘      └─────────────┘      └──────┬──────┘
+       │                                         │ self-ref
+       └─────────────────────────────────────────┘ (optional)
+```

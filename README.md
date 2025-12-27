@@ -72,13 +72,24 @@ The inventory management system will provide:
 
 ### Frontend
 
-- **TanStack Start** with **React** for the user interface
-- Modern, responsive design for both desktop and mobile use
+- **Next.js 16** with **React 19** for the user interface
+- **TanStack Query/Form** for data fetching and form handling
+- **Tailwind CSS** with **Radix UI** for styling
+- **Clerk** for authentication
+- **Orval** for generating typed API hooks from OpenAPI spec
 
 ### Backend
 
-- **Go** with **Gin** framework for API server
-- **PostgreSQL** database for data persistence
+- **NestJS 11** with **TypeScript** for API server
+- **TypeORM** for database ORM
+- **PostgreSQL 16** for data persistence
+- **Clerk** for JWT authentication
+- **OpenAPI/Swagger** for API documentation
+
+### Tooling
+
+- **pnpm workspaces** for monorepo management
+- **devenv.sh** for development environment
 
 ---
 
@@ -86,28 +97,52 @@ The inventory management system will provide:
 
 ### Prerequisites
 
-- Go 1.21+ for backend development
-- Node.js 20+ and pnpm/npm for frontend development
-- PostgreSQL 15+ for database
+- Node.js 18+ for development
+- pnpm for package management
+- PostgreSQL 16+ for database
 
 ### Development Setup
 
-_(Development instructions will be added as the project structure is finalized)_
+```bash
+# Install dependencies
+pnpm install
+
+# Start development environment (PostgreSQL + API + Web)
+devenv up
+
+# Or manually:
+pnpm --filter @rbi/api start:dev    # API on :8080
+pnpm --filter @rbi/web dev          # Web on :3000
+```
+
+### API Documentation
+
+- Swagger UI: http://localhost:8080/api/docs
+- OpenAPI spec: `openapi.yaml` (repo root)
 
 ---
 
 ## Core Concepts
 
+### Domain Model
+
+```
+Product   ← catalog item (SKU, name, category, reorder point)
+Location  ← physical place (warehouse, supplier, client, in-transit)
+Area      ← zone within a location (shelf, bin, cold storage)
+Inventory ← quantity of a product at a location/area
+```
+
 ### Inventory Management
 
-- **Categories**: Organize items by product type (e.g., "Bathroom Amenities", "Linens", "Cosmetics")
-- **Brands**: Track and filter items by manufacturer/brand
-- **Items**: Individual products with full tracking capabilities including purchase price and location
+- **Products**: Catalog items with SKU, category, pricing, and reorder points
+- **Categories**: Hierarchical organization by product type (e.g., "Bathroom Amenities", "Linens")
+- **Locations**: Physical places where inventory is stored (warehouses, suppliers, clients)
+- **Areas**: Optional granular placement within locations (zones, shelves, bins)
+- **Inventory**: Tracks quantities of products at specific locations/areas
 - **Suppliers**: Contact database for procurement with contract type tracking
 - **Minimum Level**: Automated low-stock alerts when quantity drops below threshold
-- **Usages**: Historical record of all stock movements
-- **Editing History**: Complete accountability trail with user ID tracking for all system changes
-- **Reports**: Inventory level and value reporting for business insights
+- **Audit History**: Complete accountability trail with user ID tracking for all changes
 
 ### Business Workflow
 

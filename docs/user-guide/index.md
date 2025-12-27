@@ -20,6 +20,24 @@ Organize products in a hierarchical category structure with unlimited nesting.
 
 [:octicons-arrow-right-24: Categories](categories.md)
 
+### Locations
+
+Manage warehouses, supplier facilities, client yachts, and items in transit.
+
+[:octicons-arrow-right-24: Locations](locations.md)
+
+### Areas
+
+Define zones, shelves, and bins within locations for precise inventory placement.
+
+[:octicons-arrow-right-24: Areas](areas.md)
+
+### Inventory
+
+Track stock quantities across locations with batch numbers and expiry dates.
+
+[:octicons-arrow-right-24: Inventory](inventory.md)
+
 ### Orders
 
 Track yacht provisioning orders through their complete lifecycle from draft to delivery.

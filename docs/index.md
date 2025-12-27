@@ -36,7 +36,10 @@ Welcome to the RBI Inventory documentation. This system helps manage yacht provi
 
 - **Product Management** - Create and organize products with SKUs, pricing, and categories
 - **Category Hierarchy** - Multi-level categorization with unlimited nesting
+- **Location Tracking** - Manage warehouses, suppliers, clients, and in-transit locations
+- **Area Management** - Define zones, shelves, and bins within locations
+- **Inventory Control** - Track stock quantities across locations with batch and expiry tracking
 - **Order Processing** - Track yacht provisioning orders through complete lifecycle
 - **Audit Trail** - Complete change history with user tracking
-- **Multi-language** - English, German, and French support
+- **Multi-language** - English and French support
 - **QR Scanning** - Barcode scanning for quick product lookup
