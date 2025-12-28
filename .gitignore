@@ -17,6 +17,7 @@ logfile
 # dev env
 .env
 .devenv
+.devenv.flake.nix
 .pre-commit-config.yaml
 
 node_modules/
