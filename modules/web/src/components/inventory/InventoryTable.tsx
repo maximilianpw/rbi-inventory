@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { AlertTriangle } from 'lucide-react'
+import { InventoryForm } from './InventoryForm'
+import { AdjustQuantity } from './AdjustQuantity'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -21,8 +23,6 @@ import { CrudDropdownMenu } from '@/components/common/CrudDropdownMenu'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ErrorState } from '@/components/common/ErrorState'
-import { InventoryForm } from './InventoryForm'
-import { AdjustQuantity } from './AdjustQuantity'
 import {
   useListInventory,
   useDeleteInventoryItem,
@@ -41,7 +41,7 @@ function TableSkeleton({ showLocation }: { showLocation: boolean }): React.JSX.E
   return (
     <TableBody>
       {Array.from({ length: 8 }).map((_, i) => (
-        <TableRow key={i}>
+        <TableRow key={`skeleton-row-${String(i)}`}>
           <TableCell>
             <Skeleton className="h-4 w-32" />
             <Skeleton className="mt-1 h-3 w-20" />
@@ -85,13 +85,13 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
   const deleteMutation = useDeleteInventoryItem({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('inventory.deleted') ?? 'Inventory deleted successfully')
+        toast.success(t('inventory.deleted') || 'Inventory deleted successfully')
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
         })
       },
       onError: (error) => {
-        toast.error(t('inventory.deleteError') ?? 'Failed to delete inventory')
+        toast.error(t('inventory.deleteError') || 'Failed to delete inventory')
         console.error('Inventory deletion error:', error)
       },
     },
@@ -147,8 +147,8 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
               isExpiringSoon && 'text-yellow-600'
             )}>
               {expiryDate.toLocaleDateString()}
-              {isExpired && <Badge variant="destructive" className="ml-2 text-xs">Expired</Badge>}
-              {isExpiringSoon && <Badge variant="outline" className="ml-2 text-xs border-yellow-600 text-yellow-600">Soon</Badge>}
+              {isExpired && <Badge className="ml-2 text-xs" variant="destructive">Expired</Badge>}
+              {isExpiringSoon && <Badge className="ml-2 text-xs border-yellow-600 text-yellow-600" variant="outline">Soon</Badge>}
             </span>
           ) : (
             <span className="text-muted-foreground">—</span>
@@ -166,12 +166,12 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
       </TableRow>
 
       <FormDialog
-        cancelLabel={t('form.cancel') ?? 'Cancel'}
-        description={t('inventory.editDescription') ?? 'Update inventory details.'}
+        cancelLabel={t('form.cancel') || 'Cancel'}
+        description={t('inventory.editDescription') || 'Update inventory details.'}
         formId={formId}
         open={editOpen}
-        submitLabel={t('actions.save') ?? 'Save'}
-        title={t('inventory.editTitle') ?? 'Edit Inventory'}
+        submitLabel={t('actions.save') || 'Save'}
+        title={t('inventory.editTitle') || 'Edit Inventory'}
         onOpenChange={setEditOpen}
       >
         <InventoryForm
@@ -182,9 +182,9 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
       </FormDialog>
 
       <DeleteConfirmationDialog
-        description={t('inventory.deleteDescription') ?? 'Are you sure you want to delete this inventory record?'}
+        description={t('inventory.deleteDescription') || 'Are you sure you want to delete this inventory record?'}
         open={deleteOpen}
-        title={t('inventory.deleteTitle') ?? 'Delete Inventory'}
+        title={t('inventory.deleteTitle') || 'Delete Inventory'}
         onConfirm={handleDelete}
         onOpenChange={setDeleteOpen}
       />
@@ -234,7 +234,7 @@ export function InventoryTable({ filters }: InventoryTableProps): React.JSX.Elem
             <TableHead>{t('inventory.quantity') || 'Qty'}</TableHead>
             <TableHead>{t('inventory.batch') || 'Batch'}</TableHead>
             <TableHead>{t('inventory.expiry') || 'Expiry'}</TableHead>
-            <TableHead className="w-24"></TableHead>
+            <TableHead className="w-24" />
           </TableRow>
         </TableHeader>
         {isLoading ? (

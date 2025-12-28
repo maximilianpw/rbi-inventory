@@ -24,7 +24,7 @@ import {
   getListLocationsQueryKey,
   getListAllLocationsQueryKey,
 } from '@/lib/data/generated'
-import { LocationType } from '@/lib/enums/location-type.enum'
+import { type LocationType } from '@/lib/enums/location-type.enum'
 import {
   LOCATION_TYPE_ICONS,
   LOCATION_TYPE_COLORS,

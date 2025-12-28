@@ -356,6 +356,29 @@ export default tseslint.config(
     },
   },
 
+  // React components with JSX are inherently verbose - allow higher limits
+  {
+    files: ['**/components/**/*.tsx', '**/app/**/*.tsx'],
+    rules: {
+      'max-lines-per-function': [
+        'warn',
+        { max: 200, skipBlankLines: true, skipComments: true },
+      ],
+      complexity: ['warn', 30],
+    },
+  },
+
+  // Form components with many fields need even more room
+  {
+    files: ['**/components/**/*Form.tsx'],
+    rules: {
+      'max-lines-per-function': [
+        'warn',
+        { max: 300, skipBlankLines: true, skipComments: true },
+      ],
+    },
+  },
+
   // Prettier should be last
   prettierConfig,
 

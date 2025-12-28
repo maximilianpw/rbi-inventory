@@ -32,7 +32,7 @@ export function AreaTree({ locationId }: AreaTreeProps): React.JSX.Element {
     )
   }
 
-  if (error) {
+  if (error !== null) {
     return (
       <ErrorState message={t('areas.errorLoading') || 'Error loading areas'} />
     )

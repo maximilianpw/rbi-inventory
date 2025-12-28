@@ -30,7 +30,6 @@ interface ProductFormProps {
   onSuccess?: () => void
 }
 
-// eslint-disable-next-line max-lines-per-function
 export function ProductForm({
   categories,
   defaultCategoryId,

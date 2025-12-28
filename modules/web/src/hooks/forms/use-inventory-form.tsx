@@ -49,19 +49,18 @@ export function useInventoryForm({
 }: UseInventoryFormOptions = {}) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const isEditing = !!inventory
 
   const createMutation = useCreateInventoryItem({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('inventory.created') ?? 'Inventory added successfully')
+        toast.success(t('inventory.created') || 'Inventory added successfully')
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('inventory.createError') ?? 'Failed to add inventory')
+        toast.error(t('inventory.createError') || 'Failed to add inventory')
         console.error('Inventory creation error:', error)
       },
     },
@@ -70,14 +69,14 @@ export function useInventoryForm({
   const updateMutation = useUpdateInventoryItem({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('inventory.updated') ?? 'Inventory updated successfully')
+        toast.success(t('inventory.updated') || 'Inventory updated successfully')
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('inventory.updateError') ?? 'Failed to update inventory')
+        toast.error(t('inventory.updateError') || 'Failed to update inventory')
         console.error('Inventory update error:', error)
       },
     },
@@ -115,7 +114,7 @@ export function useInventoryForm({
         received_date: value.received_date || undefined,
       }
 
-      await (isEditing && inventory ? updateMutation.mutateAsync({
+      await (inventory ? updateMutation.mutateAsync({
           id: inventory.id,
           data: payload as Parameters<typeof updateMutation.mutateAsync>[0]['data'],
         }) : createMutation.mutateAsync({

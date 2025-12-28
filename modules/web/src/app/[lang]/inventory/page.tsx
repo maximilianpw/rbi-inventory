@@ -69,8 +69,8 @@ export default function InventoryPage(): React.JSX.Element {
             </p>
           </div>
           <CreateInventory
-            defaultLocationId={selectedLocationId ?? undefined}
             defaultAreaId={selectedAreaId ?? undefined}
+            defaultLocationId={selectedLocationId ?? undefined}
           />
         </div>
 

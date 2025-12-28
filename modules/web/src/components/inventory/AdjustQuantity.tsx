@@ -72,7 +72,7 @@ export function AdjustQuantity({
     },
   })
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (): Promise<void> => {
     if (adjustment === 0) {
       handleOpenChange(false)
       return

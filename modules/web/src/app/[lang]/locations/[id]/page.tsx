@@ -12,6 +12,7 @@ import {
   User,
   Pencil,
   Trash2,
+  type LucideIcon,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -33,16 +34,145 @@ import {
   useDeleteLocation,
   getListLocationsQueryKey,
   getListAllLocationsQueryKey,
+  type LocationResponseDto,
 } from '@/lib/data/generated'
-import { LocationType } from '@/lib/enums/location-type.enum'
+import { type LocationType } from '@/lib/enums/location-type.enum'
 import {
   LOCATION_TYPE_ICONS,
   LOCATION_TYPE_COLORS,
 } from '@/lib/location-type.utils'
 
 const LOCATIONS_ROUTE = '/locations'
-const BACK_TO_LOCATIONS = 'Back to Locations'
 const NAV_LOCATIONS_KEY = 'navigation.locations'
+
+interface DetailFieldProps {
+  icon: LucideIcon
+  label: string
+  value: string
+}
+
+function DetailField({ icon: Icon, label, value }: DetailFieldProps): React.JSX.Element {
+  return (
+    <div className="flex items-start gap-2">
+      <Icon className="size-4 text-muted-foreground mt-0.5" />
+      <div>
+        <p className="text-sm font-medium">{label}</p>
+        <p className="text-sm text-muted-foreground">{value}</p>
+      </div>
+    </div>
+  )
+}
+
+interface LocationDetailsCardProps {
+  location: LocationResponseDto
+}
+
+function LocationDetailsCard({ location }: LocationDetailsCardProps): React.JSX.Element {
+  const { t } = useTranslation()
+  const hasDetails = location.address || location.contact_person || location.phone
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">
+          {t(NAV_LOCATIONS_KEY) || 'Location Details'}
+        </CardTitle>
+        <CardDescription>
+          {t('locations.subtitle') || 'Contact and address information'}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {location.address && (
+          <DetailField
+            icon={MapPin}
+            label={t('locations.address') || 'Address'}
+            value={String(location.address)}
+          />
+        )}
+        {location.contact_person && (
+          <DetailField
+            icon={User}
+            label={t('locations.contactPerson') || 'Contact Person'}
+            value={String(location.contact_person)}
+          />
+        )}
+        {location.phone && (
+          <DetailField
+            icon={Phone}
+            label={t('locations.phone') || 'Phone'}
+            value={String(location.phone)}
+          />
+        )}
+        {!hasDetails && (
+          <p className="text-sm text-muted-foreground col-span-full">
+            No additional details provided.
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+interface LocationHeaderProps {
+  location: LocationResponseDto
+  onBack: () => void
+  onEdit: () => void
+  onDelete: () => void
+}
+
+function LocationHeader({
+  location,
+  onBack,
+  onEdit,
+  onDelete,
+}: LocationHeaderProps): React.JSX.Element {
+  const { t } = useTranslation()
+  const Icon = LOCATION_TYPE_ICONS[location.type as LocationType]
+  const typeColor = LOCATION_TYPE_COLORS[location.type as LocationType]
+
+  return (
+    <div className="border-b px-6 py-4">
+      <Button className="mb-4" size="sm" variant="ghost" onClick={onBack}>
+        <ArrowLeft className="mr-2 size-4" />
+        {t(NAV_LOCATIONS_KEY) || 'Back to Locations'}
+      </Button>
+
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-4">
+          <div className={`rounded-lg p-3 ${typeColor}`}>
+            <Icon className="size-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold">{location.name}</h1>
+            <div className="flex items-center gap-2 mt-1">
+              <Badge variant={location.is_active ? 'default' : 'secondary'}>
+                {location.is_active ? (t('form.active') || 'Active') : (t('form.inactive') || 'Inactive')}
+              </Badge>
+              <span className="text-muted-foreground text-sm">
+                {t(`locations.types.${location.type}`) || location.type}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={onEdit}>
+            <Pencil className="mr-2 size-4" />
+            {t('actions.edit') || 'Edit'}
+          </Button>
+          <Button
+            className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+            variant="outline"
+            onClick={onDelete}
+          >
+            <Trash2 className="mr-2 size-4" />
+            {t('actions.delete') || 'Delete'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function LocationDetailPage(): React.JSX.Element {
   const { t } = useTranslation()
@@ -54,14 +184,8 @@ export default function LocationDetailPage(): React.JSX.Element {
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
 
-  const {
-    data: location,
-    isLoading,
-    error,
-  } = useGetLocation(locationId, {
-    query: {
-      enabled: !!locationId,
-    },
+  const { data: location, isLoading, error } = useGetLocation(locationId, {
+    query: { enabled: !!locationId },
   })
 
   const deleteMutation = useDeleteLocation({
@@ -69,25 +193,25 @@ export default function LocationDetailPage(): React.JSX.Element {
       onSuccess: async () => {
         toast.success(t('locations.deleted') || 'Location deleted successfully')
         await Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: getListLocationsQueryKey(),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: getListAllLocationsQueryKey(),
-          }),
+          queryClient.invalidateQueries({ queryKey: getListLocationsQueryKey() }),
+          queryClient.invalidateQueries({ queryKey: getListAllLocationsQueryKey() }),
         ])
         router.push(LOCATIONS_ROUTE)
       },
-      onError: (error) => {
+      onError: (err) => {
         toast.error(t('locations.deleteError') || 'Failed to delete location')
-        console.error('Location deletion error:', error)
+        console.error('Location deletion error:', err)
       },
     },
   })
 
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     await deleteMutation.mutateAsync({ id: locationId })
     setDeleteOpen(false)
+  }
+
+  const handleBack = (): void => {
+    router.push(LOCATIONS_ROUTE)
   }
 
   if (isLoading) {
@@ -104,131 +228,28 @@ export default function LocationDetailPage(): React.JSX.Element {
         <p className="text-destructive">
           {t('locations.errorLoading') || 'Error loading location'}
         </p>
-        <Button variant="outline" onClick={() => router.push(LOCATIONS_ROUTE)}>
+        <Button variant="outline" onClick={handleBack}>
           <ArrowLeft className="mr-2 size-4" />
-          {t(NAV_LOCATIONS_KEY) ?? BACK_TO_LOCATIONS}
+          {t(NAV_LOCATIONS_KEY) || 'Back to Locations'}
         </Button>
       </div>
     )
   }
 
-  const Icon = LOCATION_TYPE_ICONS[location.type as LocationType]
-  const typeColor = LOCATION_TYPE_COLORS[location.type as LocationType]
-
   return (
     <div className="flex h-full w-full flex-col">
-      {/* Header */}
-      <div className="border-b px-6 py-4">
-        <Button
-          className="mb-4"
-          size="sm"
-          variant="ghost"
-          onClick={() => router.push(LOCATIONS_ROUTE)}
-        >
-          <ArrowLeft className="mr-2 size-4" />
-          {t(NAV_LOCATIONS_KEY) ?? BACK_TO_LOCATIONS}
-        </Button>
+      <LocationHeader
+        location={location}
+        onBack={handleBack}
+        onDelete={() => setDeleteOpen(true)}
+        onEdit={() => setEditOpen(true)}
+      />
 
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4">
-            <div className={`rounded-lg p-3 ${typeColor}`}>
-              <Icon className="size-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-semibold">{location.name}</h1>
-              <div className="flex items-center gap-2 mt-1">
-                <Badge variant={location.is_active ? 'default' : 'secondary'}>
-                  {!!location.is_active && (t('form.active') || 'Active')}
-                </Badge>
-                <span className="text-muted-foreground text-sm">
-                  {t(`locations.types.${location.type}`) || location.type}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => setEditOpen(true)}>
-              <Pencil className="mr-2 size-4" />
-              {t('actions.edit') || 'Edit'}
-            </Button>
-            <Button
-              className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
-              variant="outline"
-              onClick={() => setDeleteOpen(true)}
-            >
-              <Trash2 className="mr-2 size-4" />
-              {t('actions.delete') || 'Delete'}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
       <div className="flex-1 overflow-auto p-6 space-y-6">
-        {/* Location Details Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              {t(NAV_LOCATIONS_KEY) ?? 'Location Details'}
-            </CardTitle>
-            <CardDescription>
-              {t('locations.subtitle') || 'Contact and address information'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {!!location.address && (
-              <div className="flex items-start gap-2">
-                <MapPin className="size-4 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">
-                    {t('locations.address') || 'Address'}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {String(location.address)}
-                  </p>
-                </div>
-              </div>
-            )}
-            {!!location.contact_person && (
-              <div className="flex items-start gap-2">
-                <User className="size-4 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">
-                    {t('locations.contactPerson') || 'Contact Person'}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {String(location.contact_person)}
-                  </p>
-                </div>
-              </div>
-            )}
-            {!!location.phone && (
-              <div className="flex items-start gap-2">
-                <Phone className="size-4 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">
-                    {t('locations.phone') || 'Phone'}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {String(location.phone)}
-                  </p>
-                </div>
-              </div>
-            )}
-            {!location.address && !location.contact_person && !location.phone && (
-              <p className="text-sm text-muted-foreground col-span-full">
-                No additional details provided.
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Areas Tree */}
+        <LocationDetailsCard location={location} />
         <AreaTree locationId={locationId} />
       </div>
 
-      {/* Edit Dialog */}
       <FormDialog
         cancelLabel={t('form.cancel') || 'Cancel'}
         description={t('locations.editDescription') || 'Update location details.'}
@@ -245,7 +266,6 @@ export default function LocationDetailPage(): React.JSX.Element {
         />
       </FormDialog>
 
-      {/* Delete Confirmation */}
       <DeleteConfirmationDialog
         description={t('locations.deleteDescription') || 'Are you sure you want to delete this location? This action cannot be undone.'}
         open={deleteOpen}

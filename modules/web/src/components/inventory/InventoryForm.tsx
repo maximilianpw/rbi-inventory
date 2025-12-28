@@ -210,7 +210,7 @@ export function InventoryForm({
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                {t('inventory.batchNumber') ?? 'Batch Number'}
+                {t('inventory.batchNumber') || 'Batch Number'}
               </FieldLabel>
               <FieldContent>
                 <Input

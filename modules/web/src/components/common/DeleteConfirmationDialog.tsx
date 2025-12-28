@@ -38,21 +38,21 @@ export function DeleteConfirmationDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {title ?? t('common.deleteTitle') ?? 'Delete'}
+            {title ?? (t('common.deleteTitle') || 'Delete')}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {description ?? t('common.deleteDescription') ?? 'Are you sure you want to delete this item? This action cannot be undone.'}
+            {description ?? (t('common.deleteDescription') || 'Are you sure you want to delete this item? This action cannot be undone.')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>
-            {cancelLabel ?? t('form.cancel') ?? 'Cancel'}
+            {cancelLabel ?? (t('form.cancel') || 'Cancel')}
           </AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             onClick={onConfirm}
           >
-            {confirmLabel ?? t('actions.delete') ?? 'Delete'}
+            {confirmLabel ?? (t('actions.delete') || 'Delete')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

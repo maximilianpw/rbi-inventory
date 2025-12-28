@@ -15,8 +15,10 @@ import {
   type LocationResponseDto,
   type AreaResponseDto,
 } from '@/lib/data/generated'
-import { LocationType } from '@/lib/enums/location-type.enum'
+import { type LocationType } from '@/lib/enums/location-type.enum'
 import { LOCATION_TYPE_ICONS } from '@/lib/location-type.utils'
+
+const SELECTED_ITEM_STYLES = SELECTED_ITEM_STYLES
 
 interface LocationAreaSidebarProps {
   selectedLocationId: string | null
@@ -54,11 +56,11 @@ function AreaItem({
   return (
     <div>
       <button
+        style={{ paddingLeft: `${depth * 12 + 8}px` }}
         className={cn(
           'flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent',
-          isSelected && 'bg-accent font-medium'
+          isSelected && SELECTED_ITEM_STYLES
         )}
-        style={{ paddingLeft: `${depth * 12 + 8}px` }}
         onClick={() => onSelect(area.id)}
       >
         {hasChildren ? (
@@ -155,7 +157,7 @@ function LocationItem({
       <button
         className={cn(
           'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent',
-          isSelected && !selectedAreaId && 'bg-accent font-medium'
+          isSelected && !selectedAreaId && SELECTED_ITEM_STYLES
         )}
         onClick={onSelect}
       >
@@ -250,7 +252,7 @@ export function LocationAreaSidebar({
         {isLoading && (
           <div className="space-y-2 p-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-7 w-full" />
+              <Skeleton key={`skeleton-${String(i)}`} className="h-7 w-full" />
             ))}
           </div>
         )}
@@ -278,7 +280,7 @@ export function LocationAreaSidebar({
         <button
           className={cn(
             'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent',
-            !selectedLocationId && !selectedAreaId && 'bg-accent font-medium'
+            !selectedLocationId && !selectedAreaId && SELECTED_ITEM_STYLES
           )}
           onClick={() => onSelect(null, null)}
         >

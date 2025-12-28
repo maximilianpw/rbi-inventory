@@ -44,19 +44,18 @@ export function useAreaForm({
 }: UseAreaFormOptions) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const isEditing = !!area
 
   const createMutation = useAreasControllerCreate({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('areas.created') ?? 'Area created successfully')
+        toast.success(t('areas.created') || 'Area created successfully')
         await queryClient.invalidateQueries({
           queryKey: getAreasControllerFindAllQueryKey({ location_id: locationId }),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('areas.createError') ?? 'Failed to create area')
+        toast.error(t('areas.createError') || 'Failed to create area')
         console.error('Area creation error:', error)
       },
     },
@@ -65,14 +64,14 @@ export function useAreaForm({
   const updateMutation = useAreasControllerUpdate({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('areas.updated') ?? 'Area updated successfully')
+        toast.success(t('areas.updated') || 'Area updated successfully')
         await queryClient.invalidateQueries({
           queryKey: getAreasControllerFindAllQueryKey({ location_id: locationId }),
         })
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('areas.updateError') ?? 'Failed to update area')
+        toast.error(t('areas.updateError') || 'Failed to update area')
         console.error('Area update error:', error)
       },
     },
@@ -96,7 +95,7 @@ export function useAreaForm({
       },
     },
     onSubmit: async ({ value }) => {
-      await (isEditing && area ? updateMutation.mutateAsync({
+      await (area ? updateMutation.mutateAsync({
           id: area.id,
           data: {
             name: value.name,

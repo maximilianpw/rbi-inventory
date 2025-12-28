@@ -39,12 +39,11 @@ interface UseLocationFormOptions {
 export function useLocationForm({ location, onSuccess }: UseLocationFormOptions = {}) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const isEditing = !!location
 
   const createMutation = useCreateLocation({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('locations.created') ?? 'Location created successfully')
+        toast.success(t('locations.created') || 'Location created successfully')
         await Promise.all([
           queryClient.invalidateQueries({
             queryKey: getListLocationsQueryKey(),
@@ -56,7 +55,7 @@ export function useLocationForm({ location, onSuccess }: UseLocationFormOptions 
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('locations.createError') ?? 'Failed to create location')
+        toast.error(t('locations.createError') || 'Failed to create location')
         console.error('Location creation error:', error)
       },
     },
@@ -65,7 +64,7 @@ export function useLocationForm({ location, onSuccess }: UseLocationFormOptions 
   const updateMutation = useUpdateLocation({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('locations.updated') ?? 'Location updated successfully')
+        toast.success(t('locations.updated') || 'Location updated successfully')
         await Promise.all([
           queryClient.invalidateQueries({
             queryKey: getListLocationsQueryKey(),
@@ -77,7 +76,7 @@ export function useLocationForm({ location, onSuccess }: UseLocationFormOptions 
         onSuccess?.()
       },
       onError: (error) => {
-        toast.error(t('locations.updateError') ?? 'Failed to update location')
+        toast.error(t('locations.updateError') || 'Failed to update location')
         console.error('Location update error:', error)
       },
     },
@@ -111,7 +110,7 @@ export function useLocationForm({ location, onSuccess }: UseLocationFormOptions 
         is_active: value.is_active,
       }
 
-      await (isEditing && location ? updateMutation.mutateAsync({
+      await (location ? updateMutation.mutateAsync({
           id: location.id,
           data: payload,
         }) : createMutation.mutateAsync({
