@@ -1,40 +1,27 @@
-import js from '@eslint/js'
+import baseConfig from '@rbi/eslint-config'
 import pluginNext from '@next/eslint-plugin-next'
-import prettierConfig from 'eslint-config-prettier'
-import pluginImport from 'eslint-plugin-import'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
-import pluginPromise from 'eslint-plugin-promise'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import pluginSonarjs from 'eslint-plugin-sonarjs'
-import pluginUnicorn from 'eslint-plugin-unicorn'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  // Base JavaScript configuration
-  js.configs.recommended,
+  // Extend shared base configuration
+  ...baseConfig,
 
-  // TypeScript configurations
-  ...tseslint.configs.recommendedTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
-
-  // Global configuration
+  // Web-specific: Add browser globals
   {
     languageOptions: {
-      ecmaVersion: 2024,
-      sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.node,
-        ...globals.es2021,
       },
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
         },
-        project: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -59,7 +46,7 @@ export default tseslint.config(
       ...pluginReact.configs.recommended.rules,
       ...pluginReact.configs['jsx-runtime'].rules,
       ...pluginReactHooks.configs.recommended.rules,
-      'react/prop-types': 'off', // TypeScript handles this
+      'react/prop-types': 'off',
       'react/display-name': 'warn',
       'react/jsx-no-leaked-render': 'off',
       'react/jsx-no-target-blank': 'error',
@@ -93,11 +80,8 @@ export default tseslint.config(
     },
   },
 
-  // Import plugin configuration
+  // Import resolver settings for TypeScript
   {
-    plugins: {
-      import: pluginImport,
-    },
     settings: {
       'import/resolver': {
         typescript: {
@@ -113,15 +97,8 @@ export default tseslint.config(
       },
     },
     rules: {
-      'import/order': 'error',
-      'import/no-duplicates': 'error',
-      'import/no-cycle': 'error',
-      'import/no-self-import': 'error',
       'import/no-unused-modules': 'warn',
       'import/no-deprecated': 'warn',
-      'import/no-mutable-exports': 'error',
-      'import/first': 'error',
-      'import/newline-after-import': 'error',
       'import/no-anonymous-default-export': 'warn',
     },
   },
@@ -140,96 +117,28 @@ export default tseslint.config(
     },
   },
 
-  // Code quality plugins
+  // SonarJS code quality
   {
     plugins: {
       sonarjs: pluginSonarjs,
-      unicorn: pluginUnicorn,
-      promise: pluginPromise,
     },
     rules: {
-      // SonarJS rules
       'sonarjs/no-duplicate-string': ['error', { threshold: 3 }],
       'sonarjs/cognitive-complexity': ['warn', 20],
       'sonarjs/no-identical-functions': 'error',
       'sonarjs/no-redundant-jump': 'error',
-
-      // Unicorn rules
-      'unicorn/better-regex': 'error',
-      'unicorn/catch-error-name': 'error',
-      'unicorn/consistent-destructuring': 'error',
-      'unicorn/consistent-function-scoping': 'error',
-      'unicorn/no-abusive-eslint-disable': 'error',
-      'unicorn/no-array-for-each': 'error',
-      'unicorn/no-array-reduce': 'warn',
-      'unicorn/no-null': 'off',
-      'unicorn/prefer-array-flat-map': 'error',
-      'unicorn/prefer-array-some': 'error',
-      'unicorn/prefer-includes': 'error',
-      'unicorn/prefer-module': 'error',
-      'unicorn/prefer-node-protocol': 'error',
-      'unicorn/prefer-number-properties': 'error',
-      'unicorn/prefer-optional-catch-binding': 'error',
-      'unicorn/prefer-string-starts-ends-with': 'error',
-      'unicorn/prefer-ternary': 'error',
-      'unicorn/prevent-abbreviations': 'off',
-
-      // Promise rules
-      'promise/always-return': 'error',
-      'promise/catch-or-return': 'error',
-      'promise/no-nesting': 'warn',
-      'promise/no-promise-in-callback': 'warn',
-      'promise/no-return-wrap': 'error',
-      'promise/param-names': 'error',
     },
   },
 
-  // TypeScript specific rules
+  // Additional TypeScript rules for React
   {
     rules: {
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          args: 'all',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        {
-          prefer: 'type-imports',
-          fixStyle: 'inline-type-imports',
-          disallowTypeAnnotations: false,
-        },
-      ],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-unnecessary-condition': 'warn',
-      // Disable overly strict unsafe rules - they're impractical with third-party libraries
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-member-access': 'off',
-      '@typescript-eslint/no-unsafe-call': 'off',
-      '@typescript-eslint/no-unsafe-return': 'off',
-      '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'error',
       '@typescript-eslint/prefer-optional-chain': 'error',
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/await-thenable': 'error',
-      '@typescript-eslint/no-misused-promises': [
-        'error',
-        {
-          checksVoidReturn: {
-            attributes: false,
-          },
-        },
-      ],
       '@typescript-eslint/promise-function-async': 'error',
-      '@typescript-eslint/require-await': 'error',
       '@typescript-eslint/return-await': 'error',
       '@typescript-eslint/explicit-function-return-type': [
         'warn',
@@ -279,18 +188,10 @@ export default tseslint.config(
     },
   },
 
-  // General JavaScript rules
+  // Additional JavaScript rules
   {
     rules: {
-      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
-      'no-debugger': 'error',
       'no-alert': 'error',
-      'no-var': 'error',
-      'prefer-const': 'error',
-      'prefer-arrow-callback': 'error',
-      'prefer-template': 'error',
-      'prefer-destructuring': ['error', { object: true, array: false }],
-      'object-shorthand': 'error',
       'no-param-reassign': ['error', { props: true }],
       'no-nested-ternary': 'warn',
       'no-unneeded-ternary': 'error',
@@ -298,10 +199,6 @@ export default tseslint.config(
       'no-await-in-loop': 'warn',
       'no-promise-executor-return': 'error',
       'prefer-promise-reject-errors': 'error',
-      'no-throw-literal': 'error',
-      curly: ['error', 'all'],
-      eqeqeq: ['error', 'always', { null: 'ignore' }],
-      'no-else-return': ['error', { allowElseIf: false }],
       'no-lonely-if': 'error',
       'no-multi-assign': 'error',
       'no-return-assign': 'error',
@@ -309,11 +206,6 @@ export default tseslint.config(
       'no-useless-call': 'error',
       'no-useless-computed-key': 'error',
       'no-useless-concat': 'error',
-      'no-useless-rename': 'error',
-      'no-useless-return': 'error',
-      'prefer-object-spread': 'error',
-      'prefer-rest-params': 'error',
-      'prefer-spread': 'error',
       radix: 'error',
       yoda: ['error', 'never'],
       'max-lines': [
@@ -331,15 +223,7 @@ export default tseslint.config(
     },
   },
 
-  // File-specific overrides
-  {
-    files: ['**/*.config.{js,ts,mjs,mts}', '**/scripts/**/*'],
-    rules: {
-      'no-console': 'off',
-      '@typescript-eslint/no-var-requires': 'off',
-      'import/no-default-export': 'off',
-    },
-  },
+  // Test file overrides
   {
     files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
     rules: {
@@ -348,6 +232,8 @@ export default tseslint.config(
       'no-console': 'off',
     },
   },
+
+  // Next.js app/pages directories - allow default exports
   {
     files: ['**/app/**/*.{ts,tsx}', '**/pages/**/*.{ts,tsx}'],
     rules: {
@@ -356,7 +242,7 @@ export default tseslint.config(
     },
   },
 
-  // React components with JSX are inherently verbose - allow higher limits
+  // React components - allow higher limits
   {
     files: ['**/components/**/*.tsx', '**/app/**/*.tsx'],
     rules: {
@@ -368,7 +254,7 @@ export default tseslint.config(
     },
   },
 
-  // Form components with many fields need even more room
+  // Form components need even more room
   {
     files: ['**/components/**/*Form.tsx'],
     rules: {
@@ -379,10 +265,7 @@ export default tseslint.config(
     },
   },
 
-  // Prettier should be last
-  prettierConfig,
-
-  // Ignore patterns
+  // Web-specific ignores
   {
     ignores: [
       '**/node_modules/**',
@@ -403,8 +286,6 @@ export default tseslint.config(
       '.idea/**',
       '.vscode/**',
       'coverage/**',
-      '.turbo/**',
-      '.cache/**',
       '*.min.js',
       '*.min.css',
       'public/**/*.js',

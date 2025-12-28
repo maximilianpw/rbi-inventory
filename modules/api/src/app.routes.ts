@@ -1,4 +1,4 @@
-import { Routes } from '@nestjs/core';
+import { type Routes } from '@nestjs/core';
 import { AuthModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { HealthModule } from './routes/health/health.module';

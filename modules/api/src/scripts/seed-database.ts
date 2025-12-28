@@ -104,7 +104,7 @@ async function createDataSource(): Promise<DataSource> {
     dataSourceConfig.url = process.env.DATABASE_URL;
   } else {
     dataSourceConfig.host = process.env.PGHOST || 'localhost';
-    dataSourceConfig.port = parseInt(process.env.PGPORT || '5432');
+    dataSourceConfig.port = Number.parseInt(process.env.PGPORT || '5432');
     dataSourceConfig.username = process.env.PGUSER;
     dataSourceConfig.password = process.env.PGPASSWORD;
     dataSourceConfig.database = process.env.PGDATABASE || 'rbi_inventory';
@@ -261,7 +261,7 @@ async function seedProducts(
         { probability: 0.6 },
       ),
       standard_cost: standardCost,
-      standard_price: parseFloat(standardPrice.toFixed(2)),
+      standard_price: Number.parseFloat(standardPrice.toFixed(2)),
       markup_percentage: markupPercentage,
       reorder_point: faker.number.int({ min: 0, max: 50 }),
       primary_supplier_id: supplier.id,

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AuditLog, AuditChanges } from './entities/audit-log.entity';
 import { AuditAction, AuditEntityType } from 'src/common/enums';
+import { AuditLog, AuditChanges } from './entities/audit-log.entity';
 
 export interface CreateAuditLogData {
   user_id: string | null;

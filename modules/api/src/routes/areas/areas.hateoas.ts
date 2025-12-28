@@ -1,4 +1,4 @@
-import { LinkDefinition } from '../../common/hateoas/hateoas-link.dto';
+import { type LinkDefinition } from '../../common/hateoas/hateoas-link.dto';
 import { HateoasLinks } from '../../common/hateoas/hateoas.decorator';
 
 export const AREA_HATEOAS_LINKS: LinkDefinition[] = [

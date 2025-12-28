@@ -17,8 +17,8 @@ export class HateoasLink {
   }
 }
 
-export type LinkDefinition = {
+export interface LinkDefinition {
   rel: string;
   href: string | ((data: any) => string);
   method?: string;
-};
+}

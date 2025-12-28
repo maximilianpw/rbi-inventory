@@ -6,11 +6,20 @@ import pluginUnicorn from 'eslint-plugin-unicorn'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
+/**
+ * Base ESLint configuration for RBI monorepo.
+ * Modules should import this and extend with their own rules.
+ *
+ * Usage:
+ *   import baseConfig from '@rbi/eslint-config'
+ *   export default tseslint.config(...baseConfig, { ...moduleSpecificRules })
+ */
 export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
 
+  // Global language options (modules can override)
   {
     languageOptions: {
       ecmaVersion: 2024,
@@ -37,6 +46,7 @@ export default tseslint.config(
       'import/no-self-import': 'error',
       'import/first': 'error',
       'import/newline-after-import': 'error',
+      'import/no-mutable-exports': 'error',
     },
   },
 
@@ -47,17 +57,22 @@ export default tseslint.config(
       promise: pluginPromise,
     },
     rules: {
+      // Unicorn rules
       'unicorn/better-regex': 'error',
       'unicorn/catch-error-name': 'error',
       'unicorn/no-abusive-eslint-disable': 'error',
       'unicorn/prefer-node-protocol': 'error',
+      'unicorn/prefer-number-properties': 'error',
+      'unicorn/prefer-optional-catch-binding': 'error',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/no-null': 'off',
 
+      // Promise rules
       'promise/always-return': 'error',
       'promise/catch-or-return': 'error',
       'promise/no-return-wrap': 'error',
       'promise/param-names': 'error',
+      'promise/no-nesting': 'warn',
     },
   },
 
@@ -69,7 +84,9 @@ export default tseslint.config(
         {
           args: 'all',
           argsIgnorePattern: '^_',
+          caughtErrors: 'all',
           caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
           varsIgnorePattern: '^_',
           ignoreRestSiblings: true,
         },
@@ -79,11 +96,26 @@ export default tseslint.config(
         {
           prefer: 'type-imports',
           fixStyle: 'inline-type-imports',
+          disallowTypeAnnotations: false,
         },
       ],
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/require-await': 'error',
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {
+          checksVoidReturn: {
+            attributes: false,
+          },
+        },
+      ],
+      // Disable overly strict unsafe rules - impractical with third-party libraries
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
     },
   },
 
@@ -97,21 +129,39 @@ export default tseslint.config(
       'prefer-arrow-callback': 'error',
       'prefer-template': 'error',
       'object-shorthand': 'error',
+      'prefer-destructuring': ['error', { object: true, array: false }],
+      'prefer-object-spread': 'error',
+      'prefer-rest-params': 'error',
+      'prefer-spread': 'error',
       curly: ['error', 'all'],
       eqeqeq: ['error', 'always', { null: 'ignore' }],
+      'no-else-return': ['error', { allowElseIf: false }],
+      'no-useless-return': 'error',
+      'no-useless-rename': 'error',
+      'no-throw-literal': 'error',
+    },
+  },
+
+  // Config/script file overrides
+  {
+    files: ['**/*.config.{js,ts,mjs,mts}', '**/scripts/**/*'],
+    rules: {
+      'no-console': 'off',
     },
   },
 
   // Prettier should be last
   prettierConfig,
 
-  // Ignore patterns
+  // Common ignore patterns
   {
     ignores: [
       '**/node_modules/**',
       'dist/**',
       'build/**',
       'coverage/**',
+      '**/.turbo/**',
+      '**/.cache/**',
       '*.min.js',
     ],
   },

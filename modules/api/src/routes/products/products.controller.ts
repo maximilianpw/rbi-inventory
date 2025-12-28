@@ -21,7 +21,16 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { ProductsService } from './products.service';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto';
+import { MessageResponseDto } from '../../common/dto/message-response.dto';
+import {
+  ClerkAuthGuard,
+  ClerkRequest,
+} from '../../common/guards/clerk-auth.guard';
+import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { AuditInterceptor } from '../../common/interceptors/audit.interceptor';
+import { Auditable } from '../../common/decorators/auditable.decorator';
+import { AuditAction, AuditEntityType } from '../../common/enums';
 import {
   CreateProductDto,
   UpdateProductDto,
@@ -34,16 +43,7 @@ import {
   BulkRestoreDto,
   BulkOperationResultDto,
 } from './dto';
-import { ErrorResponseDto } from '../../common/dto/error-response.dto';
-import { MessageResponseDto } from '../../common/dto/message-response.dto';
-import {
-  ClerkAuthGuard,
-  ClerkRequest,
-} from '../../common/guards/clerk-auth.guard';
-import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
-import { AuditInterceptor } from '../../common/interceptors/audit.interceptor';
-import { Auditable } from '../../common/decorators/auditable.decorator';
-import { AuditAction, AuditEntityType } from '../../common/enums';
+import { ProductsService } from './products.service';
 import {
   ProductHateoas,
   BulkOperationHateoas,

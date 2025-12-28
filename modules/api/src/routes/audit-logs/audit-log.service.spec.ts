@@ -1,12 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
+import { AuditAction, AuditEntityType } from 'src/common/enums';
 import {
   AuditLogService,
-  AuditContext,
-  LogAuditParams,
+  type AuditContext,
+  type LogAuditParams,
 } from './audit-log.service';
-import { AuditLogRepository, PaginatedAuditLogs } from './audit-log.repository';
-import { AuditLog } from './entities/audit-log.entity';
-import { AuditAction, AuditEntityType } from 'src/common/enums';
+import { AuditLogRepository, type PaginatedAuditLogs } from './audit-log.repository';
+import { type AuditLog } from './entities/audit-log.entity';
 
 describe('AuditLogService', () => {
   let service: AuditLogService;

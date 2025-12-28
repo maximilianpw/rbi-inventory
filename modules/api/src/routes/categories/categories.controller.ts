@@ -17,15 +17,15 @@ import {
   ApiTags,
   ApiParam,
 } from '@nestjs/swagger';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto';
+import { MessageResponseDto } from '../../common/dto/message-response.dto';
+import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
+import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryResponseDto } from './dto/category-response.dto';
 import { CategoryWithChildrenResponseDto } from './dto/category-with-children-response.dto';
-import { ErrorResponseDto } from '../../common/dto/error-response.dto';
-import { MessageResponseDto } from '../../common/dto/message-response.dto';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
-import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import { CategoryHateoas, DeleteCategoryHateoas } from './categories.hateoas';
 
 @ApiTags('Categories')

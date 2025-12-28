@@ -1,57 +1,32 @@
-import js from '@eslint/js';
-import prettierConfig from 'eslint-config-prettier';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import baseConfig from '@rbi/eslint-config'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  // Base JavaScript configuration
-  js.configs.recommended,
+  // Extend shared base configuration
+  ...baseConfig,
 
-  // TypeScript configurations
-  ...tseslint.configs.recommended,
-
-  // Global configuration
+  // API-specific: Add Jest globals
   {
     languageOptions: {
-      ecmaVersion: 2024,
-      sourceType: 'module',
       globals: {
-        ...globals.node,
         ...globals.jest,
       },
       parserOptions: {
-        project: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
 
-  // TypeScript and general rules
+  // NestJS-specific TypeScript rules
   {
     files: ['**/*.ts'],
     rules: {
-      // Original disabled rules from .eslintrc.js
+      // NestJS uses decorators heavily which triggers these rules
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-
-      // Additional useful rules
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          args: 'all',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
-      'no-debugger': 'error',
-      'prefer-const': 'error',
     },
   },
 
@@ -60,29 +35,12 @@ export default tseslint.config(
     files: ['**/*.spec.ts', '**/*.e2e-spec.ts', '**/test/**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-    },
-  },
-
-  // Script file overrides
-  {
-    files: ['**/scripts/**/*.ts'],
-    rules: {
       'no-console': 'off',
     },
   },
 
-  // Prettier should be last
-  prettierConfig,
-
-  // Ignore patterns
+  // NestJS-specific ignores
   {
-    ignores: [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/coverage/**',
-      '**/.turbo/**',
-      '**/.cache/**',
-      '*.min.js',
-    ],
+    ignores: ['**/node_modules/**', '**/dist/**', '**/coverage/**'],
   },
-);
+)

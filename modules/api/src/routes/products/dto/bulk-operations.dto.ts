@@ -110,5 +110,5 @@ export class BulkOperationResultDto {
       },
     },
   })
-  failures: Array<{ id?: string; sku?: string; error: string }>;
+  failures: { id?: string; sku?: string; error: string }[];
 }

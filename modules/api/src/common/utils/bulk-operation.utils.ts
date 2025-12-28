@@ -6,7 +6,7 @@ export interface BulkOperationResult<T = string> {
   success_count: number;
   failure_count: number;
   succeeded: T[];
-  failures: Array<{ id?: string; sku?: string; error: string }>;
+  failures: { id?: string; sku?: string; error: string }[];
 }
 
 /**

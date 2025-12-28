@@ -20,15 +20,15 @@ import {
   ApiBearerAuth,
   ApiParam,
 } from '@nestjs/swagger';
+import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
+import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { AreasService } from './areas.service';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { AreaQueryDto } from './dto/area-query.dto';
 import { AreaResponseDto } from './dto/area-response.dto';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
-import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import { AreaHateoas, AreaListHateoas } from './areas.hateoas';
-import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 
 @ApiTags('Areas')
 @ApiBearerAuth('BearerAuth')

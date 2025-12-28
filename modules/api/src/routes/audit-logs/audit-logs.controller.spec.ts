@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
+import { AuditAction, AuditEntityType } from 'src/common/enums';
+import { ClerkAuthGuard } from 'src/common/guards/clerk-auth.guard';
 import { AuditLogsController } from './audit-logs.controller';
 import { AuditLogService } from './audit-log.service';
-import { AuditLog } from './entities/audit-log.entity';
-import { AuditAction, AuditEntityType } from 'src/common/enums';
-import { PaginatedAuditLogs } from './audit-log.repository';
-import { ClerkAuthGuard } from 'src/common/guards/clerk-auth.guard';
+import { type AuditLog } from './entities/audit-log.entity';
+import { type PaginatedAuditLogs } from './audit-log.repository';
 
 describe('AuditLogsController', () => {
   let controller: AuditLogsController;

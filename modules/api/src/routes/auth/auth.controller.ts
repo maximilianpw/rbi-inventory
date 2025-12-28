@@ -7,12 +7,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { createClerkClient } from '@clerk/backend';
-import { ProfileResponseDto } from './dto/profile-response.dto';
-import { SessionClaimsResponseDto } from './dto/session-claims-response.dto';
 import { ClerkClaims } from 'src/common/decorators/clerk-claims.decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
 import { ClerkAuthGuard } from 'src/common/guards/clerk-auth.guard';
+import { SessionClaimsResponseDto } from './dto/session-claims-response.dto';
+import { ProfileResponseDto } from './dto/profile-response.dto';
 
 @ApiTags('Auth')
 @ApiBearerAuth()

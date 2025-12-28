@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { AuditAction, AuditEntityType } from 'src/common/enums';
 import {
   AuditLogRepository,
   CreateAuditLogData,
@@ -6,7 +7,6 @@ import {
   PaginatedAuditLogs,
 } from './audit-log.repository';
 import { AuditLog, AuditChanges } from './entities/audit-log.entity';
-import { AuditAction, AuditEntityType } from 'src/common/enums';
 
 export interface AuditContext {
   userId: string | null;

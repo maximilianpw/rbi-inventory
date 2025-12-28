@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { ProductRepository, PaginatedResult } from './product.repository';
 import { CategoryRepository } from '../categories/category.repository';
-import { Product } from './entities/product.entity';
-import { Category } from '../categories/entities/category.entity';
+import { type Category } from '../categories/entities/category.entity';
+import { ProductsService } from './products.service';
+import { ProductRepository, type PaginatedResult } from './product.repository';
+import { type Product } from './entities/product.entity';
 import { ProductSortField, SortOrder } from './dto';
 
 describe('ProductsService', () => {

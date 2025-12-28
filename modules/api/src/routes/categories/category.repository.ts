@@ -26,7 +26,7 @@ export class CategoryRepository {
 
   async existsByName(name: string, parentId?: string | null): Promise<boolean> {
     const count = await this.repository.countBy({
-      name: name,
+      name,
       parent_id: parentId || undefined,
     });
     return count > 0;
