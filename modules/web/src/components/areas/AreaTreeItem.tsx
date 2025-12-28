@@ -192,7 +192,6 @@ export function AreaTreeItem({
         open={editOpen}
         submitLabel={t('actions.save') ?? 'Save'}
         title={t('areas.editTitle') ?? 'Edit Area'}
-        trigger={<span />}
         onOpenChange={setEditOpen}
       >
         <AreaForm
@@ -208,7 +207,6 @@ export function AreaTreeItem({
         locationId={locationId}
         open={createChildOpen}
         parentId={area.id}
-        trigger={<span />}
         onOpenChange={setCreateChildOpen}
       />
 

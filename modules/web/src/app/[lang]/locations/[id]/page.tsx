@@ -258,7 +258,6 @@ export default function LocationDetailPage(): React.JSX.Element {
         open={editOpen}
         submitLabel={t('actions.save') || 'Save'}
         title={t('locations.editTitle') || 'Edit Location'}
-        trigger={<span />}
         onOpenChange={setEditOpen}
       >
         <LocationForm

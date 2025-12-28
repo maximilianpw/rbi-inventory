@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog'
 
 interface FormDialogProps {
-  trigger: React.ReactNode
+  trigger?: React.ReactNode
   title: React.ReactNode
   description?: React.ReactNode
   formId: string
@@ -62,7 +62,7 @@ export function FormDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className={contentClassName}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

@@ -187,7 +187,6 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
         open={editOpen}
         submitLabel={t('actions.save') || 'Save'}
         title={t('locations.editTitle') || 'Edit Location'}
-        trigger={<span />}
         onOpenChange={setEditOpen}
       >
         <LocationForm

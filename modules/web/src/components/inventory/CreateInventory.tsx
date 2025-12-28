@@ -11,12 +11,16 @@ interface CreateInventoryProps {
   trigger?: React.ReactNode
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  defaultLocationId?: string
+  defaultAreaId?: string
 }
 
 export function CreateInventory({
   trigger,
   open: controlledOpen,
   onOpenChange,
+  defaultLocationId,
+  defaultAreaId,
 }: CreateInventoryProps): React.JSX.Element {
   const { t } = useTranslation()
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false)
@@ -52,6 +56,8 @@ export function CreateInventory({
       onOpenChange={handleOpenChange}
     >
       <InventoryForm
+        defaultAreaId={defaultAreaId}
+        defaultLocationId={defaultLocationId}
         formId="create-inventory-form"
         onSuccess={() => handleOpenChange(false)}
       />

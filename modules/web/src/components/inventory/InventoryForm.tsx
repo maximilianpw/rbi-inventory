@@ -30,22 +30,31 @@ interface InventoryFormProps {
   inventory?: InventoryResponseDto
   formId: string
   onSuccess?: () => void
+  defaultLocationId?: string
+  defaultAreaId?: string
 }
 
 export function InventoryForm({
   inventory,
   formId,
   onSuccess,
+  defaultLocationId,
+  defaultAreaId,
 }: InventoryFormProps): React.JSX.Element {
   const { t } = useTranslation()
-  const form = useInventoryForm({ inventory, onSuccess })
+  const form = useInventoryForm({
+    inventory,
+    onSuccess,
+    defaultLocationId,
+    defaultAreaId,
+  })
 
   const { data: products } = useListAllProducts()
   const { data: locations } = useListAllLocations()
 
   // Track selected location for area filtering
   const [selectedLocationId, setSelectedLocationId] = React.useState(
-    inventory?.location?.id ?? ''
+    inventory?.location?.id ?? defaultLocationId ?? ''
   )
 
   const { data: areas } = useAreasControllerFindAll(

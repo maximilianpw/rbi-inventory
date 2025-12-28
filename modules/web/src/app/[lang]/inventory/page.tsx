@@ -2,41 +2,37 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Filter, AlertTriangle, Clock } from 'lucide-react'
+import { Search, AlertTriangle, Clock } from 'lucide-react'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import { Toggle } from '@/components/ui/toggle'
 import { CreateInventory } from '@/components/inventory/CreateInventory'
-import { InventoryList } from '@/components/inventory/InventoryList'
-import {
-  useListAllProducts,
-  useListAllLocations,
-} from '@/lib/data/generated'
+import { LocationAreaSidebar } from '@/components/inventory/LocationAreaSidebar'
+import { InventoryTable } from '@/components/inventory/InventoryTable'
+import type { ListInventoryParams } from '@/lib/data/generated'
 
 export default function InventoryPage(): React.JSX.Element {
   const { t } = useTranslation()
-  const [productFilter, setProductFilter] = React.useState<string>('ALL')
-  const [locationFilter, setLocationFilter] = React.useState<string>('ALL')
+  const [selectedLocationId, setSelectedLocationId] = React.useState<string | null>(null)
+  const [selectedAreaId, setSelectedAreaId] = React.useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = React.useState('')
   const [showLowStock, setShowLowStock] = React.useState(false)
   const [showExpiringSoon, setShowExpiringSoon] = React.useState(false)
 
-  const { data: products } = useListAllProducts()
-  const { data: locations } = useListAllLocations()
+  const handleSelect = (locationId: string | null, areaId: string | null): void => {
+    setSelectedLocationId(locationId)
+    setSelectedAreaId(areaId)
+  }
 
-  // Build filters for InventoryList
   const filters = React.useMemo(() => {
-    const f: Record<string, string | boolean> = {}
-    if (productFilter !== 'ALL') {
-      f.product_id = productFilter
+    const f: Partial<ListInventoryParams> = {}
+    if (selectedAreaId) {
+      f.area_id = selectedAreaId
+    } else if (selectedLocationId) {
+      f.location_id = selectedLocationId
     }
-    if (locationFilter !== 'ALL') {
-      f.location_id = locationFilter
+    if (searchQuery) {
+      f.search = searchQuery
     }
     if (showLowStock) {
       f.low_stock = true
@@ -45,82 +41,72 @@ export default function InventoryPage(): React.JSX.Element {
       f.expiring_soon = true
     }
     return f
-  }, [productFilter, locationFilter, showLowStock, showExpiringSoon])
+  }, [selectedLocationId, selectedAreaId, searchQuery, showLowStock, showExpiringSoon])
+
+  const currentTitle = React.useMemo(() => {
+    if (selectedAreaId) {
+      return t('inventory.areaInventory') || 'Area Inventory'
+    }
+    if (selectedLocationId) {
+      return t('inventory.locationInventory') || 'Location Inventory'
+    }
+    return t('inventory.allInventory') || 'All Inventory'
+  }, [selectedLocationId, selectedAreaId, t])
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <div className="border-b px-6 py-4">
-        <div className="flex items-center justify-between">
+    <div className="flex h-full w-full">
+      <LocationAreaSidebar
+        selectedAreaId={selectedAreaId}
+        selectedLocationId={selectedLocationId}
+        onSelect={handleSelect}
+      />
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex items-center justify-between border-b px-6 py-4">
           <div>
-            <h1 className="text-2xl font-semibold">
-              {t('navigation.inventory') || 'Inventory'}
-            </h1>
+            <h1 className="text-xl font-semibold">{currentTitle}</h1>
             <p className="text-muted-foreground text-sm">
               {t('inventory.subtitle') || 'Track product quantities across locations'}
             </p>
           </div>
-          <CreateInventory />
+          <CreateInventory
+            defaultLocationId={selectedLocationId ?? undefined}
+            defaultAreaId={selectedAreaId ?? undefined}
+          />
         </div>
-      </div>
 
-      <div className="border-b px-6 py-3">
-        <div className="flex flex-wrap items-center gap-4">
-          <Select value={productFilter} onValueChange={setProductFilter}>
-            <SelectTrigger className="w-[200px]">
-              <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('inventory.filterByProduct') || 'Filter by product'} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">
-                {t('inventory.allProducts') || 'All Products'}
-              </SelectItem>
-              {(products ?? []).map((product) => (
-                <SelectItem key={product.id} value={product.id}>
-                  {product.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select value={locationFilter} onValueChange={setLocationFilter}>
-            <SelectTrigger className="w-[200px]">
-              <Filter className="mr-2 size-4" />
-              <SelectValue placeholder={t('inventory.filterByLocation') || 'Filter by location'} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">
-                {t('inventory.allLocations') || 'All Locations'}
-              </SelectItem>
-              {(locations ?? []).map((location) => (
-                <SelectItem key={location.id} value={location.id}>
-                  {location.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
+        <div className="flex items-center gap-4 border-b px-6 py-3">
+          <div className="relative flex-1 max-w-xs">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              className="pl-9"
+              placeholder={t('inventory.searchPlaceholder') || 'Search batch...'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
           <Toggle
             aria-label="Show low stock"
             pressed={showLowStock}
+            size="sm"
             onPressedChange={setShowLowStock}
           >
-            <AlertTriangle className="mr-2 size-4" />
+            <AlertTriangle className="mr-1.5 size-4" />
             {t('inventory.lowStock') || 'Low Stock'}
           </Toggle>
-
           <Toggle
             aria-label="Show expiring soon"
             pressed={showExpiringSoon}
+            size="sm"
             onPressedChange={setShowExpiringSoon}
           >
-            <Clock className="mr-2 size-4" />
+            <Clock className="mr-1.5 size-4" />
             {t('inventory.expiringSoon') || 'Expiring Soon'}
           </Toggle>
         </div>
-      </div>
 
-      <div className="flex-1 overflow-auto p-6">
-        <InventoryList filters={filters} />
+        <div className="flex-1 overflow-auto p-6">
+          <InventoryTable filters={filters} />
+        </div>
       </div>
     </div>
   )

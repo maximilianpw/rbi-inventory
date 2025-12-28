@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { LocationCard } from './LocationCard'
-import { Spinner } from '@/components/ui/spinner'
+import { LocationCardSkeleton } from './LocationCardSkeleton'
 import {
   useListAllLocations,
   type LocationResponseDto,
@@ -26,8 +26,10 @@ export function LocationList({
 
   if (isLoading) {
     return (
-      <div className="flex justify-center py-8">
-        <Spinner />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <LocationCardSkeleton key={i} />
+        ))}
       </div>
     )
   }

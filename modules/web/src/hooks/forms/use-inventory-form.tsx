@@ -36,12 +36,16 @@ const getStringFromNullable = (value: unknown): string =>
 interface UseInventoryFormOptions {
   inventory?: InventoryResponseDto
   onSuccess?: () => void
+  defaultLocationId?: string
+  defaultAreaId?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useInventoryForm({
   inventory,
   onSuccess,
+  defaultLocationId,
+  defaultAreaId,
 }: UseInventoryFormOptions = {}) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -82,8 +86,8 @@ export function useInventoryForm({
   return useForm({
     defaultValues: {
       product_id: inventory?.product_id ?? '',
-      location_id: inventory?.location_id ?? '',
-      area_id: getStringFromNullable(inventory?.area_id),
+      location_id: inventory?.location_id ?? defaultLocationId ?? '',
+      area_id: getStringFromNullable(inventory?.area_id) || (defaultAreaId ?? ''),
       quantity: inventory?.quantity ?? 0,
       batchNumber: inventory?.batchNumber ?? '',
       expiry_date: getDateStr(inventory?.expiry_date),

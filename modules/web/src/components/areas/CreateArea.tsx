@@ -37,12 +37,13 @@ export function CreateArea({
     [controlledOpen, onOpenChange],
   )
 
-  const defaultTrigger = (
-    <Button>
-      <Plus className="size-4" />
-      {t('areas.create') || 'Create Area'}
-    </Button>
-  )
+  const defaultTrigger =
+    controlledOpen === undefined ? (
+      <Button>
+        <Plus className="size-4" />
+        {t('areas.create') || 'Create Area'}
+      </Button>
+    ) : undefined
 
   return (
     <FormDialog

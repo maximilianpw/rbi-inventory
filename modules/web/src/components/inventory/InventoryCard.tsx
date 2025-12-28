@@ -224,7 +224,6 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
         open={editOpen}
         submitLabel={t('actions.save') ?? 'Save'}
         title={t('inventory.editTitle') ?? 'Edit Inventory'}
-        trigger={<span />}
         onOpenChange={setEditOpen}
       >
         <InventoryForm
