@@ -18,7 +18,7 @@ import {
 import { type LocationType } from '@/lib/enums/location-type.enum'
 import { LOCATION_TYPE_ICONS } from '@/lib/location-type.utils'
 
-const SELECTED_ITEM_STYLES = SELECTED_ITEM_STYLES
+const SELECTED_ITEM_STYLES = 'bg-accent text-accent-foreground'
 
 interface LocationAreaSidebarProps {
   selectedLocationId: string | null
