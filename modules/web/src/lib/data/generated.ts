@@ -312,6 +312,18 @@ export type ProductResponseDtoPrimarySupplier = SupplierSummaryDto | null
 export type ProductResponseDtoSupplierSku = { [key: string]: unknown } | null
 
 /**
+ * Product barcode
+ * @nullable
+ */
+export type ProductResponseDtoBarcode = { [key: string]: unknown } | null
+
+/**
+ * Unit of measure
+ * @nullable
+ */
+export type ProductResponseDtoUnit = { [key: string]: unknown } | null
+
+/**
  * Additional notes
  * @nullable
  */
@@ -412,6 +424,16 @@ export interface ProductResponseDto {
    * @nullable
    */
   supplier_sku: ProductResponseDtoSupplierSku
+  /**
+   * Product barcode
+   * @nullable
+   */
+  barcode: ProductResponseDtoBarcode
+  /**
+   * Unit of measure
+   * @nullable
+   */
+  unit: ProductResponseDtoUnit
   /** Whether the product is active */
   is_active: boolean
   /** Whether the product is perishable */
@@ -519,6 +541,20 @@ export type CreateProductDtoPrimarySupplierId = {
 export type CreateProductDtoSupplierSku = { [key: string]: unknown } | null
 
 /**
+ * Product barcode
+ * @maxLength 100
+ * @nullable
+ */
+export type CreateProductDtoBarcode = { [key: string]: unknown } | null
+
+/**
+ * Unit of measure
+ * @maxLength 50
+ * @nullable
+ */
+export type CreateProductDtoUnit = { [key: string]: unknown } | null
+
+/**
  * Additional notes
  * @maxLength 500
  * @nullable
@@ -604,6 +640,18 @@ export interface CreateProductDto {
    * @nullable
    */
   supplier_sku?: CreateProductDtoSupplierSku
+  /**
+   * Product barcode
+   * @maxLength 100
+   * @nullable
+   */
+  barcode?: CreateProductDtoBarcode
+  /**
+   * Unit of measure
+   * @maxLength 50
+   * @nullable
+   */
+  unit?: CreateProductDtoUnit
   /** Whether the product is active */
   is_active: boolean
   /** Whether the product is perishable */
@@ -713,6 +761,20 @@ export type UpdateProductDtoPrimarySupplierId = {
 export type UpdateProductDtoSupplierSku = { [key: string]: unknown } | null
 
 /**
+ * Product barcode
+ * @maxLength 100
+ * @nullable
+ */
+export type UpdateProductDtoBarcode = { [key: string]: unknown } | null
+
+/**
+ * Unit of measure
+ * @maxLength 50
+ * @nullable
+ */
+export type UpdateProductDtoUnit = { [key: string]: unknown } | null
+
+/**
  * Additional notes
  * @maxLength 500
  * @nullable
@@ -803,6 +865,18 @@ export interface UpdateProductDto {
    */
   supplier_sku?: UpdateProductDtoSupplierSku
   /**
+   * Product barcode
+   * @maxLength 100
+   * @nullable
+   */
+  barcode?: UpdateProductDtoBarcode
+  /**
+   * Unit of measure
+   * @maxLength 50
+   * @nullable
+   */
+  unit?: UpdateProductDtoUnit
+  /**
    * Whether the product is active
    * @nullable
    */
@@ -849,6 +923,417 @@ export interface BulkRestoreDto {
    * @maxItems 100
    */
   ids: string[]
+}
+
+/**
+ * Location type
+ */
+export type LocationResponseDtoType =
+  (typeof LocationResponseDtoType)[keyof typeof LocationResponseDtoType]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const LocationResponseDtoType = {
+  WAREHOUSE: 'WAREHOUSE',
+  SUPPLIER: 'SUPPLIER',
+  IN_TRANSIT: 'IN_TRANSIT',
+  CLIENT: 'CLIENT',
+} as const
+
+export interface LocationResponseDto {
+  /** Creation timestamp */
+  created_at: string
+  /** Last update timestamp */
+  updated_at: string
+  /** Unique identifier */
+  id: string
+  /** Location name */
+  name: string
+  /** Location type */
+  type: LocationResponseDtoType
+  /** Physical address */
+  address: string
+  /** Contact person name */
+  contact_person: string
+  /** Phone number */
+  phone: string
+  /** Whether the location is active */
+  is_active: boolean
+}
+
+export interface PaginatedLocationsResponseDto {
+  /** List of locations */
+  data: LocationResponseDto[]
+  /** Pagination metadata */
+  meta: PaginationMeta
+}
+
+/**
+ * Location type
+ */
+export type CreateLocationDtoType =
+  (typeof CreateLocationDtoType)[keyof typeof CreateLocationDtoType]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const CreateLocationDtoType = {
+  WAREHOUSE: 'WAREHOUSE',
+  SUPPLIER: 'SUPPLIER',
+  IN_TRANSIT: 'IN_TRANSIT',
+  CLIENT: 'CLIENT',
+} as const
+
+export interface CreateLocationDto {
+  /**
+   * Location name
+   * @minLength 1
+   * @maxLength 200
+   */
+  name: string
+  /** Location type */
+  type: CreateLocationDtoType
+  /** Physical address */
+  address?: string
+  /**
+   * Contact person name
+   * @maxLength 200
+   */
+  contact_person?: string
+  /**
+   * Phone number
+   * @maxLength 50
+   */
+  phone?: string
+  /** Whether the location is active */
+  is_active?: boolean
+}
+
+/**
+ * Location type
+ */
+export type UpdateLocationDtoType =
+  (typeof UpdateLocationDtoType)[keyof typeof UpdateLocationDtoType]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateLocationDtoType = {
+  WAREHOUSE: 'WAREHOUSE',
+  SUPPLIER: 'SUPPLIER',
+  IN_TRANSIT: 'IN_TRANSIT',
+  CLIENT: 'CLIENT',
+} as const
+
+export interface UpdateLocationDto {
+  /**
+   * Location name
+   * @minLength 1
+   * @maxLength 200
+   */
+  name?: string
+  /** Location type */
+  type?: UpdateLocationDtoType
+  /** Physical address */
+  address?: string
+  /**
+   * Contact person name
+   * @maxLength 200
+   */
+  contact_person?: string
+  /**
+   * Phone number
+   * @maxLength 50
+   */
+  phone?: string
+  /** Whether the location is active */
+  is_active?: boolean
+}
+
+export interface CreateAreaDto {
+  /** Location ID */
+  location_id: string
+  /** Parent area ID (for nested areas) */
+  parent_id?: string
+  /** Area name */
+  name: string
+  /** Area code (short identifier) */
+  code?: string
+  /** Area description */
+  description?: string
+  /** Whether the area is active */
+  is_active?: boolean
+}
+
+/**
+ * Parent area ID
+ * @nullable
+ */
+export type AreaResponseDtoParentId = { [key: string]: unknown } | null
+
+export interface AreaResponseDto {
+  /** Creation timestamp */
+  created_at: string
+  /** Last update timestamp */
+  updated_at: string
+  /** Location ID */
+  location_id: string
+  /**
+   * Parent area ID
+   * @nullable
+   */
+  parent_id: AreaResponseDtoParentId
+  /** Area name */
+  name: string
+  /** Area code */
+  code: string
+  /** Area description */
+  description: string
+  /** Whether the area is active */
+  is_active: boolean
+  /** Child areas */
+  children?: AreaResponseDto[]
+}
+
+/**
+ * Parent area ID (for nested areas)
+ */
+export type UpdateAreaDtoParentId = { [key: string]: unknown }
+
+export interface UpdateAreaDto {
+  /** Parent area ID (for nested areas) */
+  parent_id?: UpdateAreaDtoParentId
+  /** Area name */
+  name?: string
+  /** Area code (short identifier) */
+  code?: string
+  /** Area description */
+  description?: string
+  /** Whether the area is active */
+  is_active?: boolean
+}
+
+/**
+ * Unit of measure
+ * @nullable
+ */
+export type ProductSummaryDtoUnit = { [key: string]: unknown } | null
+
+export interface ProductSummaryDto {
+  /** Product ID */
+  id: string
+  /** Product SKU */
+  sku: string
+  /** Product name */
+  name: string
+  /**
+   * Unit of measure
+   * @nullable
+   */
+  unit: ProductSummaryDtoUnit
+}
+
+export interface LocationSummaryDto {
+  /** Location ID */
+  id: string
+  /** Location name */
+  name: string
+  /** Location type */
+  type: string
+}
+
+export interface AreaSummaryDto {
+  /** Area ID */
+  id: string
+  /** Area name */
+  name: string
+  /** Area code */
+  code: string
+}
+
+/**
+ * Product details
+ * @nullable
+ */
+export type InventoryResponseDtoProduct = ProductSummaryDto | null
+
+/**
+ * Location details
+ * @nullable
+ */
+export type InventoryResponseDtoLocation = LocationSummaryDto | null
+
+/**
+ * Area ID (specific placement within location)
+ * @nullable
+ */
+export type InventoryResponseDtoAreaId = { [key: string]: unknown } | null
+
+/**
+ * Area details
+ * @nullable
+ */
+export type InventoryResponseDtoArea = AreaSummaryDto | null
+
+/**
+ * Expiry date
+ * @nullable
+ */
+export type InventoryResponseDtoExpiryDate = { [key: string]: unknown } | null
+
+/**
+ * Cost per unit
+ * @nullable
+ */
+export type InventoryResponseDtoCostPerUnit = { [key: string]: unknown } | null
+
+/**
+ * Date when received
+ * @nullable
+ */
+export type InventoryResponseDtoReceivedDate = { [key: string]: unknown } | null
+
+export interface InventoryResponseDto {
+  /** Creation timestamp */
+  created_at: string
+  /** Last update timestamp */
+  updated_at: string
+  /** Unique identifier */
+  id: string
+  /** Product ID */
+  product_id: string
+  /**
+   * Product details
+   * @nullable
+   */
+  product: InventoryResponseDtoProduct
+  /** Location ID */
+  location_id: string
+  /**
+   * Location details
+   * @nullable
+   */
+  location: InventoryResponseDtoLocation
+  /**
+   * Area ID (specific placement within location)
+   * @nullable
+   */
+  area_id: InventoryResponseDtoAreaId
+  /**
+   * Area details
+   * @nullable
+   */
+  area: InventoryResponseDtoArea
+  /** Quantity in stock */
+  quantity: number
+  /** Batch number */
+  batch_number: string
+  /**
+   * Expiry date
+   * @nullable
+   */
+  expiry_date: InventoryResponseDtoExpiryDate
+  /**
+   * Cost per unit
+   * @nullable
+   */
+  cost_per_unit: InventoryResponseDtoCostPerUnit
+  /**
+   * Date when received
+   * @nullable
+   */
+  received_date: InventoryResponseDtoReceivedDate
+}
+
+export interface PaginatedInventoryResponseDto {
+  /** List of inventory items */
+  data: InventoryResponseDto[]
+  /** Pagination metadata */
+  meta: PaginationMeta
+}
+
+/**
+ * Area ID (optional, specific placement within location)
+ * @nullable
+ */
+export type CreateInventoryDtoAreaId = { [key: string]: unknown } | null
+
+export interface CreateInventoryDto {
+  /** Product ID */
+  product_id: string
+  /** Location ID */
+  location_id: string
+  /**
+   * Area ID (optional, specific placement within location)
+   * @nullable
+   */
+  area_id?: CreateInventoryDtoAreaId
+  /**
+   * Quantity in stock
+   * @minimum 0
+   */
+  quantity: number
+  /**
+   * Batch number
+   * @maxLength 100
+   */
+  batch_number?: string
+  /**
+   * Expiry date
+   * @nullable
+   */
+  expiry_date?: string | null
+  /**
+   * Cost per unit
+   * @nullable
+   */
+  cost_per_unit?: number | null
+  /**
+   * Date when received
+   * @nullable
+   */
+  received_date?: string | null
+}
+
+/**
+ * Area ID (optional, specific placement within location)
+ * @nullable
+ */
+export type UpdateInventoryDtoAreaId = { [key: string]: unknown } | null
+
+export interface UpdateInventoryDto {
+  /** Location ID */
+  location_id?: string
+  /**
+   * Area ID (optional, specific placement within location)
+   * @nullable
+   */
+  area_id?: UpdateInventoryDtoAreaId
+  /**
+   * Quantity in stock
+   * @minimum 0
+   */
+  quantity?: number
+  /**
+   * Batch number
+   * @maxLength 100
+   */
+  batch_number?: string
+  /**
+   * Expiry date
+   * @nullable
+   */
+  expiry_date?: string | null
+  /**
+   * Cost per unit
+   * @nullable
+   */
+  cost_per_unit?: number | null
+  /**
+   * Date when received
+   * @nullable
+   */
+  received_date?: string | null
+}
+
+export interface AdjustInventoryDto {
+  /** Quantity adjustment (positive to add, negative to subtract) */
+  adjustment: number
 }
 
 /**
@@ -1067,6 +1552,171 @@ export type DeleteProductParams = {
    */
   permanent?: boolean
 }
+
+export type ListLocationsParams = {
+  /**
+   * Page number (1-based)
+   * @minimum 1
+   */
+  page?: number
+  /**
+   * Number of items per page
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number
+  /**
+   * Search term for name
+   */
+  search?: string
+  /**
+   * Filter by location type
+   */
+  type?: ListLocationsType
+  /**
+   * Filter by active status
+   */
+  is_active?: boolean
+  /**
+   * Field to sort by
+   */
+  sort_by?: ListLocationsSortBy
+  /**
+   * Sort order
+   */
+  sort_order?: ListLocationsSortOrder
+}
+
+export type ListLocationsType =
+  (typeof ListLocationsType)[keyof typeof ListLocationsType]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListLocationsType = {
+  WAREHOUSE: 'WAREHOUSE',
+  SUPPLIER: 'SUPPLIER',
+  IN_TRANSIT: 'IN_TRANSIT',
+  CLIENT: 'CLIENT',
+} as const
+
+export type ListLocationsSortBy =
+  (typeof ListLocationsSortBy)[keyof typeof ListLocationsSortBy]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListLocationsSortBy = {
+  name: 'name',
+  type: 'type',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+} as const
+
+export type ListLocationsSortOrder =
+  (typeof ListLocationsSortOrder)[keyof typeof ListLocationsSortOrder]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListLocationsSortOrder = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+} as const
+
+export type AreasControllerFindAllParams = {
+  /**
+   * Filter by location ID
+   */
+  location_id?: string
+  /**
+   * Filter by parent area ID
+   */
+  parent_id?: string
+  /**
+   * Filter root areas only (no parent)
+   */
+  root_only?: boolean
+  /**
+   * Filter by active status
+   */
+  is_active?: boolean
+  /**
+   * Include children in response (hierarchical)
+   */
+  include_children?: boolean
+}
+
+export type ListInventoryParams = {
+  /**
+   * Page number (1-based)
+   * @minimum 1
+   */
+  page?: number
+  /**
+   * Number of items per page
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number
+  /**
+   * Filter by product ID
+   */
+  product_id?: string
+  /**
+   * Filter by location ID
+   */
+  location_id?: string
+  /**
+   * Filter by area ID
+   */
+  area_id?: string
+  /**
+   * Search term for batch number
+   */
+  search?: string
+  /**
+   * Filter for low stock (quantity <= reorder_point)
+   */
+  low_stock?: boolean
+  /**
+   * Filter for expiring soon (expiry_date within 30 days)
+   */
+  expiring_soon?: boolean
+  /**
+   * Minimum quantity filter
+   * @minimum 0
+   */
+  min_quantity?: number
+  /**
+   * Maximum quantity filter
+   * @minimum 0
+   */
+  max_quantity?: number
+  /**
+   * Field to sort by
+   */
+  sort_by?: ListInventorySortBy
+  /**
+   * Sort order
+   */
+  sort_order?: ListInventorySortOrder
+}
+
+export type ListInventorySortBy =
+  (typeof ListInventorySortBy)[keyof typeof ListInventorySortBy]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListInventorySortBy = {
+  quantity: 'quantity',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  expiry_date: 'expiry_date',
+  received_date: 'received_date',
+} as const
+
+export type ListInventorySortOrder =
+  (typeof ListInventorySortOrder)[keyof typeof ListInventorySortOrder]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListInventorySortOrder = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+} as const
 
 export type ListAuditLogsParams = {
   /**
@@ -3333,6 +3983,2518 @@ export const useBulkRestoreProducts = <
   TContext
 > => {
   const mutationOptions = getBulkRestoreProductsMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary List locations with pagination and filtering
+ */
+export const listLocations = (
+  params?: ListLocationsParams,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<PaginatedLocationsResponseDto>({
+    url: `/locations`,
+    method: 'GET',
+    params,
+    signal,
+  })
+}
+
+export const getListLocationsQueryKey = (params?: ListLocationsParams) => {
+  return [`/locations`, ...(params ? [params] : [])] as const
+}
+
+export const getListLocationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listLocations>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListLocationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listLocations>>, TError, TData>
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getListLocationsQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listLocations>>> = ({
+    signal,
+  }) => listLocations(params, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listLocations>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListLocationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listLocations>>
+>
+export type ListLocationsQueryError = ErrorResponseDto
+
+export function useListLocations<
+  TData = Awaited<ReturnType<typeof listLocations>>,
+  TError = ErrorResponseDto,
+>(
+  params: undefined | ListLocationsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listLocations>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listLocations>>,
+          TError,
+          Awaited<ReturnType<typeof listLocations>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListLocations<
+  TData = Awaited<ReturnType<typeof listLocations>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListLocationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listLocations>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listLocations>>,
+          TError,
+          Awaited<ReturnType<typeof listLocations>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListLocations<
+  TData = Awaited<ReturnType<typeof listLocations>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListLocationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listLocations>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary List locations with pagination and filtering
+ */
+
+export function useListLocations<
+  TData = Awaited<ReturnType<typeof listLocations>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListLocationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listLocations>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getListLocationsQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Create location
+ */
+export const createLocation = (
+  createLocationDto: CreateLocationDto,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<LocationResponseDto>({
+    url: `/locations`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createLocationDto,
+    signal,
+  })
+}
+
+export const getCreateLocationMutationOptions = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createLocation>>,
+    TError,
+    { data: CreateLocationDto },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createLocation>>,
+  TError,
+  { data: CreateLocationDto },
+  TContext
+> => {
+  const mutationKey = ['createLocation']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createLocation>>,
+    { data: CreateLocationDto }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return createLocation(data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type CreateLocationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createLocation>>
+>
+export type CreateLocationMutationBody = CreateLocationDto
+export type CreateLocationMutationError = ErrorResponseDto
+
+/**
+ * @summary Create location
+ */
+export const useCreateLocation = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createLocation>>,
+      TError,
+      { data: CreateLocationDto },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof createLocation>>,
+  TError,
+  { data: CreateLocationDto },
+  TContext
+> => {
+  const mutationOptions = getCreateLocationMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary List all locations without pagination
+ */
+export const listAllLocations = (signal?: AbortSignal) => {
+  return getAxiosInstance<LocationResponseDto[]>({
+    url: `/locations/all`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getListAllLocationsQueryKey = () => {
+  return [`/locations/all`] as const
+}
+
+export const getListAllLocationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listAllLocations>>,
+  TError = ErrorResponseDto,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof listAllLocations>>, TError, TData>
+  >
+}) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getListAllLocationsQueryKey()
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listAllLocations>>
+  > = ({ signal }) => listAllLocations(signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listAllLocations>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListAllLocationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listAllLocations>>
+>
+export type ListAllLocationsQueryError = ErrorResponseDto
+
+export function useListAllLocations<
+  TData = Awaited<ReturnType<typeof listAllLocations>>,
+  TError = ErrorResponseDto,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllLocations>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllLocations>>,
+          TError,
+          Awaited<ReturnType<typeof listAllLocations>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAllLocations<
+  TData = Awaited<ReturnType<typeof listAllLocations>>,
+  TError = ErrorResponseDto,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllLocations>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllLocations>>,
+          TError,
+          Awaited<ReturnType<typeof listAllLocations>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAllLocations<
+  TData = Awaited<ReturnType<typeof listAllLocations>>,
+  TError = ErrorResponseDto,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllLocations>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary List all locations without pagination
+ */
+
+export function useListAllLocations<
+  TData = Awaited<ReturnType<typeof listAllLocations>>,
+  TError = ErrorResponseDto,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllLocations>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getListAllLocationsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get location by ID
+ */
+export const getLocation = (id: string, signal?: AbortSignal) => {
+  return getAxiosInstance<LocationResponseDto>({
+    url: `/locations/${id}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getGetLocationQueryKey = (id?: string) => {
+  return [`/locations/${id}`] as const
+}
+
+export const getGetLocationQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLocation>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLocation>>, TError, TData>
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetLocationQueryKey(id)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLocation>>> = ({
+    signal,
+  }) => getLocation(id, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLocation>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetLocationQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLocation>>
+>
+export type GetLocationQueryError = ErrorResponseDto
+
+export function useGetLocation<
+  TData = Awaited<ReturnType<typeof getLocation>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLocation>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLocation>>,
+          TError,
+          Awaited<ReturnType<typeof getLocation>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetLocation<
+  TData = Awaited<ReturnType<typeof getLocation>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLocation>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLocation>>,
+          TError,
+          Awaited<ReturnType<typeof getLocation>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetLocation<
+  TData = Awaited<ReturnType<typeof getLocation>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLocation>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get location by ID
+ */
+
+export function useGetLocation<
+  TData = Awaited<ReturnType<typeof getLocation>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLocation>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetLocationQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Update location
+ */
+export const updateLocation = (
+  id: string,
+  updateLocationDto: UpdateLocationDto,
+) => {
+  return getAxiosInstance<LocationResponseDto>({
+    url: `/locations/${id}`,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    data: updateLocationDto,
+  })
+}
+
+export const getUpdateLocationMutationOptions = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateLocation>>,
+    TError,
+    { id: string; data: UpdateLocationDto },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateLocation>>,
+  TError,
+  { id: string; data: UpdateLocationDto },
+  TContext
+> => {
+  const mutationKey = ['updateLocation']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateLocation>>,
+    { id: string; data: UpdateLocationDto }
+  > = (props) => {
+    const { id, data } = props ?? {}
+
+    return updateLocation(id, data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateLocationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateLocation>>
+>
+export type UpdateLocationMutationBody = UpdateLocationDto
+export type UpdateLocationMutationError = ErrorResponseDto
+
+/**
+ * @summary Update location
+ */
+export const useUpdateLocation = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateLocation>>,
+      TError,
+      { id: string; data: UpdateLocationDto },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateLocation>>,
+  TError,
+  { id: string; data: UpdateLocationDto },
+  TContext
+> => {
+  const mutationOptions = getUpdateLocationMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Delete location
+ */
+export const deleteLocation = (id: string) => {
+  return getAxiosInstance<MessageResponseDto>({
+    url: `/locations/${id}`,
+    method: 'DELETE',
+  })
+}
+
+export const getDeleteLocationMutationOptions = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteLocation>>,
+    TError,
+    { id: string },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteLocation>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ['deleteLocation']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteLocation>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {}
+
+    return deleteLocation(id)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteLocationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteLocation>>
+>
+
+export type DeleteLocationMutationError = ErrorResponseDto
+
+/**
+ * @summary Delete location
+ */
+export const useDeleteLocation = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteLocation>>,
+      TError,
+      { id: string },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteLocation>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteLocationMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Create a new area
+ */
+export const areasControllerCreate = (
+  createAreaDto: CreateAreaDto,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<AreaResponseDto>({
+    url: `/areas`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createAreaDto,
+    signal,
+  })
+}
+
+export const getAreasControllerCreateMutationOptions = <
+  TError = ErrorResponseDto | void,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof areasControllerCreate>>,
+    TError,
+    { data: CreateAreaDto },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof areasControllerCreate>>,
+  TError,
+  { data: CreateAreaDto },
+  TContext
+> => {
+  const mutationKey = ['areasControllerCreate']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof areasControllerCreate>>,
+    { data: CreateAreaDto }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return areasControllerCreate(data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type AreasControllerCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof areasControllerCreate>>
+>
+export type AreasControllerCreateMutationBody = CreateAreaDto
+export type AreasControllerCreateMutationError = ErrorResponseDto | void
+
+/**
+ * @summary Create a new area
+ */
+export const useAreasControllerCreate = <
+  TError = ErrorResponseDto | void,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof areasControllerCreate>>,
+      TError,
+      { data: CreateAreaDto },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof areasControllerCreate>>,
+  TError,
+  { data: CreateAreaDto },
+  TContext
+> => {
+  const mutationOptions = getAreasControllerCreateMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary List areas with optional filtering
+ */
+export const areasControllerFindAll = (
+  params?: AreasControllerFindAllParams,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<AreaResponseDto[]>({
+    url: `/areas`,
+    method: 'GET',
+    params,
+    signal,
+  })
+}
+
+export const getAreasControllerFindAllQueryKey = (
+  params?: AreasControllerFindAllParams,
+) => {
+  return [`/areas`, ...(params ? [params] : [])] as const
+}
+
+export const getAreasControllerFindAllQueryOptions = <
+  TData = Awaited<ReturnType<typeof areasControllerFindAll>>,
+  TError = void,
+>(
+  params?: AreasControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindAll>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAreasControllerFindAllQueryKey(params)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof areasControllerFindAll>>
+  > = ({ signal }) => areasControllerFindAll(params, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof areasControllerFindAll>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type AreasControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof areasControllerFindAll>>
+>
+export type AreasControllerFindAllQueryError = void
+
+export function useAreasControllerFindAll<
+  TData = Awaited<ReturnType<typeof areasControllerFindAll>>,
+  TError = void,
+>(
+  params: undefined | AreasControllerFindAllParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindAll>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof areasControllerFindAll>>,
+          TError,
+          Awaited<ReturnType<typeof areasControllerFindAll>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useAreasControllerFindAll<
+  TData = Awaited<ReturnType<typeof areasControllerFindAll>>,
+  TError = void,
+>(
+  params?: AreasControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindAll>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof areasControllerFindAll>>,
+          TError,
+          Awaited<ReturnType<typeof areasControllerFindAll>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useAreasControllerFindAll<
+  TData = Awaited<ReturnType<typeof areasControllerFindAll>>,
+  TError = void,
+>(
+  params?: AreasControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindAll>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary List areas with optional filtering
+ */
+
+export function useAreasControllerFindAll<
+  TData = Awaited<ReturnType<typeof areasControllerFindAll>>,
+  TError = void,
+>(
+  params?: AreasControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindAll>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getAreasControllerFindAllQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get area by ID
+ */
+export const areasControllerFindById = (id: string, signal?: AbortSignal) => {
+  return getAxiosInstance<AreaResponseDto>({
+    url: `/areas/${id}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getAreasControllerFindByIdQueryKey = (id?: string) => {
+  return [`/areas/${id}`] as const
+}
+
+export const getAreasControllerFindByIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof areasControllerFindById>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindById>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAreasControllerFindByIdQueryKey(id)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof areasControllerFindById>>
+  > = ({ signal }) => areasControllerFindById(id, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof areasControllerFindById>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type AreasControllerFindByIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof areasControllerFindById>>
+>
+export type AreasControllerFindByIdQueryError = void | ErrorResponseDto
+
+export function useAreasControllerFindById<
+  TData = Awaited<ReturnType<typeof areasControllerFindById>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof areasControllerFindById>>,
+          TError,
+          Awaited<ReturnType<typeof areasControllerFindById>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useAreasControllerFindById<
+  TData = Awaited<ReturnType<typeof areasControllerFindById>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof areasControllerFindById>>,
+          TError,
+          Awaited<ReturnType<typeof areasControllerFindById>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useAreasControllerFindById<
+  TData = Awaited<ReturnType<typeof areasControllerFindById>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindById>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get area by ID
+ */
+
+export function useAreasControllerFindById<
+  TData = Awaited<ReturnType<typeof areasControllerFindById>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindById>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getAreasControllerFindByIdQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Update an area
+ */
+export const areasControllerUpdate = (
+  id: string,
+  updateAreaDto: UpdateAreaDto,
+) => {
+  return getAxiosInstance<AreaResponseDto>({
+    url: `/areas/${id}`,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    data: updateAreaDto,
+  })
+}
+
+export const getAreasControllerUpdateMutationOptions = <
+  TError = ErrorResponseDto | void,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof areasControllerUpdate>>,
+    TError,
+    { id: string; data: UpdateAreaDto },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof areasControllerUpdate>>,
+  TError,
+  { id: string; data: UpdateAreaDto },
+  TContext
+> => {
+  const mutationKey = ['areasControllerUpdate']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof areasControllerUpdate>>,
+    { id: string; data: UpdateAreaDto }
+  > = (props) => {
+    const { id, data } = props ?? {}
+
+    return areasControllerUpdate(id, data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type AreasControllerUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof areasControllerUpdate>>
+>
+export type AreasControllerUpdateMutationBody = UpdateAreaDto
+export type AreasControllerUpdateMutationError = ErrorResponseDto | void
+
+/**
+ * @summary Update an area
+ */
+export const useAreasControllerUpdate = <
+  TError = ErrorResponseDto | void,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof areasControllerUpdate>>,
+      TError,
+      { id: string; data: UpdateAreaDto },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof areasControllerUpdate>>,
+  TError,
+  { id: string; data: UpdateAreaDto },
+  TContext
+> => {
+  const mutationOptions = getAreasControllerUpdateMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Delete an area
+ */
+export const areasControllerDelete = (id: string) => {
+  return getAxiosInstance<void>({ url: `/areas/${id}`, method: 'DELETE' })
+}
+
+export const getAreasControllerDeleteMutationOptions = <
+  TError = void | ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof areasControllerDelete>>,
+    TError,
+    { id: string },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof areasControllerDelete>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ['areasControllerDelete']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof areasControllerDelete>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {}
+
+    return areasControllerDelete(id)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type AreasControllerDeleteMutationResult = NonNullable<
+  Awaited<ReturnType<typeof areasControllerDelete>>
+>
+
+export type AreasControllerDeleteMutationError = void | ErrorResponseDto
+
+/**
+ * @summary Delete an area
+ */
+export const useAreasControllerDelete = <
+  TError = void | ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof areasControllerDelete>>,
+      TError,
+      { id: string },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof areasControllerDelete>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getAreasControllerDeleteMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Get area with children
+ */
+export const areasControllerFindByIdWithChildren = (
+  id: string,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<AreaResponseDto>({
+    url: `/areas/${id}/children`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getAreasControllerFindByIdWithChildrenQueryKey = (id?: string) => {
+  return [`/areas/${id}/children`] as const
+}
+
+export const getAreasControllerFindByIdWithChildrenQueryOptions = <
+  TData = Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAreasControllerFindByIdWithChildrenQueryKey(id)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>
+  > = ({ signal }) => areasControllerFindByIdWithChildren(id, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type AreasControllerFindByIdWithChildrenQueryResult = NonNullable<
+  Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>
+>
+export type AreasControllerFindByIdWithChildrenQueryError =
+  void | ErrorResponseDto
+
+export function useAreasControllerFindByIdWithChildren<
+  TData = Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+          TError,
+          Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useAreasControllerFindByIdWithChildren<
+  TData = Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+          TError,
+          Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useAreasControllerFindByIdWithChildren<
+  TData = Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get area with children
+ */
+
+export function useAreasControllerFindByIdWithChildren<
+  TData = Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+  TError = void | ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof areasControllerFindByIdWithChildren>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getAreasControllerFindByIdWithChildrenQueryOptions(
+    id,
+    options,
+  )
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary List inventory items with pagination and filtering
+ */
+export const listInventory = (
+  params?: ListInventoryParams,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<PaginatedInventoryResponseDto>({
+    url: `/inventory`,
+    method: 'GET',
+    params,
+    signal,
+  })
+}
+
+export const getListInventoryQueryKey = (params?: ListInventoryParams) => {
+  return [`/inventory`, ...(params ? [params] : [])] as const
+}
+
+export const getListInventoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof listInventory>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListInventoryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listInventory>>, TError, TData>
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getListInventoryQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listInventory>>> = ({
+    signal,
+  }) => listInventory(params, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listInventory>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListInventoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listInventory>>
+>
+export type ListInventoryQueryError = ErrorResponseDto
+
+export function useListInventory<
+  TData = Awaited<ReturnType<typeof listInventory>>,
+  TError = ErrorResponseDto,
+>(
+  params: undefined | ListInventoryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listInventory>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listInventory>>,
+          TError,
+          Awaited<ReturnType<typeof listInventory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListInventory<
+  TData = Awaited<ReturnType<typeof listInventory>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListInventoryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listInventory>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listInventory>>,
+          TError,
+          Awaited<ReturnType<typeof listInventory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListInventory<
+  TData = Awaited<ReturnType<typeof listInventory>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListInventoryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listInventory>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary List inventory items with pagination and filtering
+ */
+
+export function useListInventory<
+  TData = Awaited<ReturnType<typeof listInventory>>,
+  TError = ErrorResponseDto,
+>(
+  params?: ListInventoryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listInventory>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getListInventoryQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Create inventory item
+ */
+export const createInventoryItem = (
+  createInventoryDto: CreateInventoryDto,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<InventoryResponseDto>({
+    url: `/inventory`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createInventoryDto,
+    signal,
+  })
+}
+
+export const getCreateInventoryItemMutationOptions = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createInventoryItem>>,
+    TError,
+    { data: CreateInventoryDto },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createInventoryItem>>,
+  TError,
+  { data: CreateInventoryDto },
+  TContext
+> => {
+  const mutationKey = ['createInventoryItem']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createInventoryItem>>,
+    { data: CreateInventoryDto }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return createInventoryItem(data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type CreateInventoryItemMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createInventoryItem>>
+>
+export type CreateInventoryItemMutationBody = CreateInventoryDto
+export type CreateInventoryItemMutationError = ErrorResponseDto
+
+/**
+ * @summary Create inventory item
+ */
+export const useCreateInventoryItem = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createInventoryItem>>,
+      TError,
+      { data: CreateInventoryDto },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof createInventoryItem>>,
+  TError,
+  { data: CreateInventoryDto },
+  TContext
+> => {
+  const mutationOptions = getCreateInventoryItemMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary List all inventory items without pagination
+ */
+export const listAllInventory = (signal?: AbortSignal) => {
+  return getAxiosInstance<InventoryResponseDto[]>({
+    url: `/inventory/all`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getListAllInventoryQueryKey = () => {
+  return [`/inventory/all`] as const
+}
+
+export const getListAllInventoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof listAllInventory>>,
+  TError = ErrorResponseDto,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof listAllInventory>>, TError, TData>
+  >
+}) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getListAllInventoryQueryKey()
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listAllInventory>>
+  > = ({ signal }) => listAllInventory(signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listAllInventory>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListAllInventoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listAllInventory>>
+>
+export type ListAllInventoryQueryError = ErrorResponseDto
+
+export function useListAllInventory<
+  TData = Awaited<ReturnType<typeof listAllInventory>>,
+  TError = ErrorResponseDto,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllInventory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllInventory>>,
+          TError,
+          Awaited<ReturnType<typeof listAllInventory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAllInventory<
+  TData = Awaited<ReturnType<typeof listAllInventory>>,
+  TError = ErrorResponseDto,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllInventory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllInventory>>,
+          TError,
+          Awaited<ReturnType<typeof listAllInventory>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useListAllInventory<
+  TData = Awaited<ReturnType<typeof listAllInventory>>,
+  TError = ErrorResponseDto,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllInventory>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary List all inventory items without pagination
+ */
+
+export function useListAllInventory<
+  TData = Awaited<ReturnType<typeof listAllInventory>>,
+  TError = ErrorResponseDto,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listAllInventory>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getListAllInventoryQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get inventory by product
+ */
+export const getInventoryByProduct = (
+  productId: string,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<InventoryResponseDto[]>({
+    url: `/inventory/product/${productId}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getGetInventoryByProductQueryKey = (productId?: string) => {
+  return [`/inventory/product/${productId}`] as const
+}
+
+export const getGetInventoryByProductQueryOptions = <
+  TData = Awaited<ReturnType<typeof getInventoryByProduct>>,
+  TError = ErrorResponseDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByProduct>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetInventoryByProductQueryKey(productId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getInventoryByProduct>>
+  > = ({ signal }) => getInventoryByProduct(productId, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!productId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getInventoryByProduct>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetInventoryByProductQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getInventoryByProduct>>
+>
+export type GetInventoryByProductQueryError = ErrorResponseDto
+
+export function useGetInventoryByProduct<
+  TData = Awaited<ReturnType<typeof getInventoryByProduct>>,
+  TError = ErrorResponseDto,
+>(
+  productId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByProduct>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getInventoryByProduct>>,
+          TError,
+          Awaited<ReturnType<typeof getInventoryByProduct>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetInventoryByProduct<
+  TData = Awaited<ReturnType<typeof getInventoryByProduct>>,
+  TError = ErrorResponseDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByProduct>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getInventoryByProduct>>,
+          TError,
+          Awaited<ReturnType<typeof getInventoryByProduct>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetInventoryByProduct<
+  TData = Awaited<ReturnType<typeof getInventoryByProduct>>,
+  TError = ErrorResponseDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByProduct>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get inventory by product
+ */
+
+export function useGetInventoryByProduct<
+  TData = Awaited<ReturnType<typeof getInventoryByProduct>>,
+  TError = ErrorResponseDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByProduct>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetInventoryByProductQueryOptions(productId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get inventory by location
+ */
+export const getInventoryByLocation = (
+  locationId: string,
+  signal?: AbortSignal,
+) => {
+  return getAxiosInstance<InventoryResponseDto[]>({
+    url: `/inventory/location/${locationId}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getGetInventoryByLocationQueryKey = (locationId?: string) => {
+  return [`/inventory/location/${locationId}`] as const
+}
+
+export const getGetInventoryByLocationQueryOptions = <
+  TData = Awaited<ReturnType<typeof getInventoryByLocation>>,
+  TError = ErrorResponseDto,
+>(
+  locationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByLocation>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetInventoryByLocationQueryKey(locationId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getInventoryByLocation>>
+  > = ({ signal }) => getInventoryByLocation(locationId, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!locationId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getInventoryByLocation>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetInventoryByLocationQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getInventoryByLocation>>
+>
+export type GetInventoryByLocationQueryError = ErrorResponseDto
+
+export function useGetInventoryByLocation<
+  TData = Awaited<ReturnType<typeof getInventoryByLocation>>,
+  TError = ErrorResponseDto,
+>(
+  locationId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByLocation>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getInventoryByLocation>>,
+          TError,
+          Awaited<ReturnType<typeof getInventoryByLocation>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetInventoryByLocation<
+  TData = Awaited<ReturnType<typeof getInventoryByLocation>>,
+  TError = ErrorResponseDto,
+>(
+  locationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByLocation>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getInventoryByLocation>>,
+          TError,
+          Awaited<ReturnType<typeof getInventoryByLocation>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetInventoryByLocation<
+  TData = Awaited<ReturnType<typeof getInventoryByLocation>>,
+  TError = ErrorResponseDto,
+>(
+  locationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByLocation>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get inventory by location
+ */
+
+export function useGetInventoryByLocation<
+  TData = Awaited<ReturnType<typeof getInventoryByLocation>>,
+  TError = ErrorResponseDto,
+>(
+  locationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryByLocation>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetInventoryByLocationQueryOptions(
+    locationId,
+    options,
+  )
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Get inventory item by ID
+ */
+export const getInventoryItem = (id: string, signal?: AbortSignal) => {
+  return getAxiosInstance<InventoryResponseDto>({
+    url: `/inventory/${id}`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getGetInventoryItemQueryKey = (id?: string) => {
+  return [`/inventory/${id}`] as const
+}
+
+export const getGetInventoryItemQueryOptions = <
+  TData = Awaited<ReturnType<typeof getInventoryItem>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryItem>>,
+        TError,
+        TData
+      >
+    >
+  },
+) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetInventoryItemQueryKey(id)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getInventoryItem>>
+  > = ({ signal }) => getInventoryItem(id, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getInventoryItem>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetInventoryItemQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getInventoryItem>>
+>
+export type GetInventoryItemQueryError = ErrorResponseDto
+
+export function useGetInventoryItem<
+  TData = Awaited<ReturnType<typeof getInventoryItem>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryItem>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getInventoryItem>>,
+          TError,
+          Awaited<ReturnType<typeof getInventoryItem>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetInventoryItem<
+  TData = Awaited<ReturnType<typeof getInventoryItem>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryItem>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getInventoryItem>>,
+          TError,
+          Awaited<ReturnType<typeof getInventoryItem>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetInventoryItem<
+  TData = Awaited<ReturnType<typeof getInventoryItem>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryItem>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Get inventory item by ID
+ */
+
+export function useGetInventoryItem<
+  TData = Awaited<ReturnType<typeof getInventoryItem>>,
+  TError = ErrorResponseDto,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getInventoryItem>>,
+        TError,
+        TData
+      >
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetInventoryItemQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Update inventory item
+ */
+export const updateInventoryItem = (
+  id: string,
+  updateInventoryDto: UpdateInventoryDto,
+) => {
+  return getAxiosInstance<InventoryResponseDto>({
+    url: `/inventory/${id}`,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    data: updateInventoryDto,
+  })
+}
+
+export const getUpdateInventoryItemMutationOptions = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateInventoryItem>>,
+    TError,
+    { id: string; data: UpdateInventoryDto },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateInventoryItem>>,
+  TError,
+  { id: string; data: UpdateInventoryDto },
+  TContext
+> => {
+  const mutationKey = ['updateInventoryItem']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateInventoryItem>>,
+    { id: string; data: UpdateInventoryDto }
+  > = (props) => {
+    const { id, data } = props ?? {}
+
+    return updateInventoryItem(id, data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateInventoryItemMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateInventoryItem>>
+>
+export type UpdateInventoryItemMutationBody = UpdateInventoryDto
+export type UpdateInventoryItemMutationError = ErrorResponseDto
+
+/**
+ * @summary Update inventory item
+ */
+export const useUpdateInventoryItem = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateInventoryItem>>,
+      TError,
+      { id: string; data: UpdateInventoryDto },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateInventoryItem>>,
+  TError,
+  { id: string; data: UpdateInventoryDto },
+  TContext
+> => {
+  const mutationOptions = getUpdateInventoryItemMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Delete inventory item
+ */
+export const deleteInventoryItem = (id: string) => {
+  return getAxiosInstance<MessageResponseDto>({
+    url: `/inventory/${id}`,
+    method: 'DELETE',
+  })
+}
+
+export const getDeleteInventoryItemMutationOptions = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteInventoryItem>>,
+    TError,
+    { id: string },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteInventoryItem>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ['deleteInventoryItem']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteInventoryItem>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {}
+
+    return deleteInventoryItem(id)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteInventoryItemMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteInventoryItem>>
+>
+
+export type DeleteInventoryItemMutationError = ErrorResponseDto
+
+/**
+ * @summary Delete inventory item
+ */
+export const useDeleteInventoryItem = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteInventoryItem>>,
+      TError,
+      { id: string },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteInventoryItem>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteInventoryItemMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Adjust inventory quantity
+ */
+export const adjustInventoryQuantity = (
+  id: string,
+  adjustInventoryDto: AdjustInventoryDto,
+) => {
+  return getAxiosInstance<InventoryResponseDto>({
+    url: `/inventory/${id}/adjust`,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    data: adjustInventoryDto,
+  })
+}
+
+export const getAdjustInventoryQuantityMutationOptions = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof adjustInventoryQuantity>>,
+    TError,
+    { id: string; data: AdjustInventoryDto },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof adjustInventoryQuantity>>,
+  TError,
+  { id: string; data: AdjustInventoryDto },
+  TContext
+> => {
+  const mutationKey = ['adjustInventoryQuantity']
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adjustInventoryQuantity>>,
+    { id: string; data: AdjustInventoryDto }
+  > = (props) => {
+    const { id, data } = props ?? {}
+
+    return adjustInventoryQuantity(id, data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type AdjustInventoryQuantityMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adjustInventoryQuantity>>
+>
+export type AdjustInventoryQuantityMutationBody = AdjustInventoryDto
+export type AdjustInventoryQuantityMutationError = ErrorResponseDto
+
+/**
+ * @summary Adjust inventory quantity
+ */
+export const useAdjustInventoryQuantity = <
+  TError = ErrorResponseDto,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof adjustInventoryQuantity>>,
+      TError,
+      { id: string; data: AdjustInventoryDto },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof adjustInventoryQuantity>>,
+  TError,
+  { id: string; data: AdjustInventoryDto },
+  TContext
+> => {
+  const mutationOptions = getAdjustInventoryQuantityMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }

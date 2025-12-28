@@ -25,17 +25,17 @@ export class Location {
   })
   type: LocationType;
 
-  @ApiProperty({ description: 'Physical address', nullable: true })
-  @Column({ type: 'text', nullable: true })
-  address: string | null;
+  @ApiProperty({ description: 'Physical address' })
+  @Column({ type: 'text', default: '' })
+  address: string;
 
-  @ApiProperty({ description: 'Contact person name', nullable: true })
-  @Column({ type: 'varchar', nullable: true })
-  contact_person: string | null;
+  @ApiProperty({ description: 'Contact person name' })
+  @Column({ type: 'varchar', default: '' })
+  contact_person: string;
 
-  @ApiProperty({ description: 'Phone number', nullable: true })
-  @Column({ type: 'varchar', nullable: true })
-  phone: string | null;
+  @ApiProperty({ description: 'Phone number' })
+  @Column({ type: 'varchar', default: '' })
+  phone: string;
 
   @ApiProperty({ description: 'Whether the location is active', default: true })
   @Column({ type: 'boolean', default: true })

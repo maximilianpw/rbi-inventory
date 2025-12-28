@@ -33,8 +33,8 @@ export class AreaSummaryDto {
   @ApiProperty({ description: 'Area name' })
   name: string;
 
-  @ApiProperty({ description: 'Area code', nullable: true })
-  code: string | null;
+  @ApiProperty({ description: 'Area code' })
+  code: string;
 }
 
 export class InventoryResponseDto extends BaseResponseDto {
@@ -93,10 +93,9 @@ export class InventoryResponseDto extends BaseResponseDto {
 
   @ApiProperty({
     description: 'Batch number',
-    nullable: true,
     example: 'BATCH-2024-001',
   })
-  batch_number: string | null;
+  batch_number: string;
 
   @ApiProperty({
     description: 'Expiry date',

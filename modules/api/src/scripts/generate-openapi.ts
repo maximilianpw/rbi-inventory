@@ -48,7 +48,14 @@ async function generateOpenApi() {
   const document = SwaggerModule.createDocument(app, config);
 
   // Write to root of project (two levels up from this file)
-  const outputPath = path.resolve(__dirname, '..', '..', '..', 'openapi.yaml');
+  const outputPath = path.resolve(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    '..',
+    'openapi.yaml',
+  );
   const yamlContent = yaml.dump(document, { noRefs: true });
 
   fs.writeFileSync(outputPath, yamlContent, 'utf8');

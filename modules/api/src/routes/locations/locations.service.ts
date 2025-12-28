@@ -50,9 +50,9 @@ export class LocationsService {
     const location = await this.locationRepository.create({
       name: createLocationDto.name,
       type: createLocationDto.type,
-      address: createLocationDto.address ?? null,
-      contact_person: createLocationDto.contact_person ?? null,
-      phone: createLocationDto.phone ?? null,
+      address: createLocationDto.address ?? '',
+      contact_person: createLocationDto.contact_person ?? '',
+      phone: createLocationDto.phone ?? '',
       is_active: createLocationDto.is_active ?? true,
     });
 

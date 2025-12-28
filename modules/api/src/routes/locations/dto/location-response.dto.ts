@@ -25,24 +25,21 @@ export class LocationResponseDto extends BaseResponseDto {
 
   @ApiProperty({
     description: 'Physical address',
-    nullable: true,
     example: '123 Harbor Drive, Miami, FL 33101',
   })
-  address: string | null;
+  address: string;
 
   @ApiProperty({
     description: 'Contact person name',
-    nullable: true,
     example: 'John Smith',
   })
-  contact_person: string | null;
+  contact_person: string;
 
   @ApiProperty({
     description: 'Phone number',
-    nullable: true,
     example: '+1-555-123-4567',
   })
-  phone: string | null;
+  phone: string;
 
   @ApiProperty({
     description: 'Whether the location is active',

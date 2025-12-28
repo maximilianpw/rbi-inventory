@@ -31,7 +31,7 @@ export class UpdateAreaDto {
   @IsOptional()
   @IsString()
   @MaxLength(50)
-  code?: string | null;
+  code?: string;
 
   @ApiProperty({
     description: 'Area description',
@@ -39,7 +39,7 @@ export class UpdateAreaDto {
   })
   @IsOptional()
   @IsString()
-  description?: string | null;
+  description?: string;
 
   @ApiProperty({
     description: 'Whether the area is active',

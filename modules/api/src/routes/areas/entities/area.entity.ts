@@ -55,17 +55,15 @@ export class Area {
   @ApiProperty({
     description: 'Area code (short identifier)',
     example: 'A1',
-    nullable: true,
   })
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  code: string | null;
+  @Column({ type: 'varchar', length: 50, default: '' })
+  code: string;
 
   @ApiProperty({
     description: 'Area description',
-    nullable: true,
   })
-  @Column({ type: 'text', nullable: true })
-  description: string | null;
+  @Column({ type: 'text', default: '' })
+  description: string;
 
   @ApiProperty({ description: 'Whether the area is active', default: true })
   @Column({ type: 'boolean', default: true })

@@ -35,36 +35,33 @@ export class UpdateLocationDto {
   @ApiProperty({
     description: 'Physical address',
     type: String,
-    nullable: true,
     required: false,
   })
   @IsOptional()
   @IsString()
-  address?: string | null;
+  address?: string;
 
   @ApiProperty({
     description: 'Contact person name',
     type: String,
     maxLength: 200,
-    nullable: true,
     required: false,
   })
   @IsOptional()
   @IsString()
   @MaxLength(200)
-  contact_person?: string | null;
+  contact_person?: string;
 
   @ApiProperty({
     description: 'Phone number',
     type: String,
     maxLength: 50,
-    nullable: true,
     required: false,
   })
   @IsOptional()
   @IsString()
   @MaxLength(50)
-  phone?: string | null;
+  phone?: string;
 
   @ApiProperty({
     description: 'Whether the location is active',

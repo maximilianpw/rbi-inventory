@@ -44,13 +44,12 @@ export class UpdateInventoryDto {
     description: 'Batch number',
     type: String,
     maxLength: 100,
-    nullable: true,
     required: false,
   })
   @IsOptional()
   @IsString()
   @MaxLength(100)
-  batch_number?: string | null;
+  batch_number?: string;
 
   @ApiProperty({
     description: 'Expiry date',

@@ -63,9 +63,9 @@ export class Inventory {
   @Column({ type: 'int', default: 0 })
   quantity: number;
 
-  @ApiProperty({ description: 'Batch number', nullable: true })
-  @Column({ type: 'varchar', nullable: true })
-  batch_number: string | null;
+  @ApiProperty({ description: 'Batch number' })
+  @Column({ type: 'varchar', default: '' })
+  batch_number: string;
 
   @ApiProperty({ description: 'Expiry date', nullable: true })
   @Column({ type: 'timestamptz', nullable: true })

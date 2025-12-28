@@ -17,8 +17,8 @@ export class AreaRepository {
     const area = this.repository.create({
       ...dto,
       parent_id: dto.parent_id ?? null,
-      code: dto.code ?? null,
-      description: dto.description ?? null,
+      code: dto.code ?? '',
+      description: dto.description ?? '',
       is_active: dto.is_active ?? true,
     });
     return this.repository.save(area);

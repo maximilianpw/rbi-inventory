@@ -15,11 +15,11 @@ export class AreaResponseDto extends BaseResponseDto {
   @ApiProperty({ description: 'Area name' })
   name: string;
 
-  @ApiProperty({ description: 'Area code', nullable: true })
-  code: string | null;
+  @ApiProperty({ description: 'Area code' })
+  code: string;
 
-  @ApiProperty({ description: 'Area description', nullable: true })
-  description: string | null;
+  @ApiProperty({ description: 'Area description' })
+  description: string;
 
   @ApiProperty({ description: 'Whether the area is active' })
   is_active: boolean;
