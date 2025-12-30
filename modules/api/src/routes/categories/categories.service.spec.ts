@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CategoryRepository } from './category.repository';
-import { Category } from './entities/category.entity';
+import { type Category } from './entities/category.entity';
 
 describe('CategoriesService', () => {
   let service: CategoriesService;

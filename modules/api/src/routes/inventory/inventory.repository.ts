@@ -217,7 +217,7 @@ export class InventoryRepository {
       .set(updateData)
       .where('id = :id', { id })
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async adjustQuantity(id: string, adjustment: number): Promise<number> {
@@ -230,7 +230,7 @@ export class InventoryRepository {
       .where('id = :id', { id })
       .andWhere('quantity + :adjustment >= 0', { adjustment })
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async delete(id: string): Promise<void> {

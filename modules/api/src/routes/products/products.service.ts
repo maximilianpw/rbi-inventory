@@ -3,6 +3,16 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { CategoryRepository } from '../categories/category.repository';
+import { ErrorType } from '../../common/dto/error-response.dto';
+import {
+  createEmptyBulkResult,
+  addBulkSuccess,
+  addBulkFailure,
+  findDuplicates,
+  partitionByExistence,
+  addNotFoundFailures,
+} from '../../common/utils';
 import { Product } from './entities/product.entity';
 import {
   CreateProductDto,
@@ -17,17 +27,7 @@ import {
   BulkOperationResultDto,
 } from './dto';
 import { ProductRepository } from './product.repository';
-import { CategoryRepository } from '../categories/category.repository';
-import { ErrorType } from '../../common/dto/error-response.dto';
 import { ProductBuilder } from './products.builder';
-import {
-  createEmptyBulkResult,
-  addBulkSuccess,
-  addBulkFailure,
-  findDuplicates,
-  partitionByExistence,
-  addNotFoundFailures,
-} from '../../common/utils';
 
 @Injectable()
 export class ProductsService {

@@ -1,8 +1,8 @@
-import { Product } from './entities/product.entity';
+import { type Product } from './entities/product.entity';
 import {
-  CreateProductDto,
-  ProductResponseDto,
-  PaginatedProductsResponseDto,
+  type CreateProductDto,
+  type ProductResponseDto,
+  type PaginatedProductsResponseDto,
 } from './dto';
 
 interface PaginatedResult {

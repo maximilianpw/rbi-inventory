@@ -1,5 +1,5 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ClerkRequest } from '../guards/clerk-auth.guard';
+import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
+import { type ClerkRequest } from '../guards/clerk-auth.guard';
 
 export const ClerkClaims = createParamDecorator(
   (_data: unknown, ctx: ExecutionContext) => {

@@ -259,7 +259,7 @@ export class ProductRepository {
       .where('id = :id', { id })
       .andWhere('deleted_at IS NULL')
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async updateMany(
@@ -273,7 +273,7 @@ export class ProductRepository {
       .where('id IN (:...ids)', { ids })
       .andWhere('deleted_at IS NULL')
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async softDelete(id: string, deletedBy?: string): Promise<void> {
@@ -282,7 +282,7 @@ export class ProductRepository {
       .update(Product)
       .set({
         deleted_at: new Date(),
-        deleted_by: deletedBy || null,
+        deleted_by: deletedBy ?? null,
       })
       .where('id = :id', { id })
       .andWhere('deleted_at IS NULL')
@@ -295,12 +295,12 @@ export class ProductRepository {
       .update(Product)
       .set({
         deleted_at: new Date(),
-        deleted_by: deletedBy || null,
+        deleted_by: deletedBy ?? null,
       })
       .where('id IN (:...ids)', { ids })
       .andWhere('deleted_at IS NULL')
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async restore(id: string): Promise<void> {
@@ -327,7 +327,7 @@ export class ProductRepository {
       .where('id IN (:...ids)', { ids })
       .andWhere('deleted_at IS NOT NULL')
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async hardDelete(id: string): Promise<void> {
@@ -336,6 +336,6 @@ export class ProductRepository {
 
   async hardDeleteMany(ids: string[]): Promise<number> {
     const result = await this.repository.delete(ids);
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 }

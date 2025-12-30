@@ -20,14 +20,14 @@ export class LoggingInterceptor implements NestInterceptor {
     const startTime = Date.now();
 
     const { method, url, headers } = request;
-    const requestId = request.id || 'unknown';
-    const userAgent = headers['user-agent'] || 'unknown';
+    const requestId = request.id ?? 'unknown';
+    const userAgent = headers['user-agent'] ?? 'unknown';
 
     return next.handle().pipe(
       tap({
         next: () => {
           const duration = Date.now() - startTime;
-          const statusCode = response.statusCode;
+          const {statusCode} = response;
 
           this.logger.log({
             message: 'HTTP request',
@@ -41,7 +41,7 @@ export class LoggingInterceptor implements NestInterceptor {
         },
         error: (error) => {
           const duration = Date.now() - startTime;
-          const statusCode = error.status || 500;
+          const statusCode = error.status ?? 500;
 
           this.logger.error({
             message: 'HTTP request failed',

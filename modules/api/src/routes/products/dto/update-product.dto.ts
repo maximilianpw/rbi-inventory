@@ -75,7 +75,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value?.trim() || null)
+  @Transform(({ value }) => (value?.trim() ? value.trim() : null))
   @MaxLength(1000)
   description?: string | null;
 
@@ -130,7 +130,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value?.trim() || null)
+  @Transform(({ value }) => (value?.trim() ? value.trim() : null))
   @MaxLength(50)
   @Matches(/^\d+(\.\d+)?x\d+(\.\d+)?x\d+(\.\d+)?$/, {
     message:
@@ -203,7 +203,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value?.trim() || null)
+  @Transform(({ value }) => (value?.trim() ? value.trim() : null))
   @MaxLength(50)
   supplier_sku?: string | null;
 
@@ -216,7 +216,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value?.trim() || null)
+  @Transform(({ value }) => (value?.trim() ? value.trim() : null))
   @MaxLength(100)
   barcode?: string | null;
 
@@ -229,7 +229,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value?.trim() || null)
+  @Transform(({ value }) => (value?.trim() ? value.trim() : null))
   @MaxLength(50)
   unit?: string | null;
 
@@ -259,7 +259,7 @@ export class UpdateProductDto implements Partial<Product> {
   })
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value?.trim() || null)
+  @Transform(({ value }) => (value?.trim() ? value.trim() : null))
   @MaxLength(500)
   notes?: string | null;
 }

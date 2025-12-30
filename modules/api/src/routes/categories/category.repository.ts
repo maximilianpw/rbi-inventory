@@ -26,8 +26,8 @@ export class CategoryRepository {
 
   async existsByName(name: string, parentId?: string | null): Promise<boolean> {
     const count = await this.repository.countBy({
-      name: name,
-      parent_id: parentId || undefined,
+      name,
+      parent_id: parentId ?? undefined,
     });
     return count > 0;
   }
@@ -44,7 +44,7 @@ export class CategoryRepository {
       .set(updateData)
       .where('id = :id', { id })
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async delete(id: string): Promise<void> {

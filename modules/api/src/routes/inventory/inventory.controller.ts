@@ -19,7 +19,10 @@ import {
   ApiTags,
   ApiParam,
 } from '@nestjs/swagger';
-import { InventoryService } from './inventory.service';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto';
+import { MessageResponseDto } from '../../common/dto/message-response.dto';
+import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
+import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import {
   CreateInventoryDto,
   UpdateInventoryDto,
@@ -28,10 +31,7 @@ import {
   InventoryQueryDto,
   PaginatedInventoryResponseDto,
 } from './dto';
-import { ErrorResponseDto } from '../../common/dto/error-response.dto';
-import { MessageResponseDto } from '../../common/dto/message-response.dto';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
-import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { InventoryService } from './inventory.service';
 import { InventoryHateoas, DeleteInventoryHateoas } from './inventory.hateoas';
 
 @ApiTags('Inventory')

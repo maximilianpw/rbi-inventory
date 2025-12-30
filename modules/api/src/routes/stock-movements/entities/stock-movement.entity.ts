@@ -7,9 +7,9 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { StockMovementReason } from 'src/common/enums';
 import { Location } from '../../locations/entities/location.entity';
 import { Order } from '../../orders/entities/order.entity';
-import { StockMovementReason } from 'src/common/enums';
 
 @Entity('stock_movements')
 export class StockMovement {

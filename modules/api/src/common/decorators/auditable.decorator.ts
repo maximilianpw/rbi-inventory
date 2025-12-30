@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { AuditAction, AuditEntityType } from '../enums';
+import { type AuditAction, type AuditEntityType } from '../enums';
 
 export const AUDIT_METADATA_KEY = 'audit_metadata';
 

@@ -3,6 +3,9 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { ProductRepository } from '../products/product.repository';
+import { LocationRepository } from '../locations/location.repository';
+import { AreaRepository } from '../areas/area.repository';
 import { Inventory } from './entities/inventory.entity';
 import {
   CreateInventoryDto,
@@ -13,9 +16,6 @@ import {
   PaginatedInventoryResponseDto,
 } from './dto';
 import { InventoryRepository } from './inventory.repository';
-import { ProductRepository } from '../products/product.repository';
-import { LocationRepository } from '../locations/location.repository';
-import { AreaRepository } from '../areas/area.repository';
 
 @Injectable()
 export class InventoryService {

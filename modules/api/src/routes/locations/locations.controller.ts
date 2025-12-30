@@ -18,7 +18,10 @@ import {
   ApiTags,
   ApiParam,
 } from '@nestjs/swagger';
-import { LocationsService } from './locations.service';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto';
+import { MessageResponseDto } from '../../common/dto/message-response.dto';
+import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
+import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import {
   CreateLocationDto,
   UpdateLocationDto,
@@ -26,10 +29,7 @@ import {
   LocationQueryDto,
   PaginatedLocationsResponseDto,
 } from './dto';
-import { ErrorResponseDto } from '../../common/dto/error-response.dto';
-import { MessageResponseDto } from '../../common/dto/message-response.dto';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
-import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { LocationsService } from './locations.service';
 import { LocationHateoas, DeleteLocationHateoas } from './locations.hateoas';
 
 @ApiTags('Locations')

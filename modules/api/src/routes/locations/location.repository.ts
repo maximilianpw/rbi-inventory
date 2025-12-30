@@ -116,7 +116,7 @@ export class LocationRepository {
       .set(updateData)
       .where('id = :id', { id })
       .execute();
-    return result.affected || 0;
+    return result.affected ?? 0;
   }
 
   async delete(id: string): Promise<void> {

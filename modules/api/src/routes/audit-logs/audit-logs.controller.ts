@@ -14,15 +14,15 @@ import {
   ApiTags,
   ApiParam,
 } from '@nestjs/swagger';
+import { AuditEntityType } from 'src/common/enums';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto';
+import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { AuditLogService } from './audit-log.service';
 import {
   AuditLogQueryDto,
   AuditLogResponseDto,
   PaginatedAuditLogsResponseDto,
 } from './dto';
-import { ErrorResponseDto } from '../../common/dto/error-response.dto';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
-import { AuditEntityType } from 'src/common/enums';
 
 @ApiTags('Audit Logs')
 @ApiBearerAuth()

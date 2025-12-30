@@ -1,7 +1,7 @@
+import * as fs from 'node:fs';
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { parse } from 'csv-parse/sync';
-import * as fs from 'fs';
 import { Category } from '../routes/categories/entities/category.entity';
 import { Product } from '../routes/products/entities/product.entity';
 import { Location } from '../routes/locations/entities/location.entity';
@@ -61,11 +61,11 @@ async function createDataSource(): Promise<DataSource> {
   if (process.env.DATABASE_URL) {
     dataSourceConfig.url = process.env.DATABASE_URL;
   } else {
-    dataSourceConfig.host = process.env.PGHOST || 'localhost';
-    dataSourceConfig.port = parseInt(process.env.PGPORT || '5432');
+    dataSourceConfig.host = process.env.PGHOST ?? 'localhost';
+    dataSourceConfig.port = Number.parseInt(process.env.PGPORT ?? '5432');
     dataSourceConfig.username = process.env.PGUSER;
     dataSourceConfig.password = process.env.PGPASSWORD;
-    dataSourceConfig.database = process.env.PGDATABASE || 'rbi_inventory';
+    dataSourceConfig.database = process.env.PGDATABASE ?? 'rbi_inventory';
   }
 
   const dataSource = new DataSource(dataSourceConfig);
@@ -85,24 +85,24 @@ function parseDate(dateStr: string): Date | null {
     let minutes = 0;
     if (timePart) {
       const isPM = timePart.toLowerCase().includes('pm');
-      const timeOnly = timePart.replace(/[AP]M/i, '');
+      const timeOnly = timePart.replace(/[ap]m/i, '');
       const [h, m] = timeOnly.split(':');
-      hours = parseInt(h);
-      minutes = parseInt(m);
+      hours = Number.parseInt(h);
+      minutes = Number.parseInt(m);
 
       if (isPM && hours !== 12) hours += 12;
       if (!isPM && hours === 12) hours = 0;
     }
 
     return new Date(
-      parseInt(year),
-      parseInt(month) - 1,
-      parseInt(day),
+      Number.parseInt(year),
+      Number.parseInt(month) - 1,
+      Number.parseInt(day),
       hours,
       minutes,
     );
   } catch (error) {
-    console.warn(`Failed to parse date: ${dateStr}, error: ${error}`);
+    console.warn(`Failed to parse date: ${dateStr}, error: ${String(error)}`);
     return null;
   }
 }
@@ -233,8 +233,8 @@ async function importSortlyData(
       const folderName = record.Folder;
       const locationName = record.Location;
       const quantityDelta =
-        parseFloat(record['QTY change (Quantity Delta)']) || 0;
-      const newQty = parseFloat(record['New QTY']) || 0;
+        Number.parseFloat(record['QTY change (Quantity Delta)']) || 0;
+      const newQty = Number.parseFloat(record['New QTY']) || 0;
       const transactionType = record['Transaction Type'];
       const transactionDate = parseDate(record['Transaction Date (CEST)']);
       const expiryDate = parseDate(record['Expiry Date']);
@@ -276,7 +276,7 @@ async function importSortlyData(
             continue;
           }
 
-          const price = parseFloat(record.Price) || null;
+          const price = Number.parseFloat(record.Price) || null;
 
           product = productRepo.create({
             sku: sortlyId,
@@ -286,7 +286,7 @@ async function importSortlyData(
             unit: record.Unit || null,
             barcode: record['Barcode/QR1-Data'] || null,
             standard_price: price,
-            reorder_point: parseInt(record['Min Level']) || 0,
+            reorder_point: Number.parseInt(record['Min Level']) || 0,
             is_active: true,
             is_perishable: !!expiryDate,
             created_by: IMPORT_USER_ID,
@@ -317,7 +317,7 @@ async function importSortlyData(
           notes:
             record['Transaction Note'] ||
             `${transactionType} from Sortly import`,
-          created_at: transactionDate || new Date(),
+          created_at: transactionDate ?? new Date(),
         });
 
         await stockMovementRepo.save(stockMovement);
@@ -442,4 +442,4 @@ async function main() {
   }
 }
 
-main();
+void main();

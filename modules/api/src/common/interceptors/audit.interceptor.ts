@@ -61,14 +61,14 @@ export class AuditInterceptor implements NestInterceptor {
     const forwardedFor = request.headers['x-forwarded-for'];
     const ipAddress = Array.isArray(forwardedFor)
       ? forwardedFor[0]
-      : forwardedFor?.split(',')[0]?.trim() ||
-        request.socket?.remoteAddress ||
+      : forwardedFor?.split(',')[0]?.trim() ??
+        request.socket?.remoteAddress ??
         null;
 
     return {
-      userId: request.auth?.userId || null,
+      userId: request.auth?.userId ?? null,
       ipAddress,
-      userAgent: request.headers['user-agent'] || null,
+      userAgent: request.headers['user-agent'] ?? null,
     };
   }
 
