@@ -1,6 +1,5 @@
-'use client'
-
 import * as React from 'react'
+import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Search, AlertTriangle, Clock } from 'lucide-react'
 
@@ -11,7 +10,11 @@ import { LocationAreaSidebar } from '@/components/inventory/LocationAreaSidebar'
 import { InventoryTable } from '@/components/inventory/InventoryTable'
 import type { ListInventoryParams } from '@/lib/data/generated'
 
-export default function InventoryPage(): React.JSX.Element {
+export const Route = createFileRoute('/inventory')({
+  component: InventoryPage,
+})
+
+function InventoryPage(): React.JSX.Element {
   const { t } = useTranslation()
   const [selectedLocationId, setSelectedLocationId] = React.useState<string | null>(null)
   const [selectedAreaId, setSelectedAreaId] = React.useState<string | null>(null)

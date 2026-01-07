@@ -1,7 +1,5 @@
-'use client'
-
 import { useState } from 'react'
-
+import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 import { ActionButtons } from '@/components/items/ActionButtons'
@@ -22,6 +20,10 @@ import { SortField } from '@/lib/enums/sort-field.enum'
 
 import type { SortOption } from '@/components/items/SortSelect'
 
+export const Route = createFileRoute('/stock')({
+  component: ItemsPage,
+})
+
 function useSortOptions(): SortOption[] {
   const { t } = useTranslation()
 
@@ -32,7 +34,7 @@ function useSortOptions(): SortOption[] {
   ]
 }
 
-export default function ItemsPage(): React.JSX.Element {
+function ItemsPage(): React.JSX.Element {
   const { t } = useTranslation()
   const sortOptions = useSortOptions()
   const [searchQuery, setSearchQuery] = useState('')
@@ -48,7 +50,6 @@ export default function ItemsPage(): React.JSX.Element {
 
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (sortBy === SortField.NAME) return a.name.localeCompare(b.name)
-    // Sorting by quantity and value would need additional fields from API
     return 0
   })
 

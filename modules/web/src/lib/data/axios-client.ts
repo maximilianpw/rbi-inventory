@@ -2,7 +2,7 @@ import axios, { type AxiosRequestConfig } from 'axios'
 
 import { env } from '@/lib/env'
 
-const API_BASE_URL = env.NEXT_PUBLIC_API_BASE_URL
+const API_BASE_URL = env.VITE_API_BASE_URL
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,

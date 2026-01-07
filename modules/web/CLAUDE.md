@@ -1,22 +1,27 @@
 # RBI Web Module - Agent Context
 
-> Next.js 16 frontend for yacht provisioning inventory management.
+> TanStack Start frontend for yacht provisioning inventory management.
 
 ## Tech Stack
 
-Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Radix UI · TanStack
+TanStack Start · TanStack Router · React 19 · TypeScript · Tailwind CSS 4 · Radix UI · TanStack
 Query + Form · Clerk Auth · i18next · Orval
 
 ## Directory Structure
 
 ```
 modules/web/src/
-├── app/[lang]/              # App Router (language-prefixed routes)
-│   ├── layout.tsx           # Root layout + providers
-│   ├── page.tsx             # Home
-│   ├── products/page.tsx
-│   ├── stock/page.tsx
-│   └── settings/page.tsx
+├── app/                     # TanStack Router file-based routes
+│   ├── __root.tsx           # Root layout + providers
+│   ├── index.tsx            # Home (/)
+│   ├── products.tsx         # Products page (/products)
+│   ├── locations.tsx        # Locations list (/locations)
+│   ├── locations.$id.tsx    # Location detail (/locations/:id)
+│   ├── stock.tsx            # Stock page (/stock)
+│   ├── inventory.tsx        # Inventory page (/inventory)
+│   ├── settings.tsx         # Settings page (/settings)
+│   ├── audit-logs.tsx       # Audit logs (/audit-logs)
+│   └── globals.css          # Global styles
 ├── components/
 │   ├── ui/                  # Base components (Radix/shadcn)
 │   ├── category/            # Category features
@@ -30,17 +35,73 @@ modules/web/src/
 │   │   └── generated.ts     # Orval-generated hooks
 │   ├── utils.ts             # cn() utility
 │   └── env.ts               # Environment validation
+├── router.tsx               # Router configuration
 └── locales/                 # i18n (en, de, fr)
+```
+
+## Routing (TanStack Router)
+
+### File-Based Routing
+
+Routes are defined in `src/app/` using TanStack Router conventions:
+
+- `__root.tsx` - Root layout wrapping all routes
+- `index.tsx` - Home page (`/`)
+- `products.tsx` - `/products`
+- `locations.tsx` - `/locations`
+- `locations.$id.tsx` - `/locations/:id` (dynamic route)
+
+### Route Definition Pattern
+
+```typescript
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/products')({
+  component: ProductPage,
+})
+
+function ProductPage(): React.JSX.Element {
+  return <div>...</div>
+}
+```
+
+### Dynamic Routes
+
+```typescript
+// locations.$id.tsx
+export const Route = createFileRoute('/locations/$id')({
+  component: LocationDetailPage,
+})
+
+function LocationDetailPage(): React.JSX.Element {
+  const { id } = Route.useParams()
+  // ...
+}
+```
+
+### Navigation
+
+```typescript
+import { Link, useNavigate } from '@tanstack/react-router'
+
+// Link component
+<Link to="/products">Products</Link>
+<Link to="/locations/$id" params={{ id: '123' }}>Location</Link>
+
+// Programmatic navigation
+const navigate = useNavigate()
+navigate({ to: '/locations' })
 ```
 
 ## Provider Hierarchy
 
-Order matters in `[lang]/layout.tsx`:
+Order matters in `__root.tsx`:
 
 ```
-ClerkProvider → AuthProvider → ReactQueryProvider → I18nProvider → SidebarProvider
+ClerkProvider → AuthProvider → ReactQueryProvider → I18nProvider → ThemeProvider → SidebarProvider
 ```
 
+- **ClerkProvider**: Authentication (from `@clerk/tanstack-react-start`)
 - **AuthProvider**: Registers Clerk token getter with axios-client
 - **ReactQueryProvider**: Server state management
 - **I18nProvider**: Translations
@@ -141,9 +202,25 @@ const { t, i18n } = useTranslation();
 
 ## Adding a New Page
 
-1. Create `src/app/[lang]/<route>/page.tsx` with `'use client'` directive
-2. Add route to `Header.tsx` navigation
-3. Add translations to `locales/{lang}/common.json`
+1. Create `src/app/<route>.tsx` with `createFileRoute`
+2. Export the `Route` constant
+3. Add route to `Header.tsx` navigation
+4. Add translations to `locales/{lang}/common.json`
+
+Example:
+
+```typescript
+// src/app/reports.tsx
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/reports')({
+  component: ReportsPage,
+})
+
+function ReportsPage(): React.JSX.Element {
+  return <div>Reports</div>
+}
+```
 
 ## Adding a Feature Component
 
@@ -154,7 +231,6 @@ const { t, i18n } = useTranslation();
 
 ## Component Checklist
 
-- [ ] `'use client'` if using hooks/state
 - [ ] `cn()` for class merging
 - [ ] TypeScript props interface
 - [ ] Loading, error, empty states
@@ -173,79 +249,20 @@ queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() });
 
 // Conditional fetching
 const query = useListProducts(params, { enabled: !!categoryId });
+
+// Get route params
+const { id } = Route.useParams();
+
+// Get search params
+const { page, filter } = Route.useSearch();
 ```
-
-## Next.js Best Practices
-
-### Server vs Client Components
-
-**Default to Server Components.** Only add `'use client'` when you need:
-
-- Hooks (`useState`, `useEffect`, `useQuery`, etc.)
-- Event handlers (`onClick`, `onChange`)
-- Browser APIs (`localStorage`, `window`)
-
-**Pattern: Push client boundaries down.** Keep pages as server components,
-extract interactive parts:
-
-```typescript
-// app/[lang]/products/page.tsx (SERVER - no 'use client')
-import { ProductFilters } from '@/components/products/ProductFilters';
-import { ProductGrid } from '@/components/products/ProductGrid';
-
-export default function ProductsPage() {
-  return (
-    <div className="page-container">
-      <h1>Products</h1>           {/* Static - rendered on server */}
-      <ProductFilters />          {/* Client component - interactive */}
-      <ProductGrid />             {/* Client component - uses useQuery */}
-    </div>
-  );
-}
-```
-
-**Don't wrap entire pages in `'use client'`** — only the components that need
-interactivity.
-
-### Data Fetching
-
-- **Server components**: Use `async/await` directly, fetch in the component
-- **Client components**: Use React Query hooks (`useListProducts`)
-- **Shared data**: Fetch in server component, pass as props to client components
-
-### Component Organization
-
-```
-components/
-├── ui/           # Reusable primitives (Button, Input) - mostly client
-├── <feature>/    # Feature-specific (ProductCard, CategoryForm) - mixed
-└── common/       # Layout components (Header) - prefer server where possible
-```
-
-### Performance Tips
-
-- **Avoid large client bundles**: Don't import heavy libraries in client
-  components unnecessarily
-- **Colocate data fetching**: Fetch where data is used, not at page level and
-  prop-drill
-- **Use `loading.tsx`**: Add loading UI at route level for suspense boundaries
-- **Lazy load**: Use `dynamic()` for heavy client components not needed on
-  initial render
-
-### Common Mistakes to Avoid
-
-- ❌ Adding `'use client'` to a file just because a child needs it
-- ❌ Fetching data in a client component when it could be server-fetched
-- ❌ Putting all state at page level and prop-drilling everywhere
-- ❌ Importing server-only code (db, fs) in client components
 
 ## Environment Variables
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080   # Required
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...    # Required
+VITE_API_BASE_URL=http://localhost:8080          # Required
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...           # Required
 CLERK_SECRET_KEY=sk_test_...                     # Server-side
-NEXT_PUBLIC_SENTRY_DSN=https://...               # Optional
 ```
 
 ## Commands
@@ -255,15 +272,18 @@ pnpm dev        # Dev server (port 3000)
 pnpm build      # Production build
 pnpm api:gen    # Regenerate API client
 pnpm lint       # ESLint
+pnpm type-check # TypeScript check
 ```
 
 ## Key Files
 
 | File                       | Purpose                         |
 | -------------------------- | ------------------------------- |
-| `app/[lang]/layout.tsx`    | Root layout, provider hierarchy |
+| `app/__root.tsx`           | Root layout, provider hierarchy |
+| `router.tsx`               | Router configuration            |
 | `lib/data/axios-client.ts` | API client, auth injection      |
 | `lib/data/generated.ts`    | Auto-generated API hooks        |
 | `locales/i18n.ts`          | i18next config                  |
 | `app/globals.css`          | Tailwind + CSS variables        |
 | `orval.config.ts`          | API generation config           |
+| `vite.config.ts`           | Vite + TanStack Start config    |

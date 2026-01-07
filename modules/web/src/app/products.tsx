@@ -1,5 +1,6 @@
-'use client'
 import * as React from 'react'
+import { createFileRoute } from '@tanstack/react-router'
+
 import CategorySidebar from '@/components/category/CategorySidebar'
 import { CreateProductButton } from '@/components/products/CreateProductButton'
 import { ProductList } from '@/components/products/ProductList'
@@ -7,6 +8,10 @@ import {
   useListCategories,
   type CategoryWithChildrenResponseDto,
 } from '@/lib/data/generated'
+
+export const Route = createFileRoute('/products')({
+  component: ProductPage,
+})
 
 function findCategoryById(
   categories: CategoryWithChildrenResponseDto[],
@@ -24,7 +29,7 @@ function findCategoryById(
   return null
 }
 
-export default function ProductPage(): React.JSX.Element {
+function ProductPage(): React.JSX.Element {
   const [selectedCategoryId, setSelectedCategoryId] = React.useState<
     string | null
   >(null)

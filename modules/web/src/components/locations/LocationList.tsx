@@ -1,6 +1,4 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
+import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { LocationCard } from './LocationCard'
 import { LocationCardSkeleton } from './LocationCardSkeleton'
@@ -23,7 +21,7 @@ export function LocationList({
   onSelectLocation,
 }: LocationListProps): React.JSX.Element {
   const { t } = useTranslation()
-  const router = useRouter()
+  const navigate = useNavigate()
   const { data: locations, isLoading, error } = useListAllLocations()
 
   if (isLoading) {
@@ -70,7 +68,7 @@ export function LocationList({
 
   const handleClick = (location: LocationResponseDto): void => {
     onSelectLocation?.(location)
-    router.push(`/locations/${location.id}`)
+    void navigate({ to: '/locations/$id', params: { id: location.id } })
   }
 
   return (

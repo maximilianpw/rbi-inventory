@@ -1,7 +1,5 @@
-'use client'
-
 import * as React from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -41,6 +39,10 @@ import {
   LOCATION_TYPE_ICONS,
   LOCATION_TYPE_COLORS,
 } from '@/lib/location-type.utils'
+
+export const Route = createFileRoute('/locations/$id')({
+  component: LocationDetailPage,
+})
 
 const LOCATIONS_ROUTE = '/locations'
 const NAV_LOCATIONS_KEY = 'navigation.locations'
@@ -174,12 +176,11 @@ function LocationHeader({
   )
 }
 
-export default function LocationDetailPage(): React.JSX.Element {
+function LocationDetailPage(): React.JSX.Element {
   const { t } = useTranslation()
-  const router = useRouter()
-  const params = useParams()
+  const navigate = useNavigate()
+  const { id: locationId } = Route.useParams()
   const queryClient = useQueryClient()
-  const locationId = params.id as string
 
   const [editOpen, setEditOpen] = React.useState(false)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
@@ -196,7 +197,7 @@ export default function LocationDetailPage(): React.JSX.Element {
           queryClient.invalidateQueries({ queryKey: getListLocationsQueryKey() }),
           queryClient.invalidateQueries({ queryKey: getListAllLocationsQueryKey() }),
         ])
-        router.push(LOCATIONS_ROUTE)
+        void navigate({ to: LOCATIONS_ROUTE })
       },
       onError: (err) => {
         toast.error(t('locations.deleteError') || 'Failed to delete location')
@@ -211,7 +212,7 @@ export default function LocationDetailPage(): React.JSX.Element {
   }
 
   const handleBack = (): void => {
-    router.push(LOCATIONS_ROUTE)
+    void navigate({ to: LOCATIONS_ROUTE })
   }
 
   if (isLoading) {

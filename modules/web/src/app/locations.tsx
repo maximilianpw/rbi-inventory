@@ -1,6 +1,5 @@
-'use client'
-
 import * as React from 'react'
+import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Search, Filter } from 'lucide-react'
 
@@ -16,6 +15,10 @@ import { CreateLocation } from '@/components/locations/CreateLocation'
 import { LocationList } from '@/components/locations/LocationList'
 import { LocationType } from '@/lib/enums/location-type.enum'
 
+export const Route = createFileRoute('/locations')({
+  component: LocationsPage,
+})
+
 const LOCATION_TYPES = [
   { value: 'ALL', label: 'All Types' },
   { value: LocationType.WAREHOUSE, label: 'Warehouse' },
@@ -24,7 +27,7 @@ const LOCATION_TYPES = [
   { value: LocationType.CLIENT, label: 'Client' },
 ]
 
-export default function LocationsPage(): React.JSX.Element {
+function LocationsPage(): React.JSX.Element {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = React.useState('')
   const [typeFilter, setTypeFilter] = React.useState<string>('ALL')
