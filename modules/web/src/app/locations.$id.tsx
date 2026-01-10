@@ -32,8 +32,15 @@ import {
   useDeleteLocation,
   getListLocationsQueryKey,
   getListAllLocationsQueryKey,
+  type PaginatedLocationsResponseDto,
   type LocationResponseDto,
 } from '@/lib/data/generated'
+import {
+  removeItemFromArray,
+  removeItemFromPaginated,
+  restoreQueryData,
+  snapshotQueryData,
+} from '@/lib/data/query-cache'
 import { type LocationType } from '@/lib/enums/location-type.enum'
 import {
   LOCATION_TYPE_ICONS,
@@ -192,12 +199,10 @@ function LocationDetailPage(): React.JSX.Element {
   const deleteMutation = useDeleteLocation({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('locations.deleted') || 'Location deleted successfully')
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: getListLocationsQueryKey() }),
           queryClient.invalidateQueries({ queryKey: getListAllLocationsQueryKey() }),
         ])
-        void navigate({ to: LOCATIONS_ROUTE })
       },
       onError: (err) => {
         toast.error(t('locations.deleteError') || 'Failed to delete location')
@@ -206,9 +211,51 @@ function LocationDetailPage(): React.JSX.Element {
     },
   })
 
-  const handleDelete = async (): Promise<void> => {
-    await deleteMutation.mutateAsync({ id: locationId })
+  const handleDelete = (): void => {
+    const listQueryKey = getListLocationsQueryKey()
+    const listAllKey = getListAllLocationsQueryKey()
+    const snapshot = snapshotQueryData<PaginatedLocationsResponseDto>(
+      queryClient,
+      listQueryKey,
+    )
+    const allSnapshot = snapshotQueryData<LocationResponseDto[]>(
+      queryClient,
+      listAllKey,
+    )
+    queryClient.setQueriesData({ queryKey: listQueryKey }, (old) =>
+      removeItemFromPaginated(old, locationId),
+    )
+    queryClient.setQueriesData({ queryKey: listAllKey }, (old) =>
+      removeItemFromArray(old, locationId),
+    )
     setDeleteOpen(false)
+
+    let didUndo = false
+    const timeoutId = window.setTimeout(async () => {
+      if (didUndo) {
+        return
+      }
+      try {
+        await deleteMutation.mutateAsync({ id: locationId })
+      } catch {
+        restoreQueryData(queryClient, snapshot)
+        restoreQueryData(queryClient, allSnapshot)
+      }
+    }, 5000)
+
+    toast(t('locations.deleted') || 'Location deleted successfully', {
+      action: {
+        label: t('actions.undo') || 'Undo',
+        onClick: () => {
+          didUndo = true
+          window.clearTimeout(timeoutId)
+          restoreQueryData(queryClient, snapshot)
+          restoreQueryData(queryClient, allSnapshot)
+        },
+      },
+    })
+
+    void navigate({ to: LOCATIONS_ROUTE })
   }
 
   const handleBack = (): void => {
@@ -269,6 +316,7 @@ function LocationDetailPage(): React.JSX.Element {
 
       <DeleteConfirmationDialog
         description={t('locations.deleteDescription') || 'Are you sure you want to delete this location? This action cannot be undone.'}
+        isLoading={deleteMutation.isPending}
         open={deleteOpen}
         title={t('locations.deleteTitle') || 'Delete Location'}
         onConfirm={handleDelete}

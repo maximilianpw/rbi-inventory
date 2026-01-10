@@ -141,11 +141,6 @@ kill -9 <PID>
    pnpm --filter @rbi/web api:gen
    ```
 
-2. Rebuild types package:
-   ```bash
-   pnpm --filter @rbi/types build
-   ```
-
 ### Hydration errors
 
 **Symptom:** React hydration mismatch warnings
@@ -153,8 +148,8 @@ kill -9 <PID>
 **Solutions:**
 
 1. Ensure client/server rendering matches
-2. Check for browser-only code in server components
-3. Use `'use client'` directive appropriately
+2. Avoid browser-only code at module scope during SSR
+3. Defer browser APIs to effects or guards
 
 ### Translation not working
 
@@ -179,8 +174,6 @@ kill -9 <PID>
 pnpm --filter @rbi/api build
 pnpm --filter @rbi/web build
 
-# Build types first
-pnpm --filter @rbi/types build
 ```
 
 ### ESLint errors

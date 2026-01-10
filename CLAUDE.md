@@ -1,11 +1,11 @@
 # RBI Inventory System - Agent Context
 
-> pnpm monorepo for yacht provisioning inventory management. NestJS API + Next.js frontend.
+> pnpm monorepo for yacht provisioning inventory management. NestJS API + TanStack Start frontend.
 
 ## Tech Stack
 
 **Backend:** NestJS 11 · TypeORM · PostgreSQL 16 · Clerk Auth · OpenAPI/Swagger
-**Frontend:** Next.js 16 · React 19 · TanStack Query/Form · Tailwind · Radix UI · Orval
+**Frontend:** TanStack Start · React 19 · TanStack Router · TanStack Query/Form · Tailwind · Radix UI · Orval
 **Tooling:** pnpm workspaces · devenv.sh · TypeScript
 
 ## Monorepo Structure
@@ -14,9 +14,8 @@
 rbi/
 ├── modules/
 │   ├── api/                 # @rbi/api - NestJS backend
-│   └── web/                 # @rbi/web - Next.js frontend
+│   └── web/                 # @rbi/web - TanStack Start frontend
 ├── packages/
-│   ├── types/               # @rbi/types - Shared TypeScript types
 │   ├── tsconfig/            # Shared TS configs
 │   └── eslint-config/       # Shared ESLint config
 ├── openapi.yaml             # Generated API spec (source of truth for frontend)
@@ -28,7 +27,7 @@ rbi/
 
 ```
 ┌─────────────────────────────────────────┐
-│           Next.js Frontend              │
+│           TanStack Start Frontend       │
 │  React Query ←── Orval (generated) ←────┼── openapi.yaml
 │  Clerk Auth                             │
 └─────────────────────────────────────────┘
@@ -83,7 +82,6 @@ pnpm test                    # Test all packages
 # Module-specific
 pnpm --filter @rbi/api <cmd>
 pnpm --filter @rbi/web <cmd>
-pnpm --filter @rbi/types build
 ```
 
 ## Domain Model
@@ -141,8 +139,8 @@ PORT=8080
 **Web (`modules/web/.env.local`):**
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+VITE_API_BASE_URL=http://localhost:8080
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
 ```
 
 ## Module Documentation

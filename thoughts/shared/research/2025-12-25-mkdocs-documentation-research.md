@@ -29,7 +29,7 @@ API endpoints should NOT be documented as this is already covered by OpenAPI/Swa
 
 ## Summary
 
-The RBI Inventory System is a yacht provisioning inventory management application built with NestJS (backend) and Next.js (frontend). The codebase has scattered documentation across CLAUDE.md files and READMEs but lacks a unified, user-facing documentation site. The project has:
+The RBI Inventory System is a yacht provisioning inventory management application built with NestJS (backend) and TanStack Start (frontend). The codebase has scattered documentation across CLAUDE.md files and READMEs but lacks a unified, user-facing documentation site. The project has:
 
 - Comprehensive testing infrastructure for the API module (Jest)
 - Well-defined code practices via ESLint/Prettier/TypeScript configs
@@ -53,7 +53,7 @@ MkDocs Material is an excellent choice that can consolidate this information int
 | `/CLAUDE.md` | Architecture diagram, commands, module patterns |
 | `/modules/api/README.md` | NestJS features, Clerk auth, decorators |
 | `/modules/api/CLAUDE.md` | Directory structure, entities, DTOs, HATEOAS |
-| `/modules/web/README.md` | Basic Next.js getting started |
+| `/modules/web/README.md` | Basic TanStack Start getting started |
 | `/modules/web/CLAUDE.md` | Provider hierarchy, API integration, forms, i18n |
 | `/.github/README.md` | CI/CD workflows, secrets, troubleshooting |
 | `/docs/architecture/diagram.md` | Mermaid system diagram (outdated Go references) |
@@ -117,7 +117,7 @@ pnpm test:e2e      # End-to-end tests
 
 **Web Module Additions**:
 - React hooks rules (exhaustive-deps)
-- Next.js best practices
+- TanStack Start best practices
 - Accessibility (jsx-a11y)
 - Complexity limits (max 500 lines, 100 per function)
 - Naming conventions (camelCase, PascalCase, UPPER_CASE)
@@ -127,7 +127,7 @@ pnpm test:e2e      # End-to-end tests
 - Strict mode enabled across all modules
 - Path aliases: `@/` for web, `src/` for API
 - NestJS: decorator metadata enabled
-- Next.js: JSX preserve, bundler resolution
+- TanStack Start: JSX preserve, bundler resolution
 
 #### File Naming Conventions
 
@@ -225,7 +225,7 @@ devenv up   # or: pnpm dev
 |---------|------|-------------|
 | PostgreSQL | 5432 | Database (rbi_inventory) |
 | NestJS API | 8080 | Backend + Swagger at /api/docs |
-| Next.js Web | 3000 | Frontend application |
+| TanStack Start Web | 3000 | Frontend application |
 
 #### OpenAPI Workflow
 
@@ -272,7 +272,7 @@ docs/
 │   ├── code-style.md            # ESLint, Prettier, conventions
 │   ├── testing.md               # Jest, test patterns, running tests
 │   ├── api-development.md       # NestJS patterns, entities, DTOs
-│   ├── frontend-development.md  # Next.js, React Query, forms
+│   ├── frontend-development.md  # TanStack Start, React Query, forms
 │   └── ci-cd.md                 # GitHub workflows, secrets
 │
 ├── contributing/

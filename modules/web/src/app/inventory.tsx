@@ -1,30 +1,70 @@
 import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { Search, AlertTriangle, Clock } from 'lucide-react'
+import { AlertTriangle, Clock, X } from 'lucide-react'
+import { z } from 'zod'
 
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import { CreateInventory } from '@/components/inventory/CreateInventory'
 import { LocationAreaSidebar } from '@/components/inventory/LocationAreaSidebar'
 import { InventoryTable } from '@/components/inventory/InventoryTable'
+import { SearchBar } from '@/components/items/SearchBar'
+import {
+  useAreasControllerFindAll,
+  useListAllLocations,
+} from '@/lib/data/generated'
 import type { ListInventoryParams } from '@/lib/data/generated'
+import {
+  parseBooleanParam,
+  parseNumberParam,
+  parseStringParam,
+} from '@/lib/router/search'
+
+const inventorySearchSchema = z.object({
+  location: z.preprocess(parseStringParam, z.string().optional()),
+  area: z.preprocess(parseStringParam, z.string().optional()),
+  q: z.preprocess(parseStringParam, z.string().optional()),
+  low: z.preprocess(parseBooleanParam, z.boolean().optional()),
+  expiring: z.preprocess(parseBooleanParam, z.boolean().optional()),
+  page: z.preprocess(parseNumberParam, z.number().int().min(1).optional()),
+})
+
+const INVENTORY_PAGE_SIZE = 50
 
 export const Route = createFileRoute('/inventory')({
+  validateSearch: (search) => inventorySearchSchema.parse(search),
   component: InventoryPage,
 })
 
 function InventoryPage(): React.JSX.Element {
   const { t } = useTranslation()
-  const [selectedLocationId, setSelectedLocationId] = React.useState<string | null>(null)
-  const [selectedAreaId, setSelectedAreaId] = React.useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = React.useState('')
-  const [showLowStock, setShowLowStock] = React.useState(false)
-  const [showExpiringSoon, setShowExpiringSoon] = React.useState(false)
+  const search = Route.useSearch()
+  const navigate = Route.useNavigate()
+  const selectedLocationId = search.location ?? null
+  const selectedAreaId = search.area ?? null
+  const searchQuery = search.q ?? ''
+  const showLowStock = search.low ?? false
+  const showExpiringSoon = search.expiring ?? false
+  const page = search.page ?? 1
+  const deferredSearchQuery = React.useDeferredValue(searchQuery)
+
+  const { data: locations } = useListAllLocations()
+  const { data: areas } = useAreasControllerFindAll(
+    selectedLocationId ? { location_id: selectedLocationId } : undefined,
+    { query: { enabled: !!selectedLocationId } },
+  )
 
   const handleSelect = (locationId: string | null, areaId: string | null): void => {
-    setSelectedLocationId(locationId)
-    setSelectedAreaId(areaId)
+    void navigate({
+      search: (prev) => ({
+        ...prev,
+        location: locationId ?? undefined,
+        area: areaId ?? undefined,
+        page: 1,
+      }),
+      replace: true,
+    })
   }
 
   const filters = React.useMemo(() => {
@@ -34,8 +74,8 @@ function InventoryPage(): React.JSX.Element {
     } else if (selectedLocationId) {
       f.location_id = selectedLocationId
     }
-    if (searchQuery) {
-      f.search = searchQuery
+    if (deferredSearchQuery) {
+      f.search = deferredSearchQuery
     }
     if (showLowStock) {
       f.low_stock = true
@@ -44,7 +84,7 @@ function InventoryPage(): React.JSX.Element {
       f.expiring_soon = true
     }
     return f
-  }, [selectedLocationId, selectedAreaId, searchQuery, showLowStock, showExpiringSoon])
+  }, [selectedLocationId, selectedAreaId, deferredSearchQuery, showLowStock, showExpiringSoon])
 
   const currentTitle = React.useMemo(() => {
     if (selectedAreaId) {
@@ -55,6 +95,92 @@ function InventoryPage(): React.JSX.Element {
     }
     return t('inventory.allInventory') || 'All Inventory'
   }, [selectedLocationId, selectedAreaId, t])
+
+  const selectedLocationName = React.useMemo(() => {
+    if (!selectedLocationId) {
+      return null
+    }
+    return locations?.find((location) => location.id === selectedLocationId)
+      ?.name ?? null
+  }, [locations, selectedLocationId])
+
+  const selectedAreaName = React.useMemo(() => {
+    if (!selectedAreaId) {
+      return null
+    }
+    return areas?.find((area) => area.id === selectedAreaId)?.name ?? null
+  }, [areas, selectedAreaId])
+
+  const filterChips = React.useMemo(() => {
+    const chips: Array<{ key: string; label: string; onRemove: () => void }> = []
+    if (selectedAreaId && selectedAreaName) {
+      chips.push({
+        key: 'area',
+        label: `${t('inventory.area') || 'Area'}: ${selectedAreaName}`,
+        onRemove: () => handleSelect(selectedLocationId, null),
+      })
+    } else if (selectedLocationId && selectedLocationName) {
+      chips.push({
+        key: 'location',
+        label: `${t('inventory.location') || 'Location'}: ${selectedLocationName}`,
+        onRemove: () => handleSelect(null, null),
+      })
+    }
+    if (searchQuery) {
+      chips.push({
+        key: 'search',
+        label: `${t('common.search') || 'Search'}: ${searchQuery}`,
+        onRemove: () => {
+          void navigate({
+            search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+            replace: true,
+          })
+        },
+      })
+    }
+    if (showLowStock) {
+      chips.push({
+        key: 'low-stock',
+        label: t('inventory.lowStock') || 'Low Stock',
+        onRemove: () => {
+          void navigate({
+            search: (prev) => ({ ...prev, low: undefined, page: 1 }),
+            replace: true,
+          })
+        },
+      })
+    }
+    if (showExpiringSoon) {
+      chips.push({
+        key: 'expiring',
+        label: t('inventory.expiringSoon') || 'Expiring Soon',
+        onRemove: () => {
+          void navigate({
+            search: (prev) => ({ ...prev, expiring: undefined, page: 1 }),
+            replace: true,
+          })
+        },
+      })
+    }
+    return chips
+  }, [
+    handleSelect,
+    navigate,
+    searchQuery,
+    selectedAreaId,
+    selectedAreaName,
+    selectedLocationId,
+    selectedLocationName,
+    showExpiringSoon,
+    showLowStock,
+    t,
+  ])
+
+  const hasActiveFilters = filterChips.length > 0
+
+  const clearAll = (): void => {
+    void navigate({ search: {}, replace: true })
+  }
 
   return (
     <div className="flex h-full w-full">
@@ -78,20 +204,41 @@ function InventoryPage(): React.JSX.Element {
         </div>
 
         <div className="flex items-center gap-4 border-b px-6 py-3">
-          <div className="relative flex-1 max-w-xs">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              className="pl-9"
-              placeholder={t('inventory.searchPlaceholder') || 'Search batch...'}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          <SearchBar
+            className="max-w-xs"
+            placeholder={t('inventory.searchPlaceholder') || 'Search batch...'}
+            value={searchQuery}
+            onChange={(value) => {
+              void navigate({
+                search: (prev) => ({
+                  ...prev,
+                  q: value || undefined,
+                  page: 1,
+                }),
+                replace: true,
+              })
+            }}
+            onClear={() => {
+              void navigate({
+                search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+                replace: true,
+              })
+            }}
+          />
           <Toggle
             aria-label="Show low stock"
             pressed={showLowStock}
             size="sm"
-            onPressedChange={setShowLowStock}
+            onPressedChange={(pressed) => {
+              void navigate({
+                search: (prev) => ({
+                  ...prev,
+                  low: pressed ? true : undefined,
+                  page: 1,
+                }),
+                replace: true,
+              })
+            }}
           >
             <AlertTriangle className="mr-1.5 size-4" />
             {t('inventory.lowStock') || 'Low Stock'}
@@ -100,15 +247,55 @@ function InventoryPage(): React.JSX.Element {
             aria-label="Show expiring soon"
             pressed={showExpiringSoon}
             size="sm"
-            onPressedChange={setShowExpiringSoon}
+            onPressedChange={(pressed) => {
+              void navigate({
+                search: (prev) => ({
+                  ...prev,
+                  expiring: pressed ? true : undefined,
+                  page: 1,
+                }),
+                replace: true,
+              })
+            }}
           >
             <Clock className="mr-1.5 size-4" />
             {t('inventory.expiringSoon') || 'Expiring Soon'}
           </Toggle>
         </div>
 
+        {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-2 border-b px-6 py-2">
+            {filterChips.map((chip) => (
+              <Button
+                key={chip.key}
+                className="gap-1"
+                size="sm"
+                variant="outline"
+                onClick={chip.onRemove}
+              >
+                {chip.label}
+                <X className="size-3" />
+              </Button>
+            ))}
+            <Button size="sm" variant="ghost" onClick={clearAll}>
+              {t('actions.clearAll') || 'Clear all'}
+            </Button>
+          </div>
+        )}
+
         <div className="flex-1 overflow-auto p-6">
-          <InventoryTable filters={filters} />
+          <InventoryTable
+            filters={filters}
+            hasActiveFilters={hasActiveFilters}
+            limit={INVENTORY_PAGE_SIZE}
+            page={page}
+            onPageChange={(nextPage) => {
+              void navigate({
+                search: (prev) => ({ ...prev, page: nextPage }),
+                replace: true,
+              })
+            }}
+          />
         </div>
       </div>
     </div>

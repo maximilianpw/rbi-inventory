@@ -11,6 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Spinner } from '@/components/ui/spinner'
 
 interface DeleteConfirmationDialogProps {
   open: boolean
@@ -20,6 +21,7 @@ interface DeleteConfirmationDialogProps {
   description?: string
   cancelLabel?: string
   confirmLabel?: string
+  isLoading?: boolean
 }
 
 export function DeleteConfirmationDialog({
@@ -30,8 +32,10 @@ export function DeleteConfirmationDialog({
   description,
   cancelLabel,
   confirmLabel,
+  isLoading,
 }: DeleteConfirmationDialogProps): React.JSX.Element {
   const { t } = useTranslation()
+  const isBusy = isLoading === true
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -45,14 +49,22 @@ export function DeleteConfirmationDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>
+          <AlertDialogCancel disabled={isBusy}>
             {cancelLabel ?? (t('form.cancel') || 'Cancel')}
           </AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            disabled={isBusy}
             onClick={onConfirm}
           >
-            {confirmLabel ?? (t('actions.delete') || 'Delete')}
+            {isBusy ? (
+              <span className="flex items-center gap-2">
+                <Spinner className="size-3" />
+                {t('actions.deleting') || 'Deleting...'}
+              </span>
+            ) : (
+              confirmLabel ?? (t('actions.delete') || 'Delete')
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

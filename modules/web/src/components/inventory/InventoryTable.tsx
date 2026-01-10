@@ -23,18 +23,29 @@ import { CrudDropdownMenu } from '@/components/common/CrudDropdownMenu'
 import { DeleteConfirmationDialog } from '@/components/common/DeleteConfirmationDialog'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ErrorState } from '@/components/common/ErrorState'
+import { PaginationControls } from '@/components/common/PaginationControls'
 import {
   useListInventory,
   useDeleteInventoryItem,
   getListInventoryQueryKey,
+  type PaginatedInventoryResponseDto,
   type ListInventoryParams,
   type InventoryResponseDto,
 } from '@/lib/data/generated'
+import {
+  removeItemFromPaginated,
+  restoreQueryData,
+  snapshotQueryData,
+} from '@/lib/data/query-cache'
 import { useExpiryDateStatus } from '@/hooks/useExpiryDateStatus'
 import { useLowStockStatus } from '@/hooks/useLowStockStatus'
 
 interface InventoryTableProps {
   filters?: Partial<ListInventoryParams>
+  page: number
+  limit: number
+  hasActiveFilters: boolean
+  onPageChange: (page: number) => void
 }
 
 function TableSkeleton({ showLocation }: { showLocation: boolean }): React.JSX.Element {
@@ -85,7 +96,6 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
   const deleteMutation = useDeleteInventoryItem({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('inventory.deleted') || 'Inventory deleted successfully')
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
         })
@@ -97,13 +107,45 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
     },
   })
 
-  const handleDelete = async (): Promise<void> => {
-    await deleteMutation.mutateAsync({ id })
+  const handleDelete = (): void => {
+    const listQueryKey = getListInventoryQueryKey()
+    const snapshot = snapshotQueryData<PaginatedInventoryResponseDto>(
+      queryClient,
+      listQueryKey,
+    )
+    queryClient.setQueriesData({ queryKey: listQueryKey }, (old) =>
+      removeItemFromPaginated(old, id),
+    )
     setDeleteOpen(false)
+
+    let didUndo = false
+    const timeoutId = window.setTimeout(async () => {
+      if (didUndo) {
+        return
+      }
+      try {
+        await deleteMutation.mutateAsync({ id })
+      } catch {
+        restoreQueryData(queryClient, snapshot)
+      }
+    }, 5000)
+
+    toast(t('inventory.deleted') || 'Inventory deleted successfully', {
+      action: {
+        label: t('actions.undo') || 'Undo',
+        onClick: () => {
+          didUndo = true
+          window.clearTimeout(timeoutId)
+          restoreQueryData(queryClient, snapshot)
+        },
+      },
+    })
   }
 
   const isLowStock = useLowStockStatus(product, quantity)
   const { expiryDate, isExpired, isExpiringSoon } = useExpiryDateStatus(expiryDateRaw)
+  const expiredLabel = t('inventory.expired') || 'Expired'
+  const expiringLabel = t('inventory.expiringSoon') || 'Expiring Soon'
 
   const formId = `edit-inventory-form-${id}`
 
@@ -147,8 +189,19 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
               isExpiringSoon && 'text-yellow-600'
             )}>
               {expiryDate.toLocaleDateString()}
-              {isExpired && <Badge className="ml-2 text-xs" variant="destructive">Expired</Badge>}
-              {isExpiringSoon && <Badge className="ml-2 text-xs border-yellow-600 text-yellow-600" variant="outline">Soon</Badge>}
+              {isExpired && (
+                <Badge className="ml-2 text-xs" variant="destructive">
+                  {expiredLabel}
+                </Badge>
+              )}
+              {isExpiringSoon && (
+                <Badge
+                  className="ml-2 text-xs border-yellow-600 text-yellow-600"
+                  variant="outline"
+                >
+                  {expiringLabel}
+                </Badge>
+              )}
             </span>
           ) : (
             <span className="text-muted-foreground">—</span>
@@ -183,6 +236,7 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
 
       <DeleteConfirmationDialog
         description={t('inventory.deleteDescription') || 'Are you sure you want to delete this inventory record?'}
+        isLoading={deleteMutation.isPending}
         open={deleteOpen}
         title={t('inventory.deleteTitle') || 'Delete Inventory'}
         onConfirm={handleDelete}
@@ -192,16 +246,28 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
   )
 }
 
-export function InventoryTable({ filters }: InventoryTableProps): React.JSX.Element {
+export function InventoryTable({
+  filters,
+  page,
+  limit,
+  hasActiveFilters,
+  onPageChange,
+}: InventoryTableProps): React.JSX.Element {
   const { t } = useTranslation()
 
-  const { data, isLoading, error } = useListInventory({
-    page: 1,
-    limit: 100,
-    ...filters,
-  })
+  const queryParams = React.useMemo(
+    () => ({
+      page,
+      limit,
+      ...filters,
+    }),
+    [filters, limit, page],
+  )
+
+  const { data, isLoading, error } = useListInventory(queryParams)
 
   const inventoryItems = data?.data ?? []
+  const meta = data?.meta
   const showLocation = !filters?.location_id && !filters?.area_id
 
   if (error) {
@@ -216,7 +282,11 @@ export function InventoryTable({ filters }: InventoryTableProps): React.JSX.Elem
   if (!isLoading && inventoryItems.length === 0) {
     return (
       <EmptyState
-        message={t('inventory.noInventory') || 'No inventory found'}
+        message={
+          hasActiveFilters
+            ? (t('inventory.noInventoryFiltered') || 'No results for these filters')
+            : (t('inventory.noInventory') || 'No inventory found')
+        }
         variant="bordered"
       />
     )
@@ -232,8 +302,8 @@ export function InventoryTable({ filters }: InventoryTableProps): React.JSX.Elem
               <TableHead>{t('inventory.location') || 'Location'}</TableHead>
             )}
             <TableHead>{t('inventory.quantity') || 'Qty'}</TableHead>
-            <TableHead>{t('inventory.batch') || 'Batch'}</TableHead>
-            <TableHead>{t('inventory.expiry') || 'Expiry'}</TableHead>
+            <TableHead>{t('inventory.batchNumber') || 'Batch Number'}</TableHead>
+            <TableHead>{t('inventory.expiryDate') || 'Expiry Date'}</TableHead>
             <TableHead className="w-24" />
           </TableRow>
         </TableHeader>
@@ -251,6 +321,15 @@ export function InventoryTable({ filters }: InventoryTableProps): React.JSX.Elem
           </TableBody>
         )}
       </Table>
+      <div className="px-4 pb-4">
+        <PaginationControls
+          isLoading={isLoading}
+          onPageChange={onPageChange}
+          page={page}
+          totalItems={meta?.total}
+          totalPages={meta?.total_pages ?? 1}
+        />
+      </div>
     </div>
   )
 }

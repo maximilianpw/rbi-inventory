@@ -23,7 +23,13 @@ import {
   type InventoryResponseDto,
   useDeleteInventoryItem,
   getListInventoryQueryKey,
+  type PaginatedInventoryResponseDto,
 } from '@/lib/data/generated'
+import {
+  removeItemFromPaginated,
+  restoreQueryData,
+  snapshotQueryData,
+} from '@/lib/data/query-cache'
 import { useExpiryDateStatus } from '@/hooks/useExpiryDateStatus'
 import { useLowStockStatus } from '@/hooks/useLowStockStatus'
 
@@ -34,7 +40,7 @@ function getExpiryClassName(isExpired: boolean, isExpiringSoon: boolean): string
 }
 
 function getExpiryLabel(isExpired: boolean, isExpiringSoon: boolean, t: TFunction): string {
-  if (isExpired) return 'Expired: '
+  if (isExpired) return `${t('inventory.expired') || 'Expired'}: `
   if (isExpiringSoon) return `${t('inventory.expiringSoon') || 'Expiring Soon'}: `
   return `${t('inventory.expiryDate') || 'Expires'}: `
 }
@@ -54,7 +60,6 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
   const deleteMutation = useDeleteInventoryItem({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('inventory.deleted') || 'Inventory deleted successfully')
         await queryClient.invalidateQueries({
           queryKey: getListInventoryQueryKey(),
         })
@@ -66,9 +71,39 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
     },
   })
 
-  const handleDelete = async (): Promise<void> => {
-    await deleteMutation.mutateAsync({ id })
+  const handleDelete = (): void => {
+    const listQueryKey = getListInventoryQueryKey()
+    const snapshot = snapshotQueryData<PaginatedInventoryResponseDto>(
+      queryClient,
+      listQueryKey,
+    )
+    queryClient.setQueriesData({ queryKey: listQueryKey }, (old) =>
+      removeItemFromPaginated(old, id),
+    )
     setDeleteOpen(false)
+
+    let didUndo = false
+    const timeoutId = window.setTimeout(async () => {
+      if (didUndo) {
+        return
+      }
+      try {
+        await deleteMutation.mutateAsync({ id })
+      } catch {
+        restoreQueryData(queryClient, snapshot)
+      }
+    }, 5000)
+
+    toast(t('inventory.deleted') || 'Inventory deleted successfully', {
+      action: {
+        label: t('actions.undo') || 'Undo',
+        onClick: () => {
+          didUndo = true
+          window.clearTimeout(timeoutId)
+          restoreQueryData(queryClient, snapshot)
+        },
+      },
+    })
   }
 
   const isLowStock = useLowStockStatus(product, quantity)
@@ -168,6 +203,7 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
       {/* Delete Confirmation */}
       <DeleteConfirmationDialog
         description={t('inventory.deleteDescription') || 'Are you sure you want to delete this inventory record?'}
+        isLoading={deleteMutation.isPending}
         open={deleteOpen}
         title={t('inventory.deleteTitle') || 'Delete Inventory'}
         onConfirm={handleDelete}

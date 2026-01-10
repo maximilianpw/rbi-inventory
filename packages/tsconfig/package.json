@@ -5,7 +5,6 @@
   "description": "Shared TypeScript configurations for RBI Inventory monorepo",
   "files": [
     "base.json",
-    "nextjs.json",
     "nestjs.json"
   ]
 }

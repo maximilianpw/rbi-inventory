@@ -1,10 +1,10 @@
 # Frontend Development
 
-This guide covers Next.js development patterns for the RBI Inventory frontend.
+This guide covers TanStack Start development patterns for the RBI Inventory frontend.
 
 ## Tech Stack
 
-- Next.js 16 with App Router
+- TanStack Start (TanStack Router + Vite)
 - React 19
 - TanStack Query (server state)
 - TanStack Form (form management)
@@ -17,22 +17,24 @@ This guide covers Next.js development patterns for the RBI Inventory frontend.
 
 ```
 modules/web/src/
-├── app/[lang]/              # App Router (language-prefixed)
-│   ├── layout.tsx           # Root layout + providers
-│   ├── page.tsx             # Home
-│   └── products/page.tsx    # Product page
+├── app/                     # File-based routes (TanStack Router)
+│   ├── __root.tsx           # Root layout + providers
+│   ├── index.tsx            # Home
+│   ├── products.tsx         # Products page
+│   └── locations.$id.tsx    # Route params
 ├── components/
 │   ├── ui/                  # Base components (Radix/shadcn)
-│   ├── products/            # Product features
-│   ├── category/            # Category features
-│   └── common/              # Header, etc.
+│   ├── inventory/           # Inventory features
+│   └── common/              # Header, dialogs, etc.
 ├── hooks/providers/         # React context
 ├── lib/
 │   ├── data/
 │   │   ├── axios-client.ts  # API client
 │   │   └── generated.ts     # Orval-generated hooks
 │   └── utils.ts             # Utilities
-└── locales/                 # i18n (en, de, fr)
+├── locales/                 # i18n (en, de, fr)
+├── router.tsx               # Router setup
+└── routeTree.gen.ts         # Generated routes
 ```
 
 ## API Integration
@@ -150,39 +152,41 @@ function ProductForm() {
 }
 ```
 
-## Components
+## Routing
 
-### Server vs Client Components
-
-**Default to Server Components.** Only add `'use client'` when you need:
-
-- Hooks (`useState`, `useEffect`, `useQuery`)
-- Event handlers (`onClick`, `onChange`)
-- Browser APIs (`localStorage`, `window`)
-
-**Push client boundaries down:**
+Routes are defined with `createFileRoute` in `src/app`:
 
 ```typescript
-// app/[lang]/products/page.tsx (SERVER - no 'use client')
+import { createFileRoute } from '@tanstack/react-router';
 import { ProductFilters } from '@/components/products/ProductFilters';
 import { ProductGrid } from '@/components/products/ProductGrid';
 
-export default function ProductsPage() {
+export const Route = createFileRoute('/products')({
+  component: ProductsPage,
+});
+
+function ProductsPage() {
   return (
     <div className="page-container">
-      <h1>Products</h1>           {/* Static - server rendered */}
-      <ProductFilters />          {/* Client component */}
-      <ProductGrid />             {/* Client component */}
+      <h1>Products</h1>
+      <ProductFilters />
+      <ProductGrid />
     </div>
   );
 }
 ```
 
+## SSR Safety
+
+TanStack Start renders on the server for the initial HTML. Avoid browser-only
+APIs at module scope; use `useEffect` or guard with
+`typeof window !== 'undefined'` when needed.
+
+## Components
+
 ### Component Template
 
 ```typescript
-'use client';
-
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { type ProductResponseDto } from '@/lib/data/generated';
@@ -296,13 +300,13 @@ const query = useListProducts(params, { enabled: !!categoryId });
 ## Best Practices
 
 1. **Colocate data fetching** - Fetch where data is used
-2. **Use loading.tsx** - Add suspense boundaries at route level
-3. **Lazy load heavy components** - Use `dynamic()` for code splitting
-4. **Keep client bundles small** - Don't import heavy libraries unnecessarily
+2. **Use route pending UI** - Set `pendingComponent` or suspense boundaries
+3. **Lazy load heavy components** - Use `React.lazy` or route-level code splitting
+4. **Keep bundles small** - Don't import heavy libraries unnecessarily
 
 ### Common Mistakes to Avoid
 
-- Adding `'use client'` to a file just because a child needs it
-- Fetching data in client when it could be server-fetched
+- Using browser-only APIs at module scope during SSR
+- Over-invalidation of queries instead of scoped keys
 - Putting all state at page level and prop-drilling
-- Importing server-only code in client components
+- Fetching without memoized query keys or stable params

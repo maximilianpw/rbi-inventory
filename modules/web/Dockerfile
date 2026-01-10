@@ -1,4 +1,4 @@
-# Dockerfile for @rbi/web (Next.js)
+# Dockerfile for @rbi/web (TanStack Start)
 # Based on devenv configuration: Node.js 24, pnpm 10
 
 # Build stage
@@ -13,7 +13,6 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
 # Copy shared packages
-COPY packages/types/package.json ./packages/types/
 COPY packages/tsconfig/ ./packages/tsconfig/
 COPY packages/eslint-config/ ./packages/eslint-config/
 
@@ -24,13 +23,9 @@ COPY modules/web/package.json ./modules/web/
 RUN pnpm install --frozen-lockfile
 
 # Copy source code
-COPY packages/types/ ./packages/types/
 COPY modules/web/ ./modules/web/
 
-# Build types package first
-RUN pnpm --filter @rbi/types build
-
-# Build Next.js app
+# Build TanStack Start app
 RUN pnpm --filter @rbi/web build
 
 # Production stage
@@ -45,7 +40,6 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
 # Copy package.json files for workspace resolution
-COPY packages/types/package.json ./packages/types/
 COPY packages/tsconfig/ ./packages/tsconfig/
 COPY modules/web/package.json ./modules/web/
 
@@ -53,15 +47,13 @@ COPY modules/web/package.json ./modules/web/
 RUN pnpm install --frozen-lockfile --prod
 
 # Copy built artifacts from builder
-COPY --from=builder /app/packages/types/dist ./packages/types/dist
-COPY --from=builder /app/modules/web/.next ./modules/web/.next
+COPY --from=builder /app/modules/web/.output ./modules/web/.output
 COPY --from=builder /app/modules/web/public ./modules/web/public
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
 
-# Expose Next.js port
+# Expose web port
 EXPOSE 3000
 
 WORKDIR /app/modules/web

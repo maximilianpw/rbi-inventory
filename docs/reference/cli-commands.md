@@ -128,13 +128,6 @@ pnpm --filter @rbi/web lint:fix
 pnpm --filter @rbi/web api:gen
 ```
 
-## Types Package
-
-```bash
-# Build types package
-pnpm --filter @rbi/types build
-```
-
 ## Devenv Commands
 
 When using devenv:

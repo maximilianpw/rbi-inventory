@@ -1,10 +1,10 @@
 # Développement Frontend
 
-Ce guide couvre les patterns de développement Next.js pour le frontend RBI Inventory.
+Ce guide couvre les patterns de développement TanStack Start pour le frontend RBI Inventory.
 
 ## Stack technique
 
-- Next.js 16 avec App Router
+- TanStack Start (TanStack Router + Vite)
 - React 19
 - TanStack Query (état serveur)
 - TanStack Form (gestion des formulaires)
@@ -17,22 +17,24 @@ Ce guide couvre les patterns de développement Next.js pour le frontend RBI Inve
 
 ```
 modules/web/src/
-├── app/[lang]/              # App Router (préfixe langue)
-│   ├── layout.tsx           # Layout racine + providers
-│   ├── page.tsx             # Accueil
-│   └── products/page.tsx    # Page produits
+├── app/                     # Routes basées sur les fichiers (TanStack Router)
+│   ├── __root.tsx           # Layout racine + providers
+│   ├── index.tsx            # Accueil
+│   ├── products.tsx         # Page produits
+│   └── locations.$id.tsx    # Paramètres de route
 ├── components/
 │   ├── ui/                  # Composants de base (Radix/shadcn)
-│   ├── products/            # Fonctionnalités produits
-│   ├── category/            # Fonctionnalités catégories
-│   └── common/              # Header, etc.
+│   ├── inventory/           # Fonctionnalités inventaire
+│   └── common/              # Header, dialogs, etc.
 ├── hooks/providers/         # Contextes React
 ├── lib/
 │   ├── data/
 │   │   ├── axios-client.ts  # Client API
 │   │   └── generated.ts     # Hooks générés par Orval
 │   └── utils.ts             # Utilitaires
-└── locales/                 # i18n (en, de, fr)
+├── locales/                 # i18n (en, de, fr)
+├── router.tsx               # Configuration du router
+└── routeTree.gen.ts         # Routes générées
 ```
 
 ## Intégration API
@@ -150,33 +152,35 @@ function ProductForm() {
 }
 ```
 
-## Composants
+## Routage
 
-### Composants Serveur vs Client
-
-**Par défaut, utiliser les composants serveur.** N'ajouter `'use client'` que si vous avez besoin de :
-
-- Hooks (`useState`, `useEffect`, `useQuery`)
-- Gestionnaires d'événements (`onClick`, `onChange`)
-- APIs navigateur (`localStorage`, `window`)
-
-**Repousser les limites client vers le bas :**
+Les routes sont définies avec `createFileRoute` dans `src/app` :
 
 ```typescript
-// app/[lang]/products/page.tsx (SERVEUR - pas de 'use client')
+import { createFileRoute } from '@tanstack/react-router';
 import { ProductFilters } from '@/components/products/ProductFilters';
 import { ProductGrid } from '@/components/products/ProductGrid';
 
-export default function ProductsPage() {
+export const Route = createFileRoute('/products')({
+  component: ProductsPage,
+});
+
+function ProductsPage() {
   return (
     <div className="page-container">
-      <h1>Produits</h1>           {/* Statique - rendu serveur */}
-      <ProductFilters />          {/* Composant client */}
-      <ProductGrid />             {/* Composant client */}
+      <h1>Produits</h1>
+      <ProductFilters />
+      <ProductGrid />
     </div>
   );
 }
 ```
+
+## Sécurité SSR
+
+TanStack Start rend côté serveur au premier chargement. Éviter les APIs
+navigateur au niveau module ; utiliser `useEffect` ou
+`typeof window !== 'undefined'` si nécessaire.
 
 ## Styles
 
@@ -224,13 +228,13 @@ function Header() {
 ## Bonnes pratiques
 
 1. **Colocaliser la récupération de données** - Récupérer où les données sont utilisées
-2. **Utiliser loading.tsx** - Ajouter des limites de suspense au niveau des routes
-3. **Lazy load les composants lourds** - Utiliser `dynamic()` pour le code splitting
-4. **Garder les bundles client petits** - Ne pas importer de bibliothèques lourdes inutilement
+2. **Utiliser l'UI pending des routes** - Définir `pendingComponent` ou des limites de suspense
+3. **Lazy load les composants lourds** - Utiliser `React.lazy` ou le code splitting des routes
+4. **Garder les bundles petits** - Ne pas importer de bibliothèques lourdes inutilement
 
 ### Erreurs courantes à éviter
 
-- Ajouter `'use client'` à un fichier juste parce qu'un enfant en a besoin
-- Récupérer des données côté client quand elles pourraient être récupérées côté serveur
+- Utiliser des APIs navigateur au niveau module pendant le SSR
+- Invalider trop largement les requêtes au lieu de clés ciblées
 - Mettre tout l'état au niveau de la page et faire du prop-drilling
-- Importer du code server-only dans des composants client
+- Récupérer sans clés de requête stables ou paramètres mémorisés

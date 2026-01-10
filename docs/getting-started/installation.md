@@ -51,7 +51,7 @@ This starts:
 |---------|-----|-------------|
 | PostgreSQL | localhost:5432 | Database |
 | NestJS API | http://localhost:8080 | Backend + Swagger |
-| Next.js Web | http://localhost:3000 | Frontend |
+| TanStack Start Web | http://localhost:3000 | Frontend |
 | MkDocs | http://localhost:8000 | Documentation |
 
 ## Manual Setup (Alternative)

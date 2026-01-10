@@ -55,6 +55,7 @@ export const Route = createRootRoute({
     title: 'Rivierabeauty Inventory',
   }),
   component: RootComponent,
+  pendingComponent: RoutePending,
 })
 
 function RootComponent(): React.JSX.Element {
@@ -115,5 +116,16 @@ function RootDocument({
         <Scripts />
       </body>
     </html>
+  )
+}
+
+function RoutePending(): React.JSX.Element {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-50 h-1 w-full bg-primary/20"
+    >
+      <div className="h-full w-1/3 animate-pulse bg-primary" />
+    </div>
   )
 }

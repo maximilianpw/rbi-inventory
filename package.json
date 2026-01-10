@@ -15,7 +15,6 @@
     "clean": "pnpm -r clean",
     "bootstrap": "pnpm install",
     "api:gen": "pnpm --filter @rbi/web api:gen",
-    "types:build": "pnpm --filter @rbi/types build",
     "docs:dev": "mkdocs serve",
     "docs:build": "mkdocs build --strict"
   },

@@ -1,28 +1,55 @@
+import * as React from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { LocationCard } from './LocationCard'
 import { LocationCardSkeleton } from './LocationCardSkeleton'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ErrorState } from '@/components/common/ErrorState'
+import { PaginationControls } from '@/components/common/PaginationControls'
 import {
-  useListAllLocations,
+  useListLocations,
+  type ListLocationsParams,
   type LocationResponseDto,
 } from '@/lib/data/generated'
 
 interface LocationListProps {
   typeFilter?: string | null
   searchQuery?: string
+  page: number
+  limit: number
+  hasActiveFilters: boolean
+  onPageChange: (page: number) => void
   onSelectLocation?: (location: LocationResponseDto) => void
 }
 
 export function LocationList({
   typeFilter,
   searchQuery,
+  page,
+  limit,
+  hasActiveFilters,
+  onPageChange,
   onSelectLocation,
 }: LocationListProps): React.JSX.Element {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { data: locations, isLoading, error } = useListAllLocations()
+  const deferredSearchQuery = React.useDeferredValue(searchQuery ?? '')
+  const queryParams = React.useMemo(() => {
+    const params: ListLocationsParams = {
+      page,
+      limit,
+    }
+    const query = deferredSearchQuery.trim()
+    if (query) {
+      params.search = query
+    }
+    if (typeFilter) {
+      params.type = typeFilter as ListLocationsParams['type']
+    }
+    return params
+  }, [deferredSearchQuery, limit, page, typeFilter])
+
+  const { data, isLoading, error } = useListLocations(queryParams)
 
   if (isLoading) {
     return (
@@ -40,29 +67,18 @@ export function LocationList({
     )
   }
 
-  let filteredLocations = locations ?? []
+  const locations = data?.data ?? []
+  const meta = data?.meta
 
-  if (typeFilter) {
-    filteredLocations = filteredLocations.filter(
-      (loc) => loc.type === typeFilter
-    )
-  }
-
-  if (searchQuery) {
-    const query = searchQuery.toLowerCase()
-    const toStr = (value: unknown): string =>
-      typeof value === 'string' ? value : ''
-    filteredLocations = filteredLocations.filter(
-      (loc) =>
-        loc.name.toLowerCase().includes(query) ||
-        toStr(loc.address).toLowerCase().includes(query) ||
-        toStr(loc.contact_person).toLowerCase().includes(query)
-    )
-  }
-
-  if (filteredLocations.length === 0) {
+  if (locations.length === 0) {
     return (
-      <EmptyState message={t('locations.noLocations') || 'No locations found'} />
+      <EmptyState
+        message={
+          hasActiveFilters
+            ? (t('locations.noLocationsFiltered') || 'No results for these filters')
+            : (t('locations.noLocations') || 'No locations found')
+        }
+      />
     )
   }
 
@@ -72,14 +88,23 @@ export function LocationList({
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {filteredLocations.map((location) => (
-        <LocationCard
-          key={location.id}
-          location={location}
-          onClick={() => handleClick(location)}
-        />
-      ))}
-    </div>
+    <>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {locations.map((location) => (
+          <LocationCard
+            key={location.id}
+            location={location}
+            onClick={() => handleClick(location)}
+          />
+        ))}
+      </div>
+      <PaginationControls
+        isLoading={isLoading}
+        onPageChange={onPageChange}
+        page={page}
+        totalItems={meta?.total}
+        totalPages={meta?.total_pages ?? 1}
+      />
+    </>
   )
 }

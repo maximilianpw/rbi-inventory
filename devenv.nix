@@ -9,7 +9,7 @@
   env.PGDATABASE = "rbi_inventory";
   env.DATABASE_URL = "postgresql://${builtins.getEnv "USER"}@127.0.0.1:5432/rbi_inventory?sslmode=disable";
   env.NEST_PORT = "3001";
-  env.NEXT_PUBLIC_API_URL = "http://localhost:3001";
+  env.VITE_API_BASE_URL = "http://localhost:8080";
 
   # https://devenv.sh/packages/
   # Only packages not provided by languages.* modules
@@ -76,7 +76,7 @@
     echo "  Database: $PGDATABASE"
     echo ""
     echo "Services:"
-    echo "  devenv up    - Start all services (PostgreSQL, NestJS, Next.js, Docs)"
+    echo "  devenv up    - Start all services (PostgreSQL, NestJS, Web, Docs)"
     echo "  devenv down  - Stop all services"
     echo ""
     echo "Documentation:"

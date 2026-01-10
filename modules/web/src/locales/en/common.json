@@ -14,6 +14,14 @@
     "locations": "Locations",
     "inventory": "Inventory"
   },
+  "common": {
+    "search": "Search",
+    "sort": "Sort",
+    "view": "View",
+    "loading": "Loading",
+    "deleteTitle": "Delete",
+    "deleteDescription": "Are you sure you want to delete this item? This action cannot be undone."
+  },
   "search": {
     "placeholder": "Search...",
     "itemsPlaceholder": "Search items...",
@@ -29,12 +37,15 @@
   "actions": {
     "edit": "Edit",
     "delete": "Delete",
+    "undo": "Undo",
+    "deleting": "Deleting...",
     "add": "Add",
     "cancel": "Cancel",
     "save": "Save",
     "close": "Close",
     "addNewItem": "Add New Item",
-    "addNewFolder": "Add New Folder"
+    "addNewFolder": "Add New Folder",
+    "clearAll": "Clear all"
   },
   "items": {
     "allItems": "All Items",
@@ -42,6 +53,8 @@
     "totalValue": "Total Items",
     "noItemsFound": "No Items Found",
     "noItemsFolder": "No items in this folder",
+    "noSearchResults": "No results for this search",
+    "errorLoading": "Error loading items",
     "price": "Price"
   },
   "folders": {
@@ -53,6 +66,12 @@
   "view": {
     "grid": "Grid view",
     "list": "List view"
+  },
+  "pagination": {
+    "results": "{{count}} results",
+    "pageOf": "Page {{page}} of {{total}}",
+    "prev": "Prev",
+    "next": "Next"
   },
   "category": "Category",
   "form": {
@@ -122,6 +141,7 @@
     "filterByType": "Filter by type",
     "allTypes": "All Types",
     "noLocations": "No locations found",
+    "noLocationsFiltered": "No results for these filters",
     "errorLoading": "Error loading locations",
     "created": "Location created successfully",
     "createError": "Failed to create location",
@@ -162,6 +182,9 @@
   },
   "inventory": {
     "subtitle": "Track stock levels across locations",
+    "allInventory": "All Inventory",
+    "locationInventory": "Location Inventory",
+    "areaInventory": "Area Inventory",
     "create": "Add Inventory",
     "createTitle": "Add Inventory",
     "createDescription": "Add inventory for a product at a location.",
@@ -183,6 +206,7 @@
     "receivedDate": "Received Date",
     "searchPlaceholder": "Search inventory...",
     "noInventory": "No inventory found",
+    "noInventoryFiltered": "No results for these filters",
     "errorLoading": "Error loading inventory",
     "created": "Inventory added successfully",
     "createError": "Failed to add inventory",
@@ -197,6 +221,7 @@
     "adjusted": "Quantity adjusted successfully",
     "adjustError": "Failed to adjust quantity",
     "lowStock": "Low Stock",
+    "expired": "Expired",
     "expiringSoon": "Expiring Soon"
   }
 }

@@ -24,6 +24,11 @@ import {
   useAreasControllerDelete,
   getAreasControllerFindAllQueryKey,
 } from '@/lib/data/generated'
+import {
+  removeItemFromArray,
+  restoreQueryData,
+  snapshotQueryData,
+} from '@/lib/data/query-cache'
 import { cn } from '@/lib/utils'
 
 interface AreaTreeItemProps {
@@ -56,7 +61,6 @@ export function AreaTreeItem({
   const deleteMutation = useAreasControllerDelete({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('areas.deleted') || 'Area deleted successfully')
         await queryClient.invalidateQueries({
           queryKey: getAreasControllerFindAllQueryKey({ location_id: locationId }),
         })
@@ -68,9 +72,36 @@ export function AreaTreeItem({
     },
   })
 
-  const handleDelete = async (): Promise<void> => {
-    await deleteMutation.mutateAsync({ id: area.id })
+  const handleDelete = (): void => {
+    const queryKey = getAreasControllerFindAllQueryKey({ location_id: locationId })
+    const snapshot = snapshotQueryData<AreaResponseDto[]>(queryClient, queryKey)
+    queryClient.setQueriesData({ queryKey }, (old) =>
+      removeItemFromArray(old, area.id),
+    )
     setDeleteOpen(false)
+
+    let didUndo = false
+    const timeoutId = window.setTimeout(async () => {
+      if (didUndo) {
+        return
+      }
+      try {
+        await deleteMutation.mutateAsync({ id: area.id })
+      } catch {
+        restoreQueryData(queryClient, snapshot)
+      }
+    }, 5000)
+
+    toast(t('areas.deleted') || 'Area deleted successfully', {
+      action: {
+        label: t('actions.undo') || 'Undo',
+        onClick: () => {
+          didUndo = true
+          window.clearTimeout(timeoutId)
+          restoreQueryData(queryClient, snapshot)
+        },
+      },
+    })
   }
 
   return (
@@ -180,6 +211,7 @@ export function AreaTreeItem({
       {/* Delete Confirmation */}
       <DeleteConfirmationDialog
         description={t('areas.deleteDescription') || 'Are you sure you want to delete this area? All child areas will also be deleted.'}
+        isLoading={deleteMutation.isPending}
         open={deleteOpen}
         title={t('areas.deleteTitle') || 'Delete Area'}
         onConfirm={handleDelete}
