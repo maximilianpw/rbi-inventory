@@ -1,6 +1,7 @@
+import type { ReactNode } from 'react'
 import clsx from 'clsx'
 
-import type { ReactNode } from 'react'
+import { EmptyState } from '@/components/common/EmptyState'
 import { DisplayType } from '@/lib/enums/display-type.enum'
 
 interface ItemsGridProps<T> {
@@ -8,14 +9,18 @@ interface ItemsGridProps<T> {
   displayType: DisplayType
   renderItem: (item: T) => ReactNode
   emptyMessage?: string
-  searchQuery?: string
 }
 
 export function ItemsGrid<T>({
   items,
   displayType,
   renderItem,
-}: ItemsGridProps<T>): React.JSX.Element {
+  emptyMessage,
+}: ItemsGridProps<T>): React.JSX.Element | null {
+  if (items.length === 0) {
+    return emptyMessage ? <EmptyState message={emptyMessage} /> : null
+  }
+
   return (
     <div
       className={clsx(
@@ -24,7 +29,7 @@ export function ItemsGrid<T>({
           : 'flex flex-col gap-3',
       )}
     >
-      {items.map(async (item) => renderItem(item))}
+      {items.map(renderItem)}
     </div>
   )
 }

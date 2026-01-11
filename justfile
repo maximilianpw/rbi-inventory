@@ -9,7 +9,7 @@ decrypt:
   just modules/web/decrypt
   just modules/api/decrypt
 
-# Start all services (PostgreSQL, NestJS, Next.js)
+# Start all services (PostgreSQL, NestJS, Web)
 dev:
   devenv up
 

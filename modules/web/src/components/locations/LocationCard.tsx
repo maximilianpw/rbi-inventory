@@ -23,7 +23,14 @@ import {
   useDeleteLocation,
   getListLocationsQueryKey,
   getListAllLocationsQueryKey,
+  type PaginatedLocationsResponseDto,
 } from '@/lib/data/generated'
+import {
+  removeItemFromArray,
+  removeItemFromPaginated,
+  restoreQueryData,
+  snapshotQueryData,
+} from '@/lib/data/query-cache'
 import { type LocationType } from '@/lib/enums/location-type.enum'
 import {
   LOCATION_TYPE_ICONS,
@@ -47,7 +54,6 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
   const deleteMutation = useDeleteLocation({
     mutation: {
       onSuccess: async () => {
-        toast.success(t('locations.deleted') || 'Location deleted successfully')
         await Promise.all([
           queryClient.invalidateQueries({
             queryKey: getListLocationsQueryKey(),
@@ -64,9 +70,49 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
     },
   })
 
-  const handleDelete = async (): Promise<void> => {
-    await deleteMutation.mutateAsync({ id: location.id })
+  const handleDelete = (): void => {
+    const listQueryKey = getListLocationsQueryKey()
+    const listAllKey = getListAllLocationsQueryKey()
+    const snapshot = snapshotQueryData<PaginatedLocationsResponseDto>(
+      queryClient,
+      listQueryKey,
+    )
+    const allSnapshot = snapshotQueryData<LocationResponseDto[]>(
+      queryClient,
+      listAllKey,
+    )
+    queryClient.setQueriesData<PaginatedLocationsResponseDto>(
+      { queryKey: listQueryKey },
+      (old) => removeItemFromPaginated(old, location.id),
+    )
+    queryClient.setQueriesData<LocationResponseDto[]>(
+      { queryKey: listAllKey },
+      (old) => removeItemFromArray(old, location.id),
+    )
     setDeleteOpen(false)
+
+    let didUndo = false
+    const timeoutId = window.setTimeout(() => {
+      if (didUndo) {
+        return
+      }
+      deleteMutation.mutateAsync({ id: location.id }).catch(() => {
+        restoreQueryData(queryClient, snapshot)
+        restoreQueryData(queryClient, allSnapshot)
+      })
+    }, 5000)
+
+    toast(t('locations.deleted') || 'Location deleted successfully', {
+      action: {
+        label: t('actions.undo') || 'Undo',
+        onClick: () => {
+          didUndo = true
+          window.clearTimeout(timeoutId)
+          restoreQueryData(queryClient, snapshot)
+          restoreQueryData(queryClient, allSnapshot)
+        },
+      },
+    })
   }
 
   return (
@@ -140,6 +186,7 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
 
       <DeleteConfirmationDialog
         description={t('locations.deleteDescription') || 'Are you sure you want to delete this location? This action cannot be undone.'}
+        isLoading={deleteMutation.isPending}
         open={deleteOpen}
         title={t('locations.deleteTitle') || 'Delete Location'}
         onConfirm={handleDelete}

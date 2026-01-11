@@ -651,7 +651,7 @@ Migrate content from `/CLAUDE.md` architecture section with Mermaid diagrams:
 ```mermaid
 graph TB
     subgraph "Frontend"
-        A[Next.js 16] --> B[React 19]
+        A[TanStack Start] --> B[React 19]
         B --> C[TanStack Query]
         B --> D[TanStack Form]
     end
@@ -674,7 +674,7 @@ graph TB
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 16, React 19, TanStack Query/Form, Tailwind CSS |
+| Frontend | TanStack Start, React 19, TanStack Router, TanStack Query/Form, Tailwind CSS |
 | Backend | NestJS 11, TypeORM, PostgreSQL 16 |
 | Auth | Clerk |
 | API Docs | OpenAPI/Swagger |

@@ -72,7 +72,7 @@ The inventory management system will provide:
 
 ### Frontend
 
-- **Next.js 16** with **React 19** for the user interface
+- **TanStack Start** (TanStack Router + Vite) with **React 19** for the user interface
 - **TanStack Query/Form** for data fetching and form handling
 - **Tailwind CSS** with **Radix UI** for styling
 - **Clerk** for authentication

@@ -46,7 +46,7 @@ Services started:
 |---------|-----|-------------|
 | PostgreSQL | localhost:5432 | Database |
 | NestJS API | http://localhost:8080 | Backend |
-| Next.js | http://localhost:3000 | Frontend |
+| TanStack Start | http://localhost:3000 | Frontend |
 | MkDocs | http://localhost:8000 | Documentation |
 
 ## Common Commands
@@ -116,8 +116,8 @@ NODE_ENV=development
 ### Web (.env.local)
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api/v1
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+VITE_API_BASE_URL=http://localhost:8080/api/v1
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
 ```
 

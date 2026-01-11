@@ -1,5 +1,4 @@
 import baseConfig from '@rbi/eslint-config'
-import pluginNext from '@next/eslint-plugin-next'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
@@ -27,14 +26,13 @@ export default tseslint.config(
     },
   },
 
-  // React and Next.js configuration
+  // React configuration
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     plugins: {
       react: pluginReact,
       'react-hooks': pluginReactHooks,
       'react-refresh': pluginReactRefresh,
-      '@next/next': pluginNext,
     },
     settings: {
       react: {
@@ -68,15 +66,8 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'error',
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        { allowConstantExport: true, allowExportNames: ['Route'] },
       ],
-
-      // Next.js rules
-      ...pluginNext.configs.recommended.rules,
-      ...pluginNext.configs['core-web-vitals'].rules,
-      '@next/next/no-html-link-for-pages': 'error',
-      '@next/next/no-img-element': 'error',
-      '@next/next/no-sync-scripts': 'error',
     },
   },
 
@@ -233,9 +224,9 @@ export default tseslint.config(
     },
   },
 
-  // Next.js app/pages directories - allow default exports
+  // TanStack Start app directory - allow default exports and Route exports
   {
-    files: ['**/app/**/*.{ts,tsx}', '**/pages/**/*.{ts,tsx}'],
+    files: ['**/app/**/*.{ts,tsx}'],
     rules: {
       'import/no-default-export': 'off',
       'import/prefer-default-export': 'off',
@@ -272,7 +263,7 @@ export default tseslint.config(
       '.pnp',
       '.pnp.js',
       '.yarn/**',
-      '.next/**',
+      '.output/**',
       'out/**',
       'dist/**',
       'build/**',
@@ -280,8 +271,10 @@ export default tseslint.config(
       '*.gen.ts',
       '**/generated/**',
       '**/generated.ts',
+      '**/routeTree.gen.ts',
+      'eslint.config.mjs',
+      'prettier.config.js',
       'src/components/ui/**',
-      'next-env.d.ts',
       '.env*.local',
       '.idea/**',
       '.vscode/**',

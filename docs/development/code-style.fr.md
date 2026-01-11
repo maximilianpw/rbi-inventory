@@ -118,7 +118,7 @@ Tous les modules utilisent TypeScript strict :
 ### Général
 
 - Utiliser `const` par défaut, `let` uniquement si réassignation nécessaire
-- Préférer les exports nommés aux exports par défaut (sauf pages Next.js)
+- Préférer les exports nommés aux exports par défaut (utiliser les exports par défaut uniquement quand un outil l'exige)
 - Toujours utiliser des accolades pour les structures de contrôle
 - Utiliser les retours anticipés pour réduire l'imbrication
 

@@ -1,7 +1,5 @@
-'use client'
-import Link from 'next/link'
-
-import { SignedOut, SignInButton } from '@clerk/nextjs'
+import { Link, useRouterState } from '@tanstack/react-router'
+import { SignedOut, SignInButton } from '@clerk/tanstack-react-start'
 import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -61,11 +59,13 @@ function useRoutes(): {
 export default function AppSidebar(): React.JSX.Element {
   const { t } = useTranslation()
   const routes = useRoutes()
+  const routerState = useRouterState()
+  const currentPath = routerState.location.pathname
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <Link className="inline-flex items-center gap-2" href="/">
+        <Link className="inline-flex items-center gap-2" to="/">
           <span className="text-base font-bold tracking-tight">
             RBI Inventory
           </span>
@@ -77,10 +77,13 @@ export default function AppSidebar(): React.JSX.Element {
           <SidebarGroupContent>
             <SidebarMenu>
               {routes.map(({ name, route, icon: Icon }) => {
+                const isActive = route === '/' 
+                  ? currentPath === '/' 
+                  : currentPath.startsWith(route)
                 return (
                   <SidebarMenuItem key={route}>
-                    <SidebarMenuButton asChild isActive={false}>
-                      <Link href={route}>
+                    <SidebarMenuButton asChild isActive={isActive}>
+                      <Link to={route}>
                         <Icon />
                         <span>{name}</span>
                       </Link>
@@ -96,8 +99,8 @@ export default function AppSidebar(): React.JSX.Element {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={false}>
-              <Link href="/settings">
+            <SidebarMenuButton asChild isActive={currentPath === '/settings'}>
+              <Link to="/settings">
                 <Settings />
                 <span>{t('navigation.settings')}</span>
               </Link>
@@ -105,7 +108,7 @@ export default function AppSidebar(): React.JSX.Element {
           </SidebarMenuItem>
         </SidebarMenu>
         <SignedOut>
-          <SignInButton mode={'modal'} />
+          <SignInButton mode="modal" />
         </SignedOut>
       </SidebarFooter>
     </Sidebar>

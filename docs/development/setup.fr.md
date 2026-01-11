@@ -38,7 +38,7 @@ Cela démarre automatiquement :
 
 - PostgreSQL sur le port 5432
 - API NestJS sur le port 8080
-- Frontend Next.js sur le port 3000
+- Frontend TanStack Start sur le port 3000
 
 ## Configuration manuelle
 
@@ -76,8 +76,8 @@ PORT=8080
 **Web (`modules/web/.env.local`) :**
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
+VITE_API_BASE_URL=http://localhost:8080
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 ```
 
 ### 4. Démarrer les services

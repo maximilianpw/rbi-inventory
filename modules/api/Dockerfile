@@ -13,7 +13,6 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
 # Copy shared packages
-COPY packages/types/package.json ./packages/types/
 COPY packages/tsconfig/ ./packages/tsconfig/
 
 # Copy API module
@@ -23,11 +22,7 @@ COPY modules/api/package.json ./modules/api/
 RUN pnpm install --frozen-lockfile
 
 # Copy source code
-COPY packages/types/ ./packages/types/
 COPY modules/api/ ./modules/api/
-
-# Build types package first
-RUN pnpm --filter @rbi/types build
 
 # Build API
 RUN pnpm --filter @rbi/api build
@@ -44,7 +39,6 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
 # Copy package.json files for workspace resolution
-COPY packages/types/package.json ./packages/types/
 COPY packages/tsconfig/ ./packages/tsconfig/
 COPY modules/api/package.json ./modules/api/
 
@@ -52,7 +46,6 @@ COPY modules/api/package.json ./modules/api/
 RUN pnpm install --frozen-lockfile --prod
 
 # Copy built artifacts
-COPY --from=builder /app/packages/types/dist ./packages/types/dist
 COPY --from=builder /app/modules/api/dist ./modules/api/dist
 
 # Set environment variables

@@ -1,6 +1,4 @@
-'use client'
-
-import { useAuth } from '@clerk/nextjs'
+import { useAuth } from '@clerk/tanstack-react-start'
 import { useEffect, useRef } from 'react'
 import { setTokenGetter } from '@/lib/data/axios-client'
 
@@ -13,12 +11,10 @@ export function AuthProvider({
   const getTokenRef = useRef(getToken)
   const initialized = useRef(false)
 
-  // Update ref without triggering re-renders
   useEffect(() => {
     getTokenRef.current = getToken
   }, [getToken])
 
-  // Register token getter on mount
   useEffect(() => {
     if (initialized.current) {
       return

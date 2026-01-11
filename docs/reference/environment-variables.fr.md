@@ -54,22 +54,22 @@ Emplacement : `modules/web/.env.local`
 
 | Variable | Requis | Description | Exemple |
 |----------|--------|-------------|---------|
-| `NEXT_PUBLIC_API_BASE_URL` | Oui | URL de l'API backend | `http://localhost:8080` |
+| `VITE_API_BASE_URL` | Oui | URL de l'API backend | `http://localhost:8080` |
 
 ### Authentification
 
 | Variable | Requis | Description | Exemple |
 |----------|--------|-------------|---------|
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Oui | Clé API frontend Clerk | `pk_test_xxx...` |
+| `VITE_CLERK_PUBLISHABLE_KEY` | Oui | Clé API frontend Clerk | `pk_test_xxx...` |
 
 ### Exemple `.env.local`
 
 ```bash
 # API
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+VITE_API_BASE_URL=http://localhost:8080
 
 # Authentification
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxx
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxx
 ```
 
 ## Secrets CI/CD

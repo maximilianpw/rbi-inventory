@@ -149,7 +149,7 @@ components/
 ### General
 
 - Use `const` by default, `let` only when reassignment is needed
-- Prefer named exports over default exports (except Next.js pages)
+- Prefer named exports over default exports (only use default exports when required by tooling)
 - Always use braces for control statements
 - Use early returns to reduce nesting
 

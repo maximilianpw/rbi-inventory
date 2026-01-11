@@ -7,8 +7,7 @@ This section covers everything you need to contribute to the RBI Inventory codeb
 RBI Inventory is a pnpm monorepo containing:
 
 - **@rbi/api** - NestJS backend
-- **@rbi/web** - Next.js frontend
-- **@rbi/types** - Shared TypeScript types
+- **@rbi/web** - TanStack Start frontend
 
 ## Quick Links
 
@@ -17,7 +16,7 @@ RBI Inventory is a pnpm monorepo containing:
 - [Code Style](code-style.md) - ESLint, Prettier, and conventions
 - [Testing](testing.md) - Jest test patterns
 - [API Development](api-development.md) - NestJS patterns
-- [Frontend Development](frontend-development.md) - Next.js patterns
+- [Frontend Development](frontend-development.md) - TanStack Start patterns
 - [CI/CD](ci-cd.md) - GitHub Actions workflows
 
 ## Development Workflow

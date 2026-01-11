@@ -1,0 +1,38 @@
+import path from 'node:path'
+
+import { defineConfig } from 'vite'
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import viteReact from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import tailwindcss from '@tailwindcss/vite'
+
+const shimPath = path.resolve(__dirname, 'src/lib/use-sync-external-store-shim.ts')
+
+export default defineConfig({
+  server: {
+    port: 3000,
+  },
+  resolve: {
+    alias: {
+      'use-sync-external-store/shim/with-selector.js': shimPath,
+      'use-sync-external-store/shim/with-selector': shimPath,
+      'use-sync-external-store/shim/index.js': shimPath,
+      'use-sync-external-store/shim': shimPath,
+      'use-sync-external-store': shimPath,
+    },
+  },
+  ssr: {
+    noExternal: ['next-themes'],
+  },
+  plugins: [
+    tailwindcss(),
+    tsconfigPaths(),
+    tanstackStart({
+      srcDirectory: 'src',
+      router: {
+        routesDirectory: 'app',
+      },
+    }),
+    viteReact(),
+  ],
+})

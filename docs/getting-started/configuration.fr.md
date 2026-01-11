@@ -30,15 +30,15 @@ Situé dans `modules/web/.env.local` :
 
 | Variable | Requis | Description |
 |----------|--------|-------------|
-| `NEXT_PUBLIC_API_BASE_URL` | Oui | URL de l'API backend |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Oui | Clé publique Clerk |
+| `VITE_API_BASE_URL` | Oui | URL de l'API backend |
+| `VITE_CLERK_PUBLISHABLE_KEY` | Oui | Clé publique Clerk |
 | `CLERK_SECRET_KEY` | Oui | Clé secrète Clerk |
 
 **Exemple :**
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api/v1
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+VITE_API_BASE_URL=http://localhost:8080/api/v1
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
 ```
 

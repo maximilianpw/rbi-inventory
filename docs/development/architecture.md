@@ -5,7 +5,8 @@
 ```mermaid
 graph TB
     subgraph "Frontend"
-        A[Next.js 16] --> B[React 19]
+        A[TanStack Start] --> B[React 19]
+        A --> E[TanStack Router]
         B --> C[TanStack Query]
         B --> D[TanStack Form]
     end
@@ -28,7 +29,7 @@ graph TB
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 16, React 19, TanStack Query/Form, Tailwind CSS |
+| Frontend | TanStack Start, React 19, TanStack Router, TanStack Query/Form, Tailwind CSS |
 | Backend | NestJS 11, TypeORM, PostgreSQL 16 |
 | Auth | Clerk |
 | API Docs | OpenAPI/Swagger |
@@ -40,9 +41,8 @@ graph TB
 rbi/
 ├── modules/
 │   ├── api/                 # @rbi/api - NestJS backend
-│   └── web/                 # @rbi/web - Next.js frontend
+│   └── web/                 # @rbi/web - TanStack Start frontend
 ├── packages/
-│   ├── types/               # @rbi/types - Shared TypeScript types
 │   ├── tsconfig/            # Shared TS configs
 │   └── eslint-config/       # Shared ESLint config
 ├── docs/                    # MkDocs documentation
@@ -56,7 +56,7 @@ rbi/
 
 ```
 ┌─────────────────────────────────────────┐
-│           Next.js Frontend              │
+│           TanStack Start Frontend       │
 │  React Query ←── Orval (generated) ←────┼── openapi.yaml
 │  Clerk Auth                             │
 └─────────────────────────────────────────┘
