@@ -113,8 +113,9 @@ function InventoryRow({ inventory, showLocation = true }: InventoryRowProps): Re
       queryClient,
       listQueryKey,
     )
-    queryClient.setQueriesData({ queryKey: listQueryKey }, (old) =>
-      removeItemFromPaginated(old, id),
+    queryClient.setQueriesData<PaginatedInventoryResponseDto>(
+      { queryKey: listQueryKey },
+      (old) => removeItemFromPaginated(old, id),
     )
     setDeleteOpen(false)
 

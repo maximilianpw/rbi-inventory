@@ -77,8 +77,9 @@ export function InventoryCard({ inventory }: InventoryCardProps): React.JSX.Elem
       queryClient,
       listQueryKey,
     )
-    queryClient.setQueriesData({ queryKey: listQueryKey }, (old) =>
-      removeItemFromPaginated(old, id),
+    queryClient.setQueriesData<PaginatedInventoryResponseDto>(
+      { queryKey: listQueryKey },
+      (old) => removeItemFromPaginated(old, id),
     )
     setDeleteOpen(false)
 

@@ -75,7 +75,7 @@ export function AreaTreeItem({
   const handleDelete = (): void => {
     const queryKey = getAreasControllerFindAllQueryKey({ location_id: locationId })
     const snapshot = snapshotQueryData<AreaResponseDto[]>(queryClient, queryKey)
-    queryClient.setQueriesData({ queryKey }, (old) =>
+    queryClient.setQueriesData<AreaResponseDto[]>({ queryKey }, (old) =>
       removeItemFromArray(old, area.id),
     )
     setDeleteOpen(false)

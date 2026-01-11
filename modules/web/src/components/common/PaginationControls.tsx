@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import type * as React from 'react'
 
 import { Button } from '@/components/ui/button'
 
@@ -19,7 +20,7 @@ export function PaginationControls({
   totalItems,
   isLoading,
   onPageChange,
-}: PaginationControlsProps): JSX.Element | null {
+}: PaginationControlsProps): React.JSX.Element | null {
   const { t } = useTranslation()
   const showControls = totalPages > 1
 

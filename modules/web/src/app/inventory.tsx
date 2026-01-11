@@ -13,6 +13,9 @@ import { SearchBar } from '@/components/items/SearchBar'
 import {
   useAreasControllerFindAll,
   useListAllLocations,
+  getListAllLocationsQueryOptions,
+  getAreasControllerFindAllQueryOptions,
+  getListInventoryQueryOptions,
 } from '@/lib/data/generated'
 import type { ListInventoryParams } from '@/lib/data/generated'
 import {
@@ -34,8 +37,43 @@ const INVENTORY_PAGE_SIZE = 50
 
 export const Route = createFileRoute('/inventory')({
   validateSearch: (search) => inventorySearchSchema.parse(search),
+  loader: async ({ context: { queryClient }, location }) => {
+    const search = inventorySearchSchema.parse(location.search)
+    await queryClient.ensureQueryData(getListAllLocationsQueryOptions())
+
+    if (search.location) {
+      await queryClient.ensureQueryData(
+        getAreasControllerFindAllQueryOptions({
+          location_id: search.location,
+        }),
+      )
+    }
+
+    const params: ListInventoryParams = {
+      page: search.page ?? 1,
+      limit: INVENTORY_PAGE_SIZE,
+    }
+    if (search.area) {
+      params.area_id = search.area
+    } else if (search.location) {
+      params.location_id = search.location
+    }
+    if (search.q) {
+      params.search = search.q
+    }
+    if (search.low) {
+      params.low_stock = true
+    }
+    if (search.expiring) {
+      params.expiring_soon = true
+    }
+
+    await queryClient.ensureQueryData(getListInventoryQueryOptions(params))
+  },
   component: InventoryPage,
 })
+
+type InventorySearch = ReturnType<typeof Route.useSearch>
 
 function InventoryPage(): React.JSX.Element {
   const { t } = useTranslation()
@@ -57,7 +95,7 @@ function InventoryPage(): React.JSX.Element {
 
   const handleSelect = (locationId: string | null, areaId: string | null): void => {
     void navigate({
-      search: (prev) => ({
+      search: (prev: InventorySearch) => ({
         ...prev,
         location: locationId ?? undefined,
         area: areaId ?? undefined,
@@ -132,7 +170,11 @@ function InventoryPage(): React.JSX.Element {
         label: `${t('common.search') || 'Search'}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+            search: (prev: InventorySearch) => ({
+              ...prev,
+              q: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -144,7 +186,11 @@ function InventoryPage(): React.JSX.Element {
         label: t('inventory.lowStock') || 'Low Stock',
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, low: undefined, page: 1 }),
+            search: (prev: InventorySearch) => ({
+              ...prev,
+              low: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -156,7 +202,11 @@ function InventoryPage(): React.JSX.Element {
         label: t('inventory.expiringSoon') || 'Expiring Soon',
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, expiring: undefined, page: 1 }),
+            search: (prev: InventorySearch) => ({
+              ...prev,
+              expiring: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -210,7 +260,7 @@ function InventoryPage(): React.JSX.Element {
             value={searchQuery}
             onChange={(value) => {
               void navigate({
-                search: (prev) => ({
+                search: (prev: InventorySearch) => ({
                   ...prev,
                   q: value || undefined,
                   page: 1,
@@ -220,7 +270,11 @@ function InventoryPage(): React.JSX.Element {
             }}
             onClear={() => {
               void navigate({
-                search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+                search: (prev: InventorySearch) => ({
+                  ...prev,
+                  q: undefined,
+                  page: 1,
+                }),
                 replace: true,
               })
             }}
@@ -231,7 +285,7 @@ function InventoryPage(): React.JSX.Element {
             size="sm"
             onPressedChange={(pressed) => {
               void navigate({
-                search: (prev) => ({
+                search: (prev: InventorySearch) => ({
                   ...prev,
                   low: pressed ? true : undefined,
                   page: 1,
@@ -249,7 +303,7 @@ function InventoryPage(): React.JSX.Element {
             size="sm"
             onPressedChange={(pressed) => {
               void navigate({
-                search: (prev) => ({
+                search: (prev: InventorySearch) => ({
                   ...prev,
                   expiring: pressed ? true : undefined,
                   page: 1,
@@ -291,7 +345,10 @@ function InventoryPage(): React.JSX.Element {
             page={page}
             onPageChange={(nextPage) => {
               void navigate({
-                search: (prev) => ({ ...prev, page: nextPage }),
+                search: (prev: InventorySearch) => ({
+                  ...prev,
+                  page: nextPage,
+                }),
                 replace: true,
               })
             }}

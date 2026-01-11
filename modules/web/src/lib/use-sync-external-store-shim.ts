@@ -21,6 +21,8 @@ export function useSyncExternalStoreWithSelector<Snapshot, Selection>(
   } | null>(null)
 
   const equalityFn = isEqual ?? Object.is
+  const serverSnapshotRef = useRef<Snapshot | null>(null)
+  const serverSnapshotGetterRef = useRef<typeof getServerSnapshot>(getServerSnapshot)
 
   // Initialize or update the ref
   if (instRef.current === null) {
@@ -35,6 +37,10 @@ export function useSyncExternalStoreWithSelector<Snapshot, Selection>(
     instRef.current.getSnapshot = getSnapshot
     instRef.current.selector = selector
     instRef.current.isEqual = equalityFn
+  }
+  if (serverSnapshotGetterRef.current !== getServerSnapshot) {
+    serverSnapshotGetterRef.current = getServerSnapshot
+    serverSnapshotRef.current = null
   }
 
   const getSelection = useCallback(() => {
@@ -55,8 +61,11 @@ export function useSyncExternalStoreWithSelector<Snapshot, Selection>(
     if (getServerSnapshot === null || getServerSnapshot === undefined) {
       throw new Error('Missing getServerSnapshot')
     }
+    if (serverSnapshotRef.current === null) {
+      serverSnapshotRef.current = getServerSnapshot()
+    }
     const inst = instRef.current!
-    return inst.selector(getServerSnapshot())
+    return inst.selector(serverSnapshotRef.current)
   }, [getServerSnapshot])
 
   const maybeGetServerSelection =

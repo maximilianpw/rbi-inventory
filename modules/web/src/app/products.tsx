@@ -7,9 +7,13 @@ import { ProductList } from '@/components/products/ProductList'
 import {
   useListCategories,
   type CategoryWithChildrenResponseDto,
+  getListCategoriesQueryOptions,
 } from '@/lib/data/generated'
 
 export const Route = createFileRoute('/products')({
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(getListCategoriesQueryOptions())
+  },
   component: ProductPage,
 })
 

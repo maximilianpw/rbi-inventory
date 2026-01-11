@@ -32,6 +32,7 @@ import {
   useDeleteLocation,
   getListLocationsQueryKey,
   getListAllLocationsQueryKey,
+  getGetLocationQueryOptions,
   type PaginatedLocationsResponseDto,
   type LocationResponseDto,
 } from '@/lib/data/generated'
@@ -48,6 +49,9 @@ import {
 } from '@/lib/location-type.utils'
 
 export const Route = createFileRoute('/locations/$id')({
+  loader: async ({ context: { queryClient }, params }) => {
+    await queryClient.ensureQueryData(getGetLocationQueryOptions(params.id))
+  },
   component: LocationDetailPage,
 })
 
@@ -222,11 +226,13 @@ function LocationDetailPage(): React.JSX.Element {
       queryClient,
       listAllKey,
     )
-    queryClient.setQueriesData({ queryKey: listQueryKey }, (old) =>
-      removeItemFromPaginated(old, locationId),
+    queryClient.setQueriesData<PaginatedLocationsResponseDto>(
+      { queryKey: listQueryKey },
+      (old) => removeItemFromPaginated(old, locationId),
     )
-    queryClient.setQueriesData({ queryKey: listAllKey }, (old) =>
-      removeItemFromArray(old, locationId),
+    queryClient.setQueriesData<LocationResponseDto[]>(
+      { queryKey: listAllKey },
+      (old) => removeItemFromArray(old, locationId),
     )
     setDeleteOpen(false)
 

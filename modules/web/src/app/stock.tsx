@@ -44,6 +44,8 @@ export const Route = createFileRoute('/stock')({
   component: ItemsPage,
 })
 
+type StockSearch = ReturnType<typeof Route.useSearch>
+
 function useSortOptions(): SortOption[] {
   const { t } = useTranslation()
 
@@ -92,7 +94,11 @@ function ItemsPage(): React.JSX.Element {
         label: `${t('common.search') || 'Search'}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+            search: (prev: StockSearch) => ({
+              ...prev,
+              q: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -106,7 +112,11 @@ function ItemsPage(): React.JSX.Element {
         label: `${t('common.sort') || 'Sort'}: ${sortLabel}`,
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, sort: undefined, page: 1 }),
+            search: (prev: StockSearch) => ({
+              ...prev,
+              sort: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -118,7 +128,11 @@ function ItemsPage(): React.JSX.Element {
         label: `${t('common.view') || 'View'}: ${displayType}`,
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, view: undefined, page: 1 }),
+            search: (prev: StockSearch) => ({
+              ...prev,
+              view: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -157,7 +171,7 @@ function ItemsPage(): React.JSX.Element {
               value={searchQuery}
               onChange={(value) => {
                 void navigate({
-                  search: (prev) => ({
+                  search: (prev: StockSearch) => ({
                     ...prev,
                     q: value || undefined,
                     page: 1,
@@ -167,7 +181,11 @@ function ItemsPage(): React.JSX.Element {
               }}
               onClear={() => {
                 void navigate({
-                  search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+                  search: (prev: StockSearch) => ({
+                    ...prev,
+                    q: undefined,
+                    page: 1,
+                  }),
                   replace: true,
                 })
               }}
@@ -178,7 +196,7 @@ function ItemsPage(): React.JSX.Element {
               onChange={(value) => {
                 const nextSort = value as SortField
                 void navigate({
-                  search: (prev) => ({
+                  search: (prev: StockSearch) => ({
                     ...prev,
                     sort: nextSort === SortField.NAME ? undefined : nextSort,
                     page: 1,
@@ -191,7 +209,7 @@ function ItemsPage(): React.JSX.Element {
               value={displayType}
               onChange={(value) => {
                 void navigate({
-                  search: (prev) => ({
+                  search: (prev: StockSearch) => ({
                     ...prev,
                     view: value === DisplayType.GRID ? undefined : value,
                   }),
@@ -252,7 +270,10 @@ function ItemsPage(): React.JSX.Element {
                   isLoading={isLoading}
                   onPageChange={(nextPage) => {
                     void navigate({
-                      search: (prev) => ({ ...prev, page: nextPage }),
+                      search: (prev: StockSearch) => ({
+                        ...prev,
+                        page: nextPage,
+                      }),
                       replace: true,
                     })
                   }}

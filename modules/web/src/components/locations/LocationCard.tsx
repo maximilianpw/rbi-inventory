@@ -81,11 +81,13 @@ export function LocationCard({ location, onClick }: LocationCardProps): React.JS
       queryClient,
       listAllKey,
     )
-    queryClient.setQueriesData({ queryKey: listQueryKey }, (old) =>
-      removeItemFromPaginated(old, location.id),
+    queryClient.setQueriesData<PaginatedLocationsResponseDto>(
+      { queryKey: listQueryKey },
+      (old) => removeItemFromPaginated(old, location.id),
     )
-    queryClient.setQueriesData({ queryKey: listAllKey }, (old) =>
-      removeItemFromArray(old, location.id),
+    queryClient.setQueriesData<LocationResponseDto[]>(
+      { queryKey: listAllKey },
+      (old) => removeItemFromArray(old, location.id),
     )
     setDeleteOpen(false)
 

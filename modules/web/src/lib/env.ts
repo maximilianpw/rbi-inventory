@@ -11,10 +11,8 @@ const clientSchema = z.object({
 
 const processEnv = {
   CLERK_SECRET_KEY: import.meta.env.CLERK_SECRET_KEY,
-  VITE_CLERK_PUBLISHABLE_KEY:
-    import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
-  VITE_API_BASE_URL:
-    import.meta.env.VITE_API_BASE_URL,
+  VITE_CLERK_PUBLISHABLE_KEY: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+  VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
 }
 
 const merged = serverSchema.merge(clientSchema).safeParse(processEnv)

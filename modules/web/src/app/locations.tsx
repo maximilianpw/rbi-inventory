@@ -20,6 +20,10 @@ import {
   parseNumberParam,
   parseStringParam,
 } from '@/lib/router/search'
+import {
+  getListLocationsQueryOptions,
+  type ListLocationsParams,
+} from '@/lib/data/generated'
 
 const locationsSearchSchema = z.object({
   q: z.preprocess(parseStringParam, z.string().optional()),
@@ -31,8 +35,24 @@ const LOCATIONS_PAGE_SIZE = 12
 
 export const Route = createFileRoute('/locations')({
   validateSearch: (search) => locationsSearchSchema.parse(search),
+  loader: async ({ context: { queryClient }, location }) => {
+    const search = locationsSearchSchema.parse(location.search)
+    const params: ListLocationsParams = {
+      page: search.page ?? 1,
+      limit: LOCATIONS_PAGE_SIZE,
+    }
+    if (search.q) {
+      params.search = search.q
+    }
+    if (search.type) {
+      params.type = search.type
+    }
+    await queryClient.ensureQueryData(getListLocationsQueryOptions(params))
+  },
   component: LocationsPage,
 })
+
+type LocationsSearch = ReturnType<typeof Route.useSearch>
 
 const LOCATION_TYPES = [
   { value: 'ALL', label: 'All Types' },
@@ -60,7 +80,11 @@ function LocationsPage(): React.JSX.Element {
         }`,
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, type: undefined, page: 1 }),
+            search: (prev: LocationsSearch) => ({
+              ...prev,
+              type: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -72,7 +96,11 @@ function LocationsPage(): React.JSX.Element {
         label: `${t('common.search') || 'Search'}: ${searchQuery}`,
         onRemove: () => {
           void navigate({
-            search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+            search: (prev: LocationsSearch) => ({
+              ...prev,
+              q: undefined,
+              page: 1,
+            }),
             replace: true,
           })
         },
@@ -111,7 +139,7 @@ function LocationsPage(): React.JSX.Element {
             value={searchQuery}
             onChange={(value) => {
               void navigate({
-                search: (prev) => ({
+                search: (prev: LocationsSearch) => ({
                   ...prev,
                   q: value || undefined,
                   page: 1,
@@ -121,7 +149,11 @@ function LocationsPage(): React.JSX.Element {
             }}
             onClear={() => {
               void navigate({
-                search: (prev) => ({ ...prev, q: undefined, page: 1 }),
+                search: (prev: LocationsSearch) => ({
+                  ...prev,
+                  q: undefined,
+                  page: 1,
+                }),
                 replace: true,
               })
             }}
@@ -130,7 +162,7 @@ function LocationsPage(): React.JSX.Element {
             value={typeFilter}
             onValueChange={(value) => {
               void navigate({
-                search: (prev) => ({
+                search: (prev: LocationsSearch) => ({
                   ...prev,
                   type: value === 'ALL' ? undefined : (value as LocationType),
                   page: 1,
@@ -185,7 +217,10 @@ function LocationsPage(): React.JSX.Element {
           typeFilter={typeFilter === 'ALL' ? null : typeFilter}
           onPageChange={(nextPage) => {
             void navigate({
-              search: (prev) => ({ ...prev, page: nextPage }),
+              search: (prev: LocationsSearch) => ({
+                ...prev,
+                page: nextPage,
+              }),
               replace: true,
             })
           }}
