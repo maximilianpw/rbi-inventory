@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@clerk/backend": "^2.29.0",
-    "@nestjs/common": "^11.1.10",
+    "@nestjs/common": "^10.4.22",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.10",
     "@nestjs/platform-express": "^11.1.10",
