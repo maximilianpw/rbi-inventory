@@ -169,6 +169,7 @@ jobs:
       - name: Package desktop app
         shell: bash
         run: |
+          mkdir -p dist
           tar -czf dist/rbi-remote-desktop-${{ matrix.asset_name }}.tar.gz \
             -C modules/remote-desktop/src-tauri/target/release/bundle .
 
