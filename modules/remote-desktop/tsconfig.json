@@ -1,0 +1,9 @@
+{
+  "extends": "../../packages/tsconfig/base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["src-ui/**/*.js", "eslint.config.mjs"]
+}

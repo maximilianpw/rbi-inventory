@@ -149,6 +149,17 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Cache Cargo registry and build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            modules/remote-desktop/src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('modules/remote-desktop/src-tauri/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |
