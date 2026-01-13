@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Solutions to common issues when working with RBI Inventory.
+Solutions to common issues when working with LibreStock Inventory.
 
 ## Development Environment
 
@@ -119,12 +119,12 @@ kill -9 <PID>
 
 1. Build the API first:
    ```bash
-   pnpm --filter @rbi/api build
+   pnpm --filter @librestock/api build
    ```
 
 2. Check for TypeScript errors:
    ```bash
-   pnpm --filter @rbi/api build
+   pnpm --filter @librestock/api build
    ```
 
 ## Frontend Issues
@@ -137,8 +137,8 @@ kill -9 <PID>
 
 1. Regenerate after API changes:
    ```bash
-   pnpm --filter @rbi/api openapi:generate
-   pnpm --filter @rbi/web api:gen
+   pnpm --filter @librestock/api openapi:generate
+   pnpm --filter @librestock/web api:gen
    ```
 
 ### Hydration errors
@@ -171,8 +171,8 @@ kill -9 <PID>
 
 ```bash
 # Check specific module
-pnpm --filter @rbi/api build
-pnpm --filter @rbi/web build
+pnpm --filter @librestock/api build
+pnpm --filter @librestock/web build
 
 ```
 
@@ -184,8 +184,8 @@ pnpm --filter @rbi/web build
 
 ```bash
 # Auto-fix what's possible
-pnpm --filter @rbi/api lint --fix
-pnpm --filter @rbi/web lint:fix
+pnpm --filter @librestock/api lint --fix
+pnpm --filter @librestock/web lint:fix
 ```
 
 ## CI/CD Issues

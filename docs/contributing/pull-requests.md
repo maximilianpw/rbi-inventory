@@ -1,6 +1,6 @@
 # Pull Request Process
 
-This guide explains how to create and manage pull requests for RBI Inventory.
+This guide explains how to create and manage pull requests for LibreStock Inventory.
 
 ## Creating a Pull Request
 

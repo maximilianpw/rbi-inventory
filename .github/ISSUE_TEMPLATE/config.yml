@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
   - name: Question or Discussion
-    url: https://github.com/maximilianpw/rbi-inventory/discussions
+    url: https://github.com/maximilianpw/librestock-inventory/discussions
     about: Ask questions or start discussions about the project
   - name: Security Vulnerability
-    url: https://github.com/maximilianpw/rbi-inventory/security/advisories/new
+    url: https://github.com/maximilianpw/librestock-inventory/security/advisories/new
     about: Report a security vulnerability privately

@@ -1,4 +1,4 @@
-import baseConfig from '@rbi/eslint-config'
+import baseConfig from '@librestock/eslint-config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 

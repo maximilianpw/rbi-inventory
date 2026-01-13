@@ -1,6 +1,6 @@
 # Code Style
 
-This guide covers the coding standards and conventions used in RBI Inventory.
+This guide covers the coding standards and conventions used in LibreStock Inventory.
 
 ## Tools
 
@@ -17,11 +17,11 @@ This guide covers the coding standards and conventions used in RBI Inventory.
 pnpm lint
 
 # Fix auto-fixable issues
-pnpm --filter @rbi/api lint --fix
-pnpm --filter @rbi/web lint:fix
+pnpm --filter @librestock/api lint --fix
+pnpm --filter @librestock/web lint:fix
 
 # Type check
-pnpm --filter @rbi/api build  # Includes type check
+pnpm --filter @librestock/api build  # Includes type check
 ```
 
 ## ESLint Configuration

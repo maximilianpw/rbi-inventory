@@ -1,8 +1,8 @@
 [package]
-name = "rbi-remote"
+name = "librestock-remote"
 version = "0.1.0"
-description = "RBI Remote desktop client"
-authors = ["RBI Inventory"]
+description = "LibreStock Remote desktop client"
+authors = ["LibreStock Inventory"]
 edition = "2021"
 
 [build-dependencies]

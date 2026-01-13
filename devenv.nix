@@ -6,8 +6,8 @@
   ...
 }: {
   # https://devenv.sh/basics/
-  env.PGDATABASE = "rbi_inventory";
-  env.DATABASE_URL = "postgresql://${builtins.getEnv "USER"}@127.0.0.1:5432/rbi_inventory?sslmode=disable";
+  env.PGDATABASE = "librestock_inventory";
+  env.DATABASE_URL = "postgresql://${builtins.getEnv "USER"}@127.0.0.1:5432/librestock_inventory?sslmode=disable";
 
   # https://devenv.sh/packages/
   # Only packages not provided by languages.* modules
@@ -59,7 +59,7 @@
     enable = true;
     package = pkgs.postgresql_16;
     initialDatabases = [
-      {name = "rbi_inventory";}
+      {name = "librestock_inventory";}
     ];
     listen_addresses = "127.0.0.1";
   };
@@ -77,7 +77,7 @@
 
   enterShell = ''
     echo ""
-    echo "RBI Inventory Development Environment"
+    echo "LibreStock Inventory Development Environment"
     echo "======================================"
     echo ""
     echo "PostgreSQL:"

@@ -1,6 +1,6 @@
 # Environment Variables
 
-Complete reference of all environment variables used in RBI Inventory.
+Complete reference of all environment variables used in LibreStock Inventory.
 
 ## API Module
 
@@ -15,7 +15,7 @@ Location: `modules/api/.env`
 | `PGPORT` | Yes* | PostgreSQL port | `5432` |
 | `PGUSER` | Yes* | PostgreSQL user | `postgres` |
 | `PGPASSWORD` | Yes* | PostgreSQL password | `secret` |
-| `PGDATABASE` | Yes* | PostgreSQL database name | `rbi_inventory` |
+| `PGDATABASE` | Yes* | PostgreSQL database name | `librestock_inventory` |
 
 *Either `DATABASE_URL` or individual `PG*` variables are required.
 
@@ -36,7 +36,7 @@ Location: `modules/api/.env`
 
 ```bash
 # Database
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/rbi_inventory
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/librestock_inventory
 
 # Authentication
 CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxx

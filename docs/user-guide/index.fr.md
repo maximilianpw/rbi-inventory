@@ -1,10 +1,10 @@
 # Guide Utilisateur
 
-Ce guide couvre l'utilisation de toutes les fonctionnalités du système RBI Inventory.
+Ce guide couvre l'utilisation de toutes les fonctionnalités du système LibreStock Inventory.
 
 ## Aperçu
 
-RBI Inventory est un système de gestion d'inventaire pour l'approvisionnement des yachts, conçu pour gérer les articles de luxe, le linge, les cosmétiques et les commodités auprès de multiples fournisseurs.
+LibreStock Inventory est un système de gestion d'inventaire pour l'approvisionnement des yachts, conçu pour gérer les articles de luxe, le linge, les cosmétiques et les commodités auprès de multiples fournisseurs.
 
 ## Fonctionnalités Principales
 

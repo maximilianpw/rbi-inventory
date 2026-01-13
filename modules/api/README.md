@@ -1,6 +1,6 @@
-# RBI Inventory NestJS API
+# LibreStock Inventory NestJS API
 
-REST API for RBI Inventory Management System built with NestJS.
+REST API for LibreStock Inventory Management System built with NestJS.
 
 ## Features
 
@@ -39,7 +39,7 @@ Set the following environment variables in `.env`:
 ```env
 PORT=8080
 CLERK_SECRET_KEY=your_clerk_secret_key
-DATABASE_URL=postgresql://postgres@/rbi_inventory
+DATABASE_URL=postgresql://postgres@/librestock_inventory
 ```
 
 ### Running the Application

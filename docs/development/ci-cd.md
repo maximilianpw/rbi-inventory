@@ -1,6 +1,6 @@
 # CI/CD
 
-This guide covers the GitHub Actions workflows and deployment processes for RBI Inventory.
+This guide covers the GitHub Actions workflows and deployment processes for LibreStock Inventory.
 
 ## Workflows
 
@@ -99,8 +99,8 @@ pnpm lint --fix
 **Type errors:**
 
 ```bash
-pnpm --filter @rbi/api build
-pnpm --filter @rbi/web build
+pnpm --filter @librestock/api build
+pnpm --filter @librestock/web build
 ```
 
 **Test failures:**

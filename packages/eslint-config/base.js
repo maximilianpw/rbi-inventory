@@ -7,11 +7,11 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 /**
- * Base ESLint configuration for RBI monorepo.
+ * Base ESLint configuration for LibreStock monorepo.
  * Modules should import this and extend with their own rules.
  *
  * Usage:
- *   import baseConfig from '@rbi/eslint-config'
+ *   import baseConfig from '@librestock/eslint-config'
  *   export default tseslint.config(...baseConfig, { ...moduleSpecificRules })
  */
 export default tseslint.config(

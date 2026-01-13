@@ -40,8 +40,8 @@ graph TB
 ```
 rbi/
 ├── modules/
-│   ├── api/                 # @rbi/api - NestJS backend
-│   └── web/                 # @rbi/web - TanStack Start frontend
+│   ├── api/                 # @librestock/api - NestJS backend
+│   └── web/                 # @librestock/web - TanStack Start frontend
 ├── packages/
 │   ├── tsconfig/            # Shared TS configs
 │   └── eslint-config/       # Shared ESLint config
@@ -88,10 +88,10 @@ The API specification is the contract between frontend and backend:
 
 ```bash
 # 1. Backend generates spec from decorators
-pnpm --filter @rbi/api openapi:generate   # → openapi.yaml
+pnpm --filter @librestock/api openapi:generate   # → openapi.yaml
 
 # 2. Frontend generates typed hooks from spec
-pnpm --filter @rbi/web api:gen            # → src/lib/data/generated.ts
+pnpm --filter @librestock/web api:gen            # → src/lib/data/generated.ts
 ```
 
 !!! warning "Always regenerate both after API changes"

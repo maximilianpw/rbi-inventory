@@ -35,10 +35,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build API
-        run: pnpm --filter @rbi/api build
+        run: pnpm --filter @librestock/api build
 
       - name: Build Web
-        run: pnpm --filter @rbi/web build
+        run: pnpm --filter @librestock/web build
 
       - name: Package artifacts
         run: |
@@ -130,7 +130,7 @@ jobs:
           if [ ! -d "modules/remote-desktop/src-tauri/icons" ]; then
             echo "Icons not found, generating..."
             python3 modules/remote-desktop/generate-icons.py
-            pnpm --filter @rbi/remote-desktop exec tauri icon src-tauri/app-icon.svg
+            pnpm --filter @librestock/remote-desktop exec tauri icon src-tauri/app-icon.svg
           else
             echo "Icons already exist"
           fi
@@ -145,7 +145,7 @@ jobs:
           mv tauri.conf.json.tmp tauri.conf.json
 
       - name: Build desktop app
-        run: pnpm --filter @rbi/remote-desktop build
+        run: pnpm --filter @librestock/remote-desktop build
 
       - name: Package desktop app
         shell: bash

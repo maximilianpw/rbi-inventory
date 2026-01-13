@@ -19,13 +19,13 @@ async function generateOpenApi() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('RBI Inventory API')
-    .setDescription('REST API for RBI Inventory Management System')
+    .setTitle('LibreStock Inventory API')
+    .setDescription('REST API for LibreStock Inventory Management System')
     .setVersion('1.0.0')
     .setContact('API Support', '', '')
     .setLicense('MIT', '')
     .addServer('http://localhost:8080', 'Development Server')
-    .addServer('https://api.rbi-inventory.com', 'Production Server')
+    .addServer('https://api.librestock-inventory.com', 'Production Server')
     .addBearerAuth(
       {
         type: 'http',

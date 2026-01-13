@@ -1,6 +1,6 @@
 # Démarrage
 
-Cette section vous aidera à installer et configurer RBI Inventory.
+Cette section vous aidera à installer et configurer LibreStock Inventory.
 
 ## Prérequis
 

@@ -1,6 +1,6 @@
-# Système d'Inventaire RBI
+# Système d'Inventaire LibreStock
 
-Bienvenue dans la documentation RBI Inventory. Ce système aide à gérer l'inventaire d'approvisionnement des yachts avec des fonctionnalités de gestion des produits, de suivi des commandes et de journalisation des audits.
+Bienvenue dans la documentation LibreStock Inventory. Ce système aide à gérer l'inventaire d'approvisionnement des yachts avec des fonctionnalités de gestion des produits, de suivi des commandes et de journalisation des audits.
 
 ## Liens Rapides
 
@@ -8,7 +8,7 @@ Bienvenue dans la documentation RBI Inventory. Ce système aide à gérer l'inve
 
 - :material-rocket-launch: **Démarrage**
 
-    Commencez avec RBI Inventory en quelques minutes.
+    Commencez avec LibreStock Inventory en quelques minutes.
 
     [:octicons-arrow-right-24: Installation](getting-started/installation.md)
 

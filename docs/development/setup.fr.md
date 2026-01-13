@@ -58,7 +58,7 @@ pnpm install
 
 ```bash
 # Créer la base de données
-createdb rbi_inventory
+createdb librestock_inventory
 ```
 
 ### 3. Configurer les variables d'environnement
@@ -68,7 +68,7 @@ Créez les fichiers `.env` dans chaque module :
 **API (`modules/api/.env`) :**
 
 ```bash
-DATABASE_URL=postgresql://localhost:5432/rbi_inventory
+DATABASE_URL=postgresql://localhost:5432/librestock_inventory
 CLERK_SECRET_KEY=sk_test_xxx
 PORT=8080
 ```
@@ -84,10 +84,10 @@ VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 
 ```bash
 # Terminal 1 - API
-pnpm --filter @rbi/api start:dev
+pnpm --filter @librestock/api start:dev
 
 # Terminal 2 - Web
-pnpm --filter @rbi/web dev
+pnpm --filter @librestock/web dev
 ```
 
 ## Vérification

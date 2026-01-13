@@ -29,7 +29,7 @@ jobs:
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: rbi_inventory_test
+          POSTGRES_DB: librestock_inventory_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -56,13 +56,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate OpenAPI spec
-        run: pnpm --filter @rbi/api openapi:generate
+        run: pnpm --filter @librestock/api openapi:generate
         env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/rbi_inventory_test
+          DATABASE_URL: postgresql://test:test@localhost:5432/librestock_inventory_test
           CLERK_SECRET_KEY: sk_test_dummy_key_for_openapi_generation
 
       - name: Regenerate frontend API client
-        run: pnpm --filter @rbi/web api:gen
+        run: pnpm --filter @librestock/web api:gen
 
       - name: Check for changes
         id: check_changes
@@ -101,8 +101,8 @@ jobs:
 
             ## How to verify
             ```bash
-            pnpm --filter @rbi/api openapi:generate
-            pnpm --filter @rbi/web api:gen
+            pnpm --filter @librestock/api openapi:generate
+            pnpm --filter @librestock/web api:gen
             ```
 
             The changes should match what's in this PR.
@@ -119,8 +119,8 @@ jobs:
           echo "❌ OpenAPI spec or frontend client is out of date."
           echo ""
           echo "Please run these commands and commit the changes:"
-          echo "  pnpm --filter @rbi/api openapi:generate"
-          echo "  pnpm --filter @rbi/web api:gen"
+          echo "  pnpm --filter @librestock/api openapi:generate"
+          echo "  pnpm --filter @librestock/web api:gen"
           echo ""
           echo "Or wait for the automated PR to be created and merge it first."
           exit 1

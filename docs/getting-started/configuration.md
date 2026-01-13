@@ -1,6 +1,6 @@
 # Configuration
 
-This guide covers all configuration options for RBI Inventory.
+This guide covers all configuration options for LibreStock Inventory.
 
 ## Environment Variables
 
@@ -18,7 +18,7 @@ Located in `modules/api/.env`:
 **Example:**
 
 ```bash
-DATABASE_URL=postgresql://user@localhost:5432/rbi_inventory
+DATABASE_URL=postgresql://user@localhost:5432/librestock_inventory
 CLERK_SECRET_KEY=sk_test_...
 PORT=8080
 NODE_ENV=development
@@ -54,7 +54,7 @@ CLERK_SECRET_KEY=sk_test_...
 
 The database is automatically configured when using devenv:
 
-- Database name: `rbi_inventory`
+- Database name: `librestock_inventory`
 - Host: `127.0.0.1`
 - Port: `5432`
 
@@ -63,22 +63,22 @@ The database is automatically configured when using devenv:
 Create the database:
 
 ```bash
-createdb rbi_inventory
+createdb librestock_inventory
 ```
 
 Set the connection string:
 
 ```bash
-DATABASE_URL=postgresql://username:password@localhost:5432/rbi_inventory
+DATABASE_URL=postgresql://username:password@localhost:5432/librestock_inventory
 ```
 
 ## OpenAPI Configuration
 
 The API generates OpenAPI documentation automatically:
 
-1. Generate the spec: `pnpm --filter @rbi/api openapi:generate`
+1. Generate the spec: `pnpm --filter @librestock/api openapi:generate`
 2. View at: http://localhost:8080/api/docs
-3. Generate frontend hooks: `pnpm --filter @rbi/web api:gen`
+3. Generate frontend hooks: `pnpm --filter @librestock/web api:gen`
 
 ## Next Steps
 

@@ -1,6 +1,6 @@
 # Développement API
 
-Ce guide couvre les patterns de développement NestJS pour le backend RBI Inventory.
+Ce guide couvre les patterns de développement NestJS pour le backend LibreStock Inventory.
 
 ## Structure des modules
 
@@ -167,7 +167,7 @@ export class ProductsController {
 ### 6. Génération OpenAPI
 
 ```bash
-pnpm --filter @rbi/api openapi:generate
+pnpm --filter @librestock/api openapi:generate
 ```
 
 ## Authentification

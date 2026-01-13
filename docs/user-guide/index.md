@@ -1,10 +1,10 @@
 # User Guide
 
-This guide covers how to use all features of the RBI Inventory system.
+This guide covers how to use all features of the LibreStock Inventory system.
 
 ## Overview
 
-RBI Inventory is a yacht provisioning inventory management system designed for managing luxury goods, linens, cosmetics, and amenities across multiple suppliers.
+LibreStock Inventory is a yacht provisioning inventory management system designed for managing luxury goods, linens, cosmetics, and amenities across multiple suppliers.
 
 ## Core Features
 

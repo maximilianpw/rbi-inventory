@@ -38,8 +38,8 @@ After implementation:
 ### Verification Commands
 ```bash
 # TypeScript compiles without errors
-pnpm --filter @rbi/api build
-pnpm --filter @rbi/web build
+pnpm --filter @librestock/api build
+pnpm --filter @librestock/web build
 
 # Check generated types contain clean string types
 grep -A2 "address" modules/web/src/lib/data/generated.ts
@@ -169,8 +169,8 @@ batch_number: string;
 ### Success Criteria
 
 #### Automated Verification:
-- [x] TypeScript compiles: `pnpm --filter @rbi/api build`
-- [x] API starts without errors: `pnpm --filter @rbi/api start:dev` (verify no TypeORM errors)
+- [x] TypeScript compiles: `pnpm --filter @librestock/api build`
+- [x] API starts without errors: `pnpm --filter @librestock/api start:dev` (verify no TypeORM errors)
 
 ---
 
@@ -299,7 +299,7 @@ code: string;
 ### Success Criteria
 
 #### Automated Verification:
-- [x] TypeScript compiles: `pnpm --filter @rbi/api build`
+- [x] TypeScript compiles: `pnpm --filter @librestock/api build`
 
 ---
 
@@ -312,21 +312,21 @@ Regenerate OpenAPI spec and frontend client to get clean types.
 
 ```bash
 # 1. Generate OpenAPI spec from backend
-pnpm --filter @rbi/api openapi:generate
+pnpm --filter @librestock/api openapi:generate
 
 # 2. Copy to repository root (source of truth for frontend)
 cp modules/api/openapi.yaml openapi.yaml
 
 # 3. Regenerate frontend client
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/web api:gen
 ```
 
 ### Success Criteria
 
 #### Automated Verification:
-- [x] OpenAPI generates: `pnpm --filter @rbi/api openapi:generate`
-- [x] Frontend client generates: `pnpm --filter @rbi/web api:gen`
-- [x] Frontend builds: `pnpm --filter @rbi/web build`
+- [x] OpenAPI generates: `pnpm --filter @librestock/api openapi:generate`
+- [x] Frontend client generates: `pnpm --filter @librestock/web api:gen`
+- [x] Frontend builds: `pnpm --filter @librestock/web build`
 
 #### Manual Verification:
 - [x] Check `modules/web/src/lib/data/generated.ts` contains clean types:
@@ -354,7 +354,7 @@ pnpm build
 pnpm lint
 
 # Start API and verify Swagger docs
-pnpm --filter @rbi/api start:dev
+pnpm --filter @librestock/api start:dev
 # Visit http://localhost:8080/api/docs - verify schemas show non-nullable strings
 ```
 

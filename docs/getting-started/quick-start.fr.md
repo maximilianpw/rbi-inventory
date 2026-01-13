@@ -1,6 +1,6 @@
 # Démarrage Rapide
 
-Ce guide vous accompagnera dans la création de vos premiers produits dans RBI Inventory.
+Ce guide vous accompagnera dans la création de vos premiers produits dans LibreStock Inventory.
 
 ## 1. Connexion
 

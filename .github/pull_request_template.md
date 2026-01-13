@@ -41,8 +41,8 @@ Closes #
 - [ ] New and existing unit tests pass locally with my changes
 
 ### API Changes (if applicable)
-- [ ] I have regenerated the OpenAPI spec (`pnpm --filter @rbi/api openapi:generate`)
-- [ ] I have regenerated the frontend client (`pnpm --filter @rbi/web api:gen`)
+- [ ] I have regenerated the OpenAPI spec (`pnpm --filter @librestock/api openapi:generate`)
+- [ ] I have regenerated the frontend client (`pnpm --filter @librestock/web api:gen`)
 - [ ] I have committed both `openapi.yaml` and `modules/web/src/lib/data/generated.ts`
 - [ ] API changes are backward compatible OR breaking changes are documented
 

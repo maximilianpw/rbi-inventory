@@ -1,6 +1,6 @@
 # Contribuer
 
-Merci de votre intérêt pour contribuer à RBI Inventory ! Cette section explique comment contribuer au projet.
+Merci de votre intérêt pour contribuer à LibreStock Inventory ! Cette section explique comment contribuer au projet.
 
 ## Façons de contribuer
 

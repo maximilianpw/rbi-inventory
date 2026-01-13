@@ -1,4 +1,4 @@
-# RBI API Module - Agent Context
+# LibreStock API Module - Agent Context
 
 > NestJS REST API for yacht provisioning inventory management.
 
@@ -210,9 +210,9 @@ Products use soft delete via `BaseAuditEntity`. Repositories filter `deleted_at 
 CLERK_SECRET_KEY=sk_test_xxxxx    # Required
 
 # Database (URL or individual vars)
-DATABASE_URL=postgresql://user:pass@host:5432/rbi_inventory
+DATABASE_URL=postgresql://user:pass@host:5432/librestock_inventory
 # OR
-PGHOST=localhost  PGPORT=5432  PGUSER=postgres  PGPASSWORD=pass  PGDATABASE=rbi_inventory
+PGHOST=localhost  PGPORT=5432  PGUSER=postgres  PGPASSWORD=pass  PGDATABASE=librestock_inventory
 
 PORT=8080                          # Default: 8080
 NODE_ENV=development               # development | production

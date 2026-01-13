@@ -1,4 +1,4 @@
-# RBI Web Module - Agent Context
+# LibreStock Web Module - Agent Context
 
 > TanStack Start frontend for yacht provisioning inventory management.
 

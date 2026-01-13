@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-This document outlines the guidelines for contributing to RBI Inventory.
+This document outlines the guidelines for contributing to LibreStock Inventory.
 
 ## Development Workflow
 

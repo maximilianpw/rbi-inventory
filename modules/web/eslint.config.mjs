@@ -1,4 +1,4 @@
-import baseConfig from '@rbi/eslint-config'
+import baseConfig from '@librestock/eslint-config'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'

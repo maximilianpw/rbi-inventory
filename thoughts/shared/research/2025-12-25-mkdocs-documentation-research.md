@@ -3,7 +3,7 @@ date: 2025-12-25T23:23:19+01:00
 researcher: Claude Code
 git_commit: e872f5c915c184e828fac95ba43b89df5f60d862
 branch: main
-repository: maximilianpw/rbi-inventory
+repository: maximilianpw/librestock-inventory
 topic: "MkDocs Material Documentation Planning"
 tags: [research, codebase, documentation, mkdocs, user-docs, developer-docs]
 status: complete
@@ -17,11 +17,11 @@ last_updated_by: Claude Code
 **Researcher**: Claude Code
 **Git Commit**: e872f5c915c184e828fac95ba43b89df5f60d862
 **Branch**: main
-**Repository**: maximilianpw/rbi-inventory
+**Repository**: maximilianpw/librestock-inventory
 
 ## Research Question
 
-The user wants to create documentation for the RBI Inventory project using MkDocs Material with two main audiences:
+The user wants to create documentation for the LibreStock Inventory project using MkDocs Material with two main audiences:
 1. **User Documentation** - Help for product usage
 2. **Developer Documentation** - Testing, code practices, development workflow
 
@@ -29,7 +29,7 @@ API endpoints should NOT be documented as this is already covered by OpenAPI/Swa
 
 ## Summary
 
-The RBI Inventory System is a yacht provisioning inventory management application built with NestJS (backend) and TanStack Start (frontend). The codebase has scattered documentation across CLAUDE.md files and READMEs but lacks a unified, user-facing documentation site. The project has:
+The LibreStock Inventory System is a yacht provisioning inventory management application built with NestJS (backend) and TanStack Start (frontend). The codebase has scattered documentation across CLAUDE.md files and READMEs but lacks a unified, user-facing documentation site. The project has:
 
 - Comprehensive testing infrastructure for the API module (Jest)
 - Well-defined code practices via ESLint/Prettier/TypeScript configs
@@ -223,7 +223,7 @@ devenv up   # or: pnpm dev
 
 | Service | Port | Description |
 |---------|------|-------------|
-| PostgreSQL | 5432 | Database (rbi_inventory) |
+| PostgreSQL | 5432 | Database (librestock_inventory) |
 | NestJS API | 8080 | Backend + Swagger at /api/docs |
 | TanStack Start Web | 3000 | Frontend application |
 
@@ -231,10 +231,10 @@ devenv up   # or: pnpm dev
 
 ```bash
 # 1. Generate spec from NestJS decorators
-pnpm --filter @rbi/api openapi:generate
+pnpm --filter @librestock/api openapi:generate
 
 # 2. Generate TypeScript hooks for frontend
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/web api:gen
 ```
 
 ---
@@ -291,10 +291,10 @@ docs/
 ## MkDocs Material Configuration Recommendations
 
 ```yaml
-site_name: RBI Inventory Documentation
+site_name: LibreStock Inventory Documentation
 site_description: Yacht provisioning inventory management system
-repo_url: https://github.com/maximilianpw/rbi-inventory
-repo_name: maximilianpw/rbi-inventory
+repo_url: https://github.com/maximilianpw/librestock-inventory
+repo_name: maximilianpw/librestock-inventory
 
 theme:
   name: material

@@ -1,6 +1,6 @@
 # Frontend Development
 
-This guide covers TanStack Start development patterns for the RBI Inventory frontend.
+This guide covers TanStack Start development patterns for the LibreStock Inventory frontend.
 
 ## Tech Stack
 
@@ -44,7 +44,7 @@ modules/web/src/
 Regenerate after API changes:
 
 ```bash
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/web api:gen
 ```
 
 This generates:

@@ -1,6 +1,6 @@
 # Quick Start
 
-This guide will walk you through creating your first products in RBI Inventory.
+This guide will walk you through creating your first products in LibreStock Inventory.
 
 ## 1. Sign In
 

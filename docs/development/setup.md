@@ -1,6 +1,6 @@
 # Development Setup
 
-This guide covers setting up the development environment for contributing to RBI Inventory.
+This guide covers setting up the development environment for contributing to LibreStock Inventory.
 
 ## Prerequisites
 
@@ -16,8 +16,8 @@ The project uses [devenv.sh](https://devenv.sh) for reproducible development env
 ### Enter Development Shell
 
 ```bash
-git clone https://github.com/maximilianpw/rbi-inventory.git
-cd rbi-inventory
+git clone https://github.com/maximilianpw/librestock-inventory.git
+cd librestock-inventory
 devenv shell
 ```
 
@@ -65,20 +65,20 @@ pnpm docs:build       # Build documentation
 ### API Module
 
 ```bash
-pnpm --filter @rbi/api start:dev      # Development server
-pnpm --filter @rbi/api build          # Build
-pnpm --filter @rbi/api test           # Run tests
-pnpm --filter @rbi/api test:e2e       # E2E tests
-pnpm --filter @rbi/api openapi:generate  # Generate OpenAPI spec
+pnpm --filter @librestock/api start:dev      # Development server
+pnpm --filter @librestock/api build          # Build
+pnpm --filter @librestock/api test           # Run tests
+pnpm --filter @librestock/api test:e2e       # E2E tests
+pnpm --filter @librestock/api openapi:generate  # Generate OpenAPI spec
 ```
 
 ### Web Module
 
 ```bash
-pnpm --filter @rbi/web dev           # Development server
-pnpm --filter @rbi/web build         # Production build
-pnpm --filter @rbi/web api:gen       # Generate API client
-pnpm --filter @rbi/web lint          # Lint
+pnpm --filter @librestock/web dev           # Development server
+pnpm --filter @librestock/web build         # Production build
+pnpm --filter @librestock/web api:gen       # Generate API client
+pnpm --filter @librestock/web lint          # Lint
 ```
 
 ## Database Setup
@@ -90,7 +90,7 @@ The database is automatically created and configured.
 ### Manual Setup
 
 ```bash
-createdb rbi_inventory
+createdb librestock_inventory
 ```
 
 ### Seed Data
@@ -107,7 +107,7 @@ pnpm seed
 ### API (.env)
 
 ```bash
-DATABASE_URL=postgresql://user@localhost:5432/rbi_inventory
+DATABASE_URL=postgresql://user@localhost:5432/librestock_inventory
 CLERK_SECRET_KEY=sk_test_...
 PORT=8080
 NODE_ENV=development

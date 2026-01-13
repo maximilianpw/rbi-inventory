@@ -1,6 +1,6 @@
 # GitHub Actions CI/CD
 
-This directory contains GitHub Actions workflows for the RBI Inventory monorepo.
+This directory contains GitHub Actions workflows for the LibreStock Inventory monorepo.
 
 ## Workflows
 
@@ -39,8 +39,8 @@ This directory contains GitHub Actions workflows for the RBI Inventory monorepo.
 
 **How to Fix Issues:**
 ```bash
-pnpm --filter @rbi/api openapi:generate
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/api openapi:generate
+pnpm --filter @librestock/web api:gen
 git add openapi.yaml modules/web/src/lib/data/generated.ts
 git commit -m "chore: regenerate OpenAPI spec and client"
 ```
@@ -127,8 +127,8 @@ Configure these in repository settings (Settings → Secrets and variables → A
 Add these to your main README.md:
 
 ```markdown
-![CI Status](https://github.com/maximilianpw/rbi-inventory/workflows/CI/badge.svg)
-![CodeQL](https://github.com/maximilianpw/rbi-inventory/workflows/CodeQL%20Security%20Scan/badge.svg)
+![CI Status](https://github.com/maximilianpw/librestock-inventory/workflows/CI/badge.svg)
+![CodeQL](https://github.com/maximilianpw/librestock-inventory/workflows/CodeQL%20Security%20Scan/badge.svg)
 ```
 
 ---
@@ -144,12 +144,12 @@ pnpm test          # Run all tests
 pnpm build         # Build all packages
 
 # Module-specific
-pnpm --filter @rbi/api test
-pnpm --filter @rbi/web type-check
+pnpm --filter @librestock/api test
+pnpm --filter @librestock/web type-check
 
 # OpenAPI workflow
-pnpm --filter @rbi/api openapi:generate
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/api openapi:generate
+pnpm --filter @librestock/web api:gen
 ```
 
 ---
@@ -175,8 +175,8 @@ devenv up  # Starts all services
 
 ### OpenAPI Out of Sync
 ```bash
-pnpm --filter @rbi/api openapi:generate
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/api openapi:generate
+pnpm --filter @librestock/web api:gen
 ```
 
 ---

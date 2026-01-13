@@ -1,5 +1,5 @@
 {
-  "name": "@rbi/web",
+  "name": "@librestock/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -58,7 +58,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
-    "@rbi/eslint-config": "workspace:*",
+    "@librestock/eslint-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/vite": "^4.1.18",
     "@types/negotiator": "^0.6.4",

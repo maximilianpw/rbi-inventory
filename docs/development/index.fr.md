@@ -1,13 +1,13 @@
 # Développement
 
-Cette section couvre tout ce dont vous avez besoin pour contribuer à la base de code RBI Inventory.
+Cette section couvre tout ce dont vous avez besoin pour contribuer à la base de code LibreStock Inventory.
 
 ## Aperçu
 
-RBI Inventory est un monorepo pnpm contenant :
+LibreStock Inventory est un monorepo pnpm contenant :
 
-- **@rbi/api** - Backend NestJS
-- **@rbi/web** - Frontend TanStack Start
+- **@librestock/api** - Backend NestJS
+- **@librestock/web** - Frontend TanStack Start
 
 ## Liens Rapides
 
@@ -32,8 +32,8 @@ RBI Inventory est un monorepo pnpm contenant :
 3. **Régénérer le client API** (si l'API a changé)
 
     ```bash
-    pnpm --filter @rbi/api openapi:generate
-    pnpm --filter @rbi/web api:gen
+    pnpm --filter @librestock/api openapi:generate
+    pnpm --filter @librestock/web api:gen
     ```
 
 4. **Exécuter les tests et le lint**

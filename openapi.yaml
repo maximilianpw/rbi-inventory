@@ -1930,8 +1930,8 @@ paths:
       tags:
         - Audit Logs
 info:
-  title: RBI Inventory API
-  description: REST API for RBI Inventory Management System
+  title: LibreStock Inventory API
+  description: REST API for LibreStock Inventory Management System
   version: 1.0.0
   contact:
     name: API Support
@@ -1960,7 +1960,7 @@ tags:
 servers:
   - url: http://localhost:8080
     description: Development Server
-  - url: https://api.rbi-inventory.com
+  - url: https://api.librestock-inventory.com
     description: Production Server
 components:
   securitySchemes:

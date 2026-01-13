@@ -1,6 +1,6 @@
 # Tests
 
-Le système RBI Inventory utilise Jest pour les tests backend. Ce guide couvre les patterns de test et les bonnes pratiques.
+Le système LibreStock Inventory utilise Jest pour les tests backend. Ce guide couvre les patterns de test et les bonnes pratiques.
 
 ## Vue d'ensemble
 
@@ -15,16 +15,16 @@ Le système RBI Inventory utilise Jest pour les tests backend. Ce guide couvre l
 
 ```bash
 # Exécuter tous les tests unitaires
-pnpm --filter @rbi/api test
+pnpm --filter @librestock/api test
 
 # Exécuter les tests en mode watch
-pnpm --filter @rbi/api test:watch
+pnpm --filter @librestock/api test:watch
 
 # Exécuter les tests avec couverture
-pnpm --filter @rbi/api test:cov
+pnpm --filter @librestock/api test:cov
 
 # Exécuter les tests end-to-end
-pnpm --filter @rbi/api test:e2e
+pnpm --filter @librestock/api test:e2e
 ```
 
 ## Structure des tests
@@ -124,7 +124,7 @@ describe('ProductsService', () => {
 Générer le rapport de couverture :
 
 ```bash
-pnpm --filter @rbi/api test:cov
+pnpm --filter @librestock/api test:cov
 ```
 
 Les rapports sont générés dans `modules/api/coverage/`.

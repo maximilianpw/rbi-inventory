@@ -1,6 +1,6 @@
 # Référence
 
-Documentation de référence technique pour RBI Inventory.
+Documentation de référence technique pour LibreStock Inventory.
 
 ## Contenu
 
@@ -22,7 +22,7 @@ L'API est documentée via OpenAPI/Swagger :
 Les types TypeScript du frontend sont générés depuis la spec OpenAPI :
 
 ```bash
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/web api:gen
 ```
 
 Les fichiers générés sont dans `modules/web/src/lib/data/generated.ts`.

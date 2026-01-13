@@ -1,6 +1,6 @@
-# RBI Inventory Web
+# LibreStock Inventory Web
 
-This is the TanStack Start frontend for RBI Inventory, built with Vite, TanStack Router, and React.
+This is the TanStack Start frontend for LibreStock Inventory, built with Vite, TanStack Router, and React.
 
 ## Getting Started
 

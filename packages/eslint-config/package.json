@@ -1,8 +1,8 @@
 {
-  "name": "@rbi/eslint-config",
+  "name": "@librestock/eslint-config",
   "version": "0.0.1",
   "private": true,
-  "description": "Shared ESLint configurations for RBI Inventory monorepo",
+  "description": "Shared ESLint configurations for LibreStock Inventory monorepo",
   "type": "module",
   "main": "./index.js",
   "exports": {

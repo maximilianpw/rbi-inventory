@@ -1,6 +1,6 @@
-# RBI Inventory System
+# LibreStock Inventory System
 
-Welcome to the RBI Inventory documentation. This system helps manage yacht provisioning inventory with features for product management, order tracking, and audit logging.
+Welcome to the LibreStock Inventory documentation. This system helps manage yacht provisioning inventory with features for product management, order tracking, and audit logging.
 
 ## Quick Links
 
@@ -8,7 +8,7 @@ Welcome to the RBI Inventory documentation. This system helps manage yacht provi
 
 - :material-rocket-launch: **Getting Started**
 
-    Get up and running with RBI Inventory in minutes.
+    Get up and running with LibreStock Inventory in minutes.
 
     [:octicons-arrow-right-24: Installation](getting-started/installation.md)
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Implement a comprehensive documentation site for the RBI Inventory System using MkDocs Material with:
+Implement a comprehensive documentation site for the LibreStock Inventory System using MkDocs Material with:
 - Multi-language support (English and French)
 - UI screenshots for user documentation
 - AWS S3 + CloudFront hosting (initially), with future bare metal migration
@@ -83,12 +83,12 @@ mkdocs-git-revision-date-localized-plugin>=1.2.0
 **File**: `mkdocs.yml` (new file at repo root)
 
 ```yaml
-site_name: RBI Inventory Documentation
+site_name: LibreStock Inventory Documentation
 site_description: Yacht provisioning inventory management system
-site_url: https://docs.rbi-inventory.com
-repo_url: https://github.com/maximilianpw/rbi-inventory
-repo_name: maximilianpw/rbi-inventory
-copyright: Copyright &copy; 2025 RBI Inventory
+site_url: https://docs.librestock-inventory.com
+repo_url: https://github.com/maximilianpw/librestock-inventory
+repo_name: maximilianpw/librestock-inventory
+copyright: Copyright &copy; 2025 LibreStock Inventory
 
 theme:
   name: material
@@ -133,12 +133,12 @@ plugins:
           default: true
           name: English
           build: true
-          site_name: "RBI Inventory Documentation"
+          site_name: "LibreStock Inventory Documentation"
           site_description: "Yacht provisioning inventory management system"
         - locale: fr
           name: Français
           build: true
-          site_name: "Documentation RBI Inventory"
+          site_name: "Documentation LibreStock Inventory"
           site_description: "Système de gestion d'inventaire pour yachts"
           nav_translations:
             Home: Accueil
@@ -208,7 +208,7 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/maximilianpw/rbi-inventory
+      link: https://github.com/maximilianpw/librestock-inventory
 
 nav:
   - Home: index.md
@@ -311,9 +311,9 @@ Create the markdown file structure with English content and French placeholders.
 **File**: `docs/index.md`
 
 ```markdown
-# RBI Inventory System
+# LibreStock Inventory System
 
-Welcome to the RBI Inventory documentation. This system helps manage yacht provisioning inventory with features for product management, order tracking, and audit logging.
+Welcome to the LibreStock Inventory documentation. This system helps manage yacht provisioning inventory with features for product management, order tracking, and audit logging.
 
 ## Quick Links
 
@@ -321,7 +321,7 @@ Welcome to the RBI Inventory documentation. This system helps manage yacht provi
 
 - :material-rocket-launch: **Getting Started**
 
-    Get up and running with RBI Inventory in minutes.
+    Get up and running with LibreStock Inventory in minutes.
 
     [:octicons-arrow-right-24: Installation](getting-started/installation.md)
 
@@ -358,9 +358,9 @@ Welcome to the RBI Inventory documentation. This system helps manage yacht provi
 **File**: `docs/index.fr.md`
 
 ```markdown
-# Système d'Inventaire RBI
+# Système d'Inventaire LibreStock
 
-Bienvenue dans la documentation RBI Inventory. Ce système aide à gérer l'inventaire d'approvisionnement des yachts avec des fonctionnalités de gestion des produits, de suivi des commandes et de journalisation des audits.
+Bienvenue dans la documentation LibreStock Inventory. Ce système aide à gérer l'inventaire d'approvisionnement des yachts avec des fonctionnalités de gestion des produits, de suivi des commandes et de journalisation des audits.
 
 ## Liens Rapides
 
@@ -368,7 +368,7 @@ Bienvenue dans la documentation RBI Inventory. Ce système aide à gérer l'inve
 
 - :material-rocket-launch: **Démarrage**
 
-    Commencez avec RBI Inventory en quelques minutes.
+    Commencez avec LibreStock Inventory en quelques minutes.
 
     [:octicons-arrow-right-24: Installation](getting-started/installation.md)
 
@@ -410,7 +410,7 @@ Create index files for each section. Example for Getting Started:
 ```markdown
 # Getting Started
 
-This section will help you get RBI Inventory up and running.
+This section will help you get LibreStock Inventory up and running.
 
 ## Prerequisites
 
@@ -498,7 +498,7 @@ docs/assets/screenshots/
 ```markdown
 # Managing Products
 
-Products are the core of the RBI Inventory system. Each product represents an item in your yacht provisioning inventory.
+Products are the core of the LibreStock Inventory system. Each product represents an item in your yacht provisioning inventory.
 
 ## Viewing Products
 
@@ -561,7 +561,7 @@ Select multiple products using the checkboxes to perform bulk actions:
 ```markdown
 # Gestion des Produits
 
-Les produits sont au cœur du système RBI Inventory. Chaque produit représente un article dans votre inventaire d'approvisionnement de yacht.
+Les produits sont au cœur du système LibreStock Inventory. Chaque produit représente un article dans votre inventaire d'approvisionnement de yacht.
 
 ## Affichage des Produits
 
@@ -695,7 +695,7 @@ Consolidate testing information from research:
 
 ## Overview
 
-The RBI Inventory system uses Jest for backend testing. Frontend testing is planned but not yet implemented.
+The LibreStock Inventory system uses Jest for backend testing. Frontend testing is planned but not yet implemented.
 
 ## Backend Testing
 
@@ -703,16 +703,16 @@ The RBI Inventory system uses Jest for backend testing. Frontend testing is plan
 
 ```bash
 # Run all unit tests
-pnpm --filter @rbi/api test
+pnpm --filter @librestock/api test
 
 # Run tests in watch mode
-pnpm --filter @rbi/api test:watch
+pnpm --filter @librestock/api test:watch
 
 # Run tests with coverage
-pnpm --filter @rbi/api test:cov
+pnpm --filter @librestock/api test:cov
 
 # Run end-to-end tests
-pnpm --filter @rbi/api test:e2e
+pnpm --filter @librestock/api test:e2e
 ```
 
 ### Test Structure
@@ -794,16 +794,16 @@ Create a roadmap page organized by GitHub issues.
 ```markdown
 # Roadmap
 
-This roadmap outlines planned features and improvements for RBI Inventory. Items are tracked as [GitHub Issues](https://github.com/maximilianpw/rbi-inventory/issues).
+This roadmap outlines planned features and improvements for LibreStock Inventory. Items are tracked as [GitHub Issues](https://github.com/maximilianpw/librestock-inventory/issues).
 
 ## Completed
 
-- [x] Categories management API ([#40](https://github.com/maximilianpw/rbi-inventory/issues/40))
-- [x] User authentication UI with Clerk ([#45](https://github.com/maximilianpw/rbi-inventory/issues/45))
-- [x] Categories and Locations management UI ([#46](https://github.com/maximilianpw/rbi-inventory/issues/46))
-- [x] Code quality tools and linting ([#57](https://github.com/maximilianpw/rbi-inventory/issues/57))
-- [x] CI/CD pipeline with GitHub Actions ([#58](https://github.com/maximilianpw/rbi-inventory/issues/58))
-- [x] Mobile-responsive PWA features ([#63](https://github.com/maximilianpw/rbi-inventory/issues/63))
+- [x] Categories management API ([#40](https://github.com/maximilianpw/librestock-inventory/issues/40))
+- [x] User authentication UI with Clerk ([#45](https://github.com/maximilianpw/librestock-inventory/issues/45))
+- [x] Categories and Locations management UI ([#46](https://github.com/maximilianpw/librestock-inventory/issues/46))
+- [x] Code quality tools and linting ([#57](https://github.com/maximilianpw/librestock-inventory/issues/57))
+- [x] CI/CD pipeline with GitHub Actions ([#58](https://github.com/maximilianpw/librestock-inventory/issues/58))
+- [x] Mobile-responsive PWA features ([#63](https://github.com/maximilianpw/librestock-inventory/issues/63))
 
 ## In Progress
 
@@ -811,48 +811,48 @@ This roadmap outlines planned features and improvements for RBI Inventory. Items
 
 | Feature | Issue | Description |
 |---------|-------|-------------|
-| Inventory Items CRUD | [#39](https://github.com/maximilianpw/rbi-inventory/issues/39) | Full CRUD operations for inventory items |
-| Locations API | [#41](https://github.com/maximilianpw/rbi-inventory/issues/41) | Location/storage area management |
-| Suppliers API | [#42](https://github.com/maximilianpw/rbi-inventory/issues/42) | Supplier/vendor management |
-| Inventory Items UI | [#43](https://github.com/maximilianpw/rbi-inventory/issues/43) | Frontend interface for inventory |
-| RBAC | [#44](https://github.com/maximilianpw/rbi-inventory/issues/44) | Role-based access control |
+| Inventory Items CRUD | [#39](https://github.com/maximilianpw/librestock-inventory/issues/39) | Full CRUD operations for inventory items |
+| Locations API | [#41](https://github.com/maximilianpw/librestock-inventory/issues/41) | Location/storage area management |
+| Suppliers API | [#42](https://github.com/maximilianpw/librestock-inventory/issues/42) | Supplier/vendor management |
+| Inventory Items UI | [#43](https://github.com/maximilianpw/librestock-inventory/issues/43) | Frontend interface for inventory |
+| RBAC | [#44](https://github.com/maximilianpw/librestock-inventory/issues/44) | Role-based access control |
 
 ### Inventory Management
 
 | Feature | Issue | Description |
 |---------|-------|-------------|
-| Transaction History | [#47](https://github.com/maximilianpw/rbi-inventory/issues/47) | Track all inventory changes |
-| Low Stock Alerts | [#48](https://github.com/maximilianpw/rbi-inventory/issues/48) | Notifications for low stock |
-| Advanced Search API | [#49](https://github.com/maximilianpw/rbi-inventory/issues/49) | Full-text search and filtering |
-| Advanced Search UI | [#50](https://github.com/maximilianpw/rbi-inventory/issues/50) | Search interface with filters |
-| QR/Barcode Scanning | [#51](https://github.com/maximilianpw/rbi-inventory/issues/51) | Barcode scanning support |
-| Dashboard Analytics | [#52](https://github.com/maximilianpw/rbi-inventory/issues/52) | Inventory metrics and charts |
-| Reporting & Export | [#53](https://github.com/maximilianpw/rbi-inventory/issues/53) | CSV, PDF, Excel export |
-| Bulk Operations | [#54](https://github.com/maximilianpw/rbi-inventory/issues/54) | Bulk update/delete/import |
-| Expiration Tracking | [#65](https://github.com/maximilianpw/rbi-inventory/issues/65) | Track perishable expiration dates |
+| Transaction History | [#47](https://github.com/maximilianpw/librestock-inventory/issues/47) | Track all inventory changes |
+| Low Stock Alerts | [#48](https://github.com/maximilianpw/librestock-inventory/issues/48) | Notifications for low stock |
+| Advanced Search API | [#49](https://github.com/maximilianpw/librestock-inventory/issues/49) | Full-text search and filtering |
+| Advanced Search UI | [#50](https://github.com/maximilianpw/librestock-inventory/issues/50) | Search interface with filters |
+| QR/Barcode Scanning | [#51](https://github.com/maximilianpw/librestock-inventory/issues/51) | Barcode scanning support |
+| Dashboard Analytics | [#52](https://github.com/maximilianpw/librestock-inventory/issues/52) | Inventory metrics and charts |
+| Reporting & Export | [#53](https://github.com/maximilianpw/librestock-inventory/issues/53) | CSV, PDF, Excel export |
+| Bulk Operations | [#54](https://github.com/maximilianpw/librestock-inventory/issues/54) | Bulk update/delete/import |
+| Expiration Tracking | [#65](https://github.com/maximilianpw/librestock-inventory/issues/65) | Track perishable expiration dates |
 
 ### Orders & Procurement
 
 | Feature | Issue | Description |
 |---------|-------|-------------|
-| Ordering System | [#64](https://github.com/maximilianpw/rbi-inventory/issues/64) | Purchase orders and requisitions |
+| Ordering System | [#64](https://github.com/maximilianpw/librestock-inventory/issues/64) | Purchase orders and requisitions |
 
 ### Testing & Quality
 
 | Feature | Issue | Description |
 |---------|-------|-------------|
-| API Unit/Integration Tests | [#55](https://github.com/maximilianpw/rbi-inventory/issues/55) | Backend test suite |
-| E2E Tests (Playwright) | [#56](https://github.com/maximilianpw/rbi-inventory/issues/56) | Frontend E2E testing |
+| API Unit/Integration Tests | [#55](https://github.com/maximilianpw/librestock-inventory/issues/55) | Backend test suite |
+| E2E Tests (Playwright) | [#56](https://github.com/maximilianpw/librestock-inventory/issues/56) | Frontend E2E testing |
 
 ### Infrastructure
 
 | Feature | Issue | Description |
 |---------|-------|-------------|
-| Production Deployment | [#59](https://github.com/maximilianpw/rbi-inventory/issues/59) | Docker + hosting setup |
-| Logging & Monitoring | [#60](https://github.com/maximilianpw/rbi-inventory/issues/60) | Production observability |
-| Database Backup | [#61](https://github.com/maximilianpw/rbi-inventory/issues/61) | Backup and recovery |
-| Documentation | [#62](https://github.com/maximilianpw/rbi-inventory/issues/62) | Comprehensive docs (this!) |
-| Getting Started Guide | [#66](https://github.com/maximilianpw/rbi-inventory/issues/66) | Sample data and onboarding |
+| Production Deployment | [#59](https://github.com/maximilianpw/librestock-inventory/issues/59) | Docker + hosting setup |
+| Logging & Monitoring | [#60](https://github.com/maximilianpw/librestock-inventory/issues/60) | Production observability |
+| Database Backup | [#61](https://github.com/maximilianpw/librestock-inventory/issues/61) | Backup and recovery |
+| Documentation | [#62](https://github.com/maximilianpw/librestock-inventory/issues/62) | Comprehensive docs (this!) |
+| Getting Started Guide | [#66](https://github.com/maximilianpw/librestock-inventory/issues/66) | Sample data and onboarding |
 
 ## Contributing
 
@@ -864,16 +864,16 @@ Want to help? Check the [Contributing Guide](contributing/guidelines.md) and pic
 ```markdown
 # Feuille de Route
 
-Cette feuille de route présente les fonctionnalités et améliorations prévues pour RBI Inventory. Les éléments sont suivis comme [Issues GitHub](https://github.com/maximilianpw/rbi-inventory/issues).
+Cette feuille de route présente les fonctionnalités et améliorations prévues pour LibreStock Inventory. Les éléments sont suivis comme [Issues GitHub](https://github.com/maximilianpw/librestock-inventory/issues).
 
 ## Terminé
 
-- [x] API de gestion des catégories ([#40](https://github.com/maximilianpw/rbi-inventory/issues/40))
-- [x] Interface d'authentification avec Clerk ([#45](https://github.com/maximilianpw/rbi-inventory/issues/45))
-- [x] Interface de gestion des catégories et emplacements ([#46](https://github.com/maximilianpw/rbi-inventory/issues/46))
-- [x] Outils de qualité de code et linting ([#57](https://github.com/maximilianpw/rbi-inventory/issues/57))
-- [x] Pipeline CI/CD avec GitHub Actions ([#58](https://github.com/maximilianpw/rbi-inventory/issues/58))
-- [x] Fonctionnalités PWA responsive mobile ([#63](https://github.com/maximilianpw/rbi-inventory/issues/63))
+- [x] API de gestion des catégories ([#40](https://github.com/maximilianpw/librestock-inventory/issues/40))
+- [x] Interface d'authentification avec Clerk ([#45](https://github.com/maximilianpw/librestock-inventory/issues/45))
+- [x] Interface de gestion des catégories et emplacements ([#46](https://github.com/maximilianpw/librestock-inventory/issues/46))
+- [x] Outils de qualité de code et linting ([#57](https://github.com/maximilianpw/librestock-inventory/issues/57))
+- [x] Pipeline CI/CD avec GitHub Actions ([#58](https://github.com/maximilianpw/librestock-inventory/issues/58))
+- [x] Fonctionnalités PWA responsive mobile ([#63](https://github.com/maximilianpw/librestock-inventory/issues/63))
 
 ## En Cours
 
@@ -881,11 +881,11 @@ Cette feuille de route présente les fonctionnalités et améliorations prévues
 
 | Fonctionnalité | Issue | Description |
 |----------------|-------|-------------|
-| CRUD Articles d'Inventaire | [#39](https://github.com/maximilianpw/rbi-inventory/issues/39) | Opérations CRUD complètes |
-| API Emplacements | [#41](https://github.com/maximilianpw/rbi-inventory/issues/41) | Gestion des zones de stockage |
-| API Fournisseurs | [#42](https://github.com/maximilianpw/rbi-inventory/issues/42) | Gestion des fournisseurs |
-| Interface Inventaire | [#43](https://github.com/maximilianpw/rbi-inventory/issues/43) | Interface frontend |
-| Contrôle d'Accès | [#44](https://github.com/maximilianpw/rbi-inventory/issues/44) | Contrôle d'accès basé sur les rôles |
+| CRUD Articles d'Inventaire | [#39](https://github.com/maximilianpw/librestock-inventory/issues/39) | Opérations CRUD complètes |
+| API Emplacements | [#41](https://github.com/maximilianpw/librestock-inventory/issues/41) | Gestion des zones de stockage |
+| API Fournisseurs | [#42](https://github.com/maximilianpw/librestock-inventory/issues/42) | Gestion des fournisseurs |
+| Interface Inventaire | [#43](https://github.com/maximilianpw/librestock-inventory/issues/43) | Interface frontend |
+| Contrôle d'Accès | [#44](https://github.com/maximilianpw/librestock-inventory/issues/44) | Contrôle d'accès basé sur les rôles |
 
 ...
 
@@ -980,7 +980,7 @@ jobs:
 #### 2. AWS Infrastructure Setup (Manual or IaC)
 
 **S3 Bucket Configuration**:
-- Bucket name: `rbi-inventory-docs`
+- Bucket name: `librestock-inventory-docs`
 - Block all public access: Yes
 - Versioning: Optional
 - Object ownership: Bucket owner enforced
@@ -990,7 +990,7 @@ jobs:
 - Origin Access Control: Create new OAC
 - Viewer protocol policy: Redirect HTTP to HTTPS
 - Default root object: `index.html`
-- Custom domain: `docs.rbi-inventory.com` (optional)
+- Custom domain: `docs.librestock-inventory.com` (optional)
 - SSL certificate: ACM certificate in us-east-1
 
 **CloudFront Function for index.html routing**:
@@ -1031,7 +1031,7 @@ function handler(event) {
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
         },
         "StringLike": {
-          "token.actions.githubusercontent.com:sub": "repo:maximilianpw/rbi-inventory:*"
+          "token.actions.githubusercontent.com:sub": "repo:maximilianpw/librestock-inventory:*"
         }
       }
     }
@@ -1048,8 +1048,8 @@ function handler(event) {
       "Effect": "Allow",
       "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:ListBucket"],
       "Resource": [
-        "arn:aws:s3:::rbi-inventory-docs",
-        "arn:aws:s3:::rbi-inventory-docs/*"
+        "arn:aws:s3:::librestock-inventory-docs",
+        "arn:aws:s3:::librestock-inventory-docs/*"
       ]
     },
     {
@@ -1066,7 +1066,7 @@ function handler(event) {
 | Secret | Value |
 |--------|-------|
 | `AWS_DOCS_ROLE_ARN` | `arn:aws:iam::ACCOUNT_ID:role/GitHubActionsDocsRole` |
-| `DOCS_S3_BUCKET` | `rbi-inventory-docs` |
+| `DOCS_S3_BUCKET` | `librestock-inventory-docs` |
 | `DOCS_CLOUDFRONT_DISTRIBUTION_ID` | `E1234567890ABC` |
 
 ### Success Criteria
@@ -1138,4 +1138,4 @@ Content from these files will be incorporated into developer documentation:
 - Research document: `thoughts/shared/research/2025-12-25-mkdocs-documentation-research.md`
 - MkDocs Material: https://squidfunk.github.io/mkdocs-material/
 - mkdocs-static-i18n: https://ultrabug.github.io/mkdocs-static-i18n/
-- GitHub Issues: https://github.com/maximilianpw/rbi-inventory/issues
+- GitHub Issues: https://github.com/maximilianpw/librestock-inventory/issues

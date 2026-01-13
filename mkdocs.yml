@@ -1,9 +1,9 @@
-site_name: RBI Inventory Documentation
+site_name: LibreStock Inventory Documentation
 site_description: Yacht provisioning inventory management system
-site_url: https://maximilianpw.github.io/rbi-inventory/
-repo_url: https://github.com/maximilianpw/rbi-inventory
-repo_name: maximilianpw/rbi-inventory
-copyright: Copyright &copy; 2025 RBI Inventory
+site_url: https://maximilianpw.github.io/librestock-inventory/
+repo_url: https://github.com/maximilianpw/librestock-inventory
+repo_name: maximilianpw/librestock-inventory
+copyright: Copyright &copy; 2025 LibreStock Inventory
 
 theme:
   name: material
@@ -48,12 +48,12 @@ plugins:
           default: true
           name: English
           build: true
-          site_name: "RBI Inventory Documentation"
+          site_name: "LibreStock Inventory Documentation"
           site_description: "Yacht provisioning inventory management system"
         - locale: fr
           name: Français
           build: true
-          site_name: "Documentation RBI Inventory"
+          site_name: "Documentation LibreStock Inventory"
           site_description: "Système de gestion d'inventaire pour yachts"
           nav_translations:
             Home: Accueil
@@ -127,7 +127,7 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/maximilianpw/rbi-inventory
+      link: https://github.com/maximilianpw/librestock-inventory
 
 nav:
   - Home: index.md

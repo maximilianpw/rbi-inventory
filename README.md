@@ -111,8 +111,8 @@ pnpm install
 devenv up
 
 # Or manually:
-pnpm --filter @rbi/api start:dev    # API on :8080
-pnpm --filter @rbi/web dev          # Web on :3000
+pnpm --filter @librestock/api start:dev    # API on :8080
+pnpm --filter @librestock/web dev          # Web on :3000
 ```
 
 ### API Documentation

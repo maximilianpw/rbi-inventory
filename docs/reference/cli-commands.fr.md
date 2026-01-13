@@ -1,6 +1,6 @@
 # Commandes CLI
 
-Référence de toutes les commandes disponibles en ligne de commande pour RBI Inventory.
+Référence de toutes les commandes disponibles en ligne de commande pour LibreStock Inventory.
 
 ## Gestionnaire de paquets
 
@@ -46,86 +46,86 @@ pnpm docs:build
 
 ## Commandes du module API
 
-Utilisez `pnpm --filter @rbi/api <commande>` ou exécutez depuis `modules/api/`.
+Utilisez `pnpm --filter @librestock/api <commande>` ou exécutez depuis `modules/api/`.
 
 ### Développement
 
 ```bash
 # Démarrer le serveur de développement avec hot reload
-pnpm --filter @rbi/api start:dev
+pnpm --filter @librestock/api start:dev
 
 # Démarrer le serveur de production
-pnpm --filter @rbi/api start:prod
+pnpm --filter @librestock/api start:prod
 
 # Build l'application
-pnpm --filter @rbi/api build
+pnpm --filter @librestock/api build
 ```
 
 ### Tests
 
 ```bash
 # Exécuter les tests unitaires
-pnpm --filter @rbi/api test
+pnpm --filter @librestock/api test
 
 # Exécuter les tests en mode watch
-pnpm --filter @rbi/api test:watch
+pnpm --filter @librestock/api test:watch
 
 # Exécuter les tests avec couverture
-pnpm --filter @rbi/api test:cov
+pnpm --filter @librestock/api test:cov
 
 # Exécuter les tests end-to-end
-pnpm --filter @rbi/api test:e2e
+pnpm --filter @librestock/api test:e2e
 ```
 
 ### Qualité du code
 
 ```bash
 # Lint le code
-pnpm --filter @rbi/api lint
+pnpm --filter @librestock/api lint
 
 # Lint et corriger
-pnpm --filter @rbi/api lint --fix
+pnpm --filter @librestock/api lint --fix
 ```
 
 ### OpenAPI
 
 ```bash
 # Générer la spec OpenAPI
-pnpm --filter @rbi/api openapi:generate
+pnpm --filter @librestock/api openapi:generate
 ```
 
 ## Commandes du module Web
 
-Utilisez `pnpm --filter @rbi/web <commande>` ou exécutez depuis `modules/web/`.
+Utilisez `pnpm --filter @librestock/web <commande>` ou exécutez depuis `modules/web/`.
 
 ### Développement
 
 ```bash
 # Démarrer le serveur de développement
-pnpm --filter @rbi/web dev
+pnpm --filter @librestock/web dev
 
 # Build pour la production
-pnpm --filter @rbi/web build
+pnpm --filter @librestock/web build
 
 # Démarrer le serveur de production
-pnpm --filter @rbi/web start
+pnpm --filter @librestock/web start
 ```
 
 ### Qualité du code
 
 ```bash
 # Lint le code
-pnpm --filter @rbi/web lint
+pnpm --filter @librestock/web lint
 
 # Lint et corriger
-pnpm --filter @rbi/web lint:fix
+pnpm --filter @librestock/web lint:fix
 ```
 
 ### Client API
 
 ```bash
 # Générer le client API depuis la spec OpenAPI
-pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/web api:gen
 ```
 
 ## Commandes Devenv
@@ -151,7 +151,7 @@ Avec PostgreSQL en cours d'exécution :
 
 ```bash
 # Se connecter à la base de données
-psql -h localhost -p 5432 -U postgres -d rbi_inventory
+psql -h localhost -p 5432 -U postgres -d librestock_inventory
 
 # Vérifier le statut de la base
 pg_isready -h localhost -p 5432
@@ -167,5 +167,5 @@ pnpm install && pnpm build
 pnpm lint && pnpm test && pnpm build
 
 # Régénérer les types API après des changements backend
-pnpm --filter @rbi/api openapi:generate && pnpm --filter @rbi/web api:gen
+pnpm --filter @librestock/api openapi:generate && pnpm --filter @librestock/web api:gen
 ```

@@ -143,8 +143,8 @@ Page showing:
 ### Success Criteria:
 
 #### Automated Verification:
-- [x] TypeScript compiles without errors: `pnpm --filter @rbi/web build`
-- [x] Linting passes: `pnpm --filter @rbi/web lint` (warnings acceptable)
+- [x] TypeScript compiles without errors: `pnpm --filter @librestock/web build`
+- [x] Linting passes: `pnpm --filter @librestock/web lint` (warnings acceptable)
 
 #### Manual Verification:
 - [ ] Navigate to /locations and click a location → location detail page loads
@@ -239,8 +239,8 @@ Page with:
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] TypeScript compiles without errors: `pnpm --filter @rbi/web build`
-- [ ] Linting passes: `pnpm --filter @rbi/web lint`
+- [ ] TypeScript compiles without errors: `pnpm --filter @librestock/web build`
+- [ ] Linting passes: `pnpm --filter @librestock/web lint`
 
 #### Manual Verification:
 - [ ] Navigate to /inventory → inventory list loads
@@ -366,4 +366,4 @@ Consider linking to inventory or showing inventory summary on stock page.
 - Backend Inventory: `modules/api/src/routes/inventory/`
 - Generated hooks: `modules/web/src/lib/data/generated.ts`
 - Existing patterns: `modules/web/src/components/category/`
-- GitHub Issue: https://github.com/maximilianpw/rbi-inventory/issues/72
+- GitHub Issue: https://github.com/maximilianpw/librestock-inventory/issues/72

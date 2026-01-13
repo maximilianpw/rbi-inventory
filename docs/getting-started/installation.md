@@ -1,6 +1,6 @@
 # Installation
 
-This guide covers setting up the RBI Inventory development environment.
+This guide covers setting up the LibreStock Inventory development environment.
 
 ## Using devenv (Recommended)
 
@@ -21,8 +21,8 @@ nix profile install nixpkgs#devenv
 ### 3. Clone and Enter Environment
 
 ```bash
-git clone https://github.com/maximilianpw/rbi-inventory.git
-cd rbi-inventory
+git clone https://github.com/maximilianpw/librestock-inventory.git
+cd librestock-inventory
 devenv shell
 ```
 
@@ -68,7 +68,7 @@ If you prefer not to use devenv:
 ### Database Setup
 
 ```bash
-createdb rbi_inventory
+createdb librestock_inventory
 ```
 
 ### Environment Variables
@@ -82,7 +82,7 @@ cp modules/api/.env.template modules/api/.env
 Edit `.env` with your configuration:
 
 ```bash
-DATABASE_URL=postgresql://user@localhost:5432/rbi_inventory
+DATABASE_URL=postgresql://user@localhost:5432/librestock_inventory
 CLERK_SECRET_KEY=sk_test_...
 PORT=8080
 ```

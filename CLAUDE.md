@@ -1,4 +1,4 @@
-# RBI Inventory System - Agent Context
+# LibreStock Inventory System - Agent Context
 
 > pnpm monorepo for yacht provisioning inventory management. NestJS API + TanStack Start frontend.
 
@@ -11,10 +11,10 @@
 ## Monorepo Structure
 
 ```
-rbi/
+librestock/
 ├── modules/
-│   ├── api/                 # @rbi/api - NestJS backend
-│   └── web/                 # @rbi/web - TanStack Start frontend
+│   ├── api/                 # @librestock/api - NestJS backend
+│   └── web/                 # @librestock/web - TanStack Start frontend
 ├── packages/
 │   ├── tsconfig/            # Shared TS configs
 │   └── eslint-config/       # Shared ESLint config
@@ -47,10 +47,10 @@ rbi/
 
 ```bash
 # 1. Backend generates spec from decorators
-pnpm --filter @rbi/api openapi:generate   # → openapi.yaml
+pnpm --filter @librestock/api openapi:generate   # → openapi.yaml
 
 # 2. Frontend generates typed hooks from spec
-pnpm --filter @rbi/web api:gen            # → src/lib/data/generated.ts
+pnpm --filter @librestock/web api:gen            # → src/lib/data/generated.ts
 ```
 
 **Always regenerate both after API changes.** The `openapi.yaml` at repo root is the contract between frontend and backend.
@@ -61,8 +61,8 @@ pnpm --filter @rbi/web api:gen            # → src/lib/data/generated.ts
 devenv up                    # Start PostgreSQL + API (8080) + Web (3000)
 
 # Or manually:
-pnpm --filter @rbi/api start:dev
-pnpm --filter @rbi/web dev
+pnpm --filter @librestock/api start:dev
+pnpm --filter @librestock/web dev
 ```
 
 **Access:**
@@ -80,8 +80,8 @@ pnpm lint                    # Lint all packages
 pnpm test                    # Test all packages
 
 # Module-specific
-pnpm --filter @rbi/api <cmd>
-pnpm --filter @rbi/web <cmd>
+pnpm --filter @librestock/api <cmd>
+pnpm --filter @librestock/web <cmd>
 ```
 
 ## Domain Model
@@ -122,8 +122,8 @@ Backend: ClerkAuthGuard → verify → req.auth.userId
 2. **Backend DTOs** in `api/src/routes/<feature>/dto/`
 3. **Backend repository/service/controller/module**
 4. **Register module** in `api/src/app.module.ts` and `app.routes.ts`
-5. **Generate OpenAPI:** `pnpm --filter @rbi/api openapi:generate`
-6. **Generate frontend client:** `pnpm --filter @rbi/web api:gen`
+5. **Generate OpenAPI:** `pnpm --filter @librestock/api openapi:generate`
+6. **Generate frontend client:** `pnpm --filter @librestock/web api:gen`
 7. **Frontend components** using generated hooks
 
 ## Environment Variables

@@ -1,7 +1,7 @@
 {
-  "name": "@rbi/api",
+  "name": "@librestock/api",
   "version": "0.0.1",
-  "description": "RBI Inventory NestJS API",
+  "description": "LibreStock Inventory NestJS API",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -45,7 +45,7 @@
     "@nestjs/cli": "^11.0.14",
     "@nestjs/schematics": "^11.0.9",
     "@nestjs/testing": "^11.1.10",
-    "@rbi/eslint-config": "workspace:*",
+    "@librestock/eslint-config": "workspace:*",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/js-yaml": "^4.0.9",

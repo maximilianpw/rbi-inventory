@@ -1,11 +1,11 @@
 {
-  "name": "rbi-inventory",
+  "name": "librestock-inventory",
   "version": "0.0.1",
   "private": true,
-  "description": "RBI Inventory Management System - Monorepo",
+  "description": "LibreStock Inventory Management System - Monorepo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/maximilianpw/rbi-inventory.git"
+    "url": "https://github.com/maximilianpw/librestock-inventory.git"
   },
   "scripts": {
     "dev": "devenv up",
@@ -14,7 +14,7 @@
     "test": "pnpm -r test",
     "clean": "pnpm -r clean",
     "bootstrap": "pnpm install",
-    "api:gen": "pnpm --filter @rbi/web api:gen",
+    "api:gen": "pnpm --filter @librestock/web api:gen",
     "docs:dev": "mkdocs serve",
     "docs:build": "mkdocs build --strict"
   },

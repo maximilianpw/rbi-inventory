@@ -1,6 +1,6 @@
 # Directives de contribution
 
-Ce document décrit les directives pour contribuer à RBI Inventory.
+Ce document décrit les directives pour contribuer à LibreStock Inventory.
 
 ## Workflow de développement
 
