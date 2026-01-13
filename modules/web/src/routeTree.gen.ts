@@ -8,15 +8,15 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './app/__root'
-import { Route as StockRouteImport } from './app/stock'
-import { Route as SettingsRouteImport } from './app/settings'
-import { Route as ProductsRouteImport } from './app/products'
-import { Route as LocationsRouteImport } from './app/locations'
-import { Route as InventoryRouteImport } from './app/inventory'
-import { Route as AuditLogsRouteImport } from './app/audit-logs'
-import { Route as IndexRouteImport } from './app/index'
-import { Route as LocationsIdRouteImport } from './app/locations.$id'
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as StockRouteImport } from './routes/stock'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ProductsRouteImport } from './routes/products'
+import { Route as LocationsRouteImport } from './routes/locations'
+import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as AuditLogsRouteImport } from './routes/audit-logs'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as LocationsIdRouteImport } from './routes/locations.$id'
 
 const StockRoute = StockRouteImport.update({
   id: '/stock',

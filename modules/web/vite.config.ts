@@ -29,9 +29,6 @@ export default defineConfig({
     tsconfigPaths(),
     tanstackStart({
       srcDirectory: 'src',
-      router: {
-        routesDirectory: 'app',
-      },
     }),
     viteReact(),
   ],
