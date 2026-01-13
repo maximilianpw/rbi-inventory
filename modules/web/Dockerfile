@@ -47,7 +47,7 @@ COPY modules/web/package.json ./modules/web/
 RUN pnpm install --frozen-lockfile --prod
 
 # Copy built artifacts from builder
-COPY --from=builder /app/modules/web/.output ./modules/web/.output
+COPY --from=builder /app/modules/web/dist ./modules/web/dist
 COPY --from=builder /app/modules/web/public ./modules/web/public
 
 # Set environment variables

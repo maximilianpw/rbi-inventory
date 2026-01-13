@@ -247,5 +247,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web-dist
-          path: modules/web/.next/
+          path: modules/web/dist/
           retention-days: 7

@@ -3,7 +3,9 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*'        # Stable releases
+      - 'v*-alpha*' # Alpha releases
+      - 'v*-beta*'  # Beta releases
   workflow_dispatch:
 
 permissions:
@@ -181,14 +183,21 @@ jobs:
         shell: bash
         run: |
           mkdir -p dist
-          tar -czf dist/rbi-remote-desktop-${{ matrix.asset_name }}.tar.gz \
-            -C modules/remote-desktop/src-tauri/target/release/bundle .
+          cd modules/remote-desktop/src-tauri/target/release/bundle
+          # Extract specific installers based on platform
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            find . -name "*.deb" -o -name "*.AppImage" | xargs -I {} cp {} $GITHUB_WORKSPACE/dist/
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            find . -name "*.dmg" -o -name "*.app" | xargs -I {} cp -r {} $GITHUB_WORKSPACE/dist/
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            find . -name "*.msi" -o -name "*.exe" | xargs -I {} cp {} $GITHUB_WORKSPACE/dist/
+          fi
 
       - name: Upload desktop app
         uses: actions/upload-artifact@v4
         with:
           name: rbi-remote-desktop-${{ matrix.asset_name }}
-          path: dist/rbi-remote-desktop-${{ matrix.asset_name }}.tar.gz
+          path: dist/*
 
   docker:
     name: Build and push Docker images
@@ -203,6 +212,8 @@ jobs:
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -226,6 +237,7 @@ jobs:
           context: .
           file: modules/api/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta_server.outputs.tags }}
           labels: ${{ steps.meta_server.outputs.labels }}
 
@@ -244,6 +256,7 @@ jobs:
           context: .
           file: modules/web/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta_remote.outputs.tags }}
           labels: ${{ steps.meta_remote.outputs.labels }}
 
@@ -263,16 +276,25 @@ jobs:
           path: dist
           merge-multiple: true
 
+      - name: Generate checksums
+        run: |
+          cd dist
+          sha256sum * > checksums.txt
+          cat checksums.txt
+
+      - name: Report artifact sizes
+        run: |
+          echo "## Release Artifact Sizes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Artifact | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|------|" >> $GITHUB_STEP_SUMMARY
+          cd dist
+          ls -lh | grep -v '^d' | awk '{printf "| %s | %s |\n", $9, $5}' >> $GITHUB_STEP_SUMMARY
+
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
           files: |
-            dist/rbi-server-dist.tar.gz
-            dist/rbi-remote-web.tar.gz
-            dist/rbi-server-linux-x64.tar.gz
-            dist/rbi-server-macos-x64.tar.gz
-            dist/rbi-server-windows-x64.tar.gz
-            dist/rbi-remote-desktop-linux-x64.tar.gz
-            dist/rbi-remote-desktop-macos-x64.tar.gz
-            dist/rbi-remote-desktop-windows-x64.tar.gz
-            dist/openapi.yaml
+            dist/*
