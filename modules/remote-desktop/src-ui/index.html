@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>RBI Remote</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <header>
+          <p class="eyebrow">RBI Remote</p>
+          <h1>Connect to your server</h1>
+          <p class="hint">
+            Enter the URL for your RBI Server. This app will open it in a secure
+            desktop window.
+          </p>
+        </header>
+        <form class="form" data-connect-form>
+          <label class="label" for="server-url">Server URL</label>
+          <input
+            id="server-url"
+            class="input"
+            name="server-url"
+            type="text"
+            placeholder="http://192.168.1.10:8080"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div class="actions">
+            <button type="submit" class="primary">Connect</button>
+            <button type="button" class="ghost" data-clear>
+              Clear saved server
+            </button>
+          </div>
+          <p class="error" data-error hidden></p>
+        </form>
+        <p class="saved" data-saved hidden></p>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

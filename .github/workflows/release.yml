@@ -1,0 +1,266 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-artifacts:
+    name: Build release artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build API
+        run: pnpm --filter @rbi/api build
+
+      - name: Build Web
+        run: pnpm --filter @rbi/web build
+
+      - name: Package artifacts
+        run: |
+          mkdir -p dist
+          tar -czf dist/rbi-server-dist.tar.gz \
+            modules/api/dist \
+            modules/api/package.json \
+            package.json \
+            pnpm-workspace.yaml \
+            pnpm-lock.yaml \
+            packages/tsconfig
+          tar -czf dist/rbi-remote-web.tar.gz \
+            modules/web/.output \
+            modules/web/public \
+            modules/web/package.json \
+            package.json \
+            pnpm-workspace.yaml \
+            pnpm-lock.yaml \
+            packages/tsconfig
+          cp openapi.yaml dist/openapi.yaml
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: dist/*
+
+  server-binaries:
+    name: Build server binaries
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            pkg_target: node20-linux-x64
+            asset_name: linux-x64
+          - os: macos-latest
+            pkg_target: node20-macos-x64
+            asset_name: macos-x64
+          - os: windows-latest
+            pkg_target: node20-win-x64
+            asset_name: windows-x64
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build API
+        run: pnpm --filter @rbi/api build
+
+      - name: Build server binary
+        run: pnpm --filter @rbi/api exec pkg dist/main.js --targets ${{ matrix.pkg_target }} --out-path dist/bin
+
+      - name: Package server binary
+        shell: bash
+        run: |
+          mkdir -p dist/server-package
+          cp modules/api/.env.template dist/server-package/
+          cp modules/api/dist/bin/* dist/server-package/
+          tar -czf dist/rbi-server-${{ matrix.asset_name }}.tar.gz -C dist/server-package .
+
+      - name: Upload server binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: rbi-server-${{ matrix.asset_name }}
+          path: dist/rbi-server-${{ matrix.asset_name }}.tar.gz
+
+  remote-desktop:
+    name: Build remote desktop apps
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name: linux-x64
+          - os: macos-latest
+            asset_name: macos-x64
+          - os: windows-latest
+            asset_name: windows-x64
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libwebkit2gtk-4.1-dev \
+            patchelf
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build desktop app
+        run: pnpm --filter @rbi/remote-desktop build
+
+      - name: Package desktop app
+        shell: bash
+        run: |
+          tar -czf dist/rbi-remote-desktop-${{ matrix.asset_name }}.tar.gz \
+            -C modules/remote-desktop/src-tauri/target/release/bundle .
+
+      - name: Upload desktop app
+        uses: actions/upload-artifact@v4
+        with:
+          name: rbi-remote-desktop-${{ matrix.asset_name }}
+          path: dist/rbi-remote-desktop-${{ matrix.asset_name }}.tar.gz
+
+  docker:
+    name: Build and push Docker images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set image owner
+        id: vars
+        run: echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker metadata (server)
+        id: meta_server
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.vars.outputs.owner }}/rbi-server
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+
+      - name: Build and push server image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: modules/api/Dockerfile
+          push: true
+          tags: ${{ steps.meta_server.outputs.tags }}
+          labels: ${{ steps.meta_server.outputs.labels }}
+
+      - name: Docker metadata (remote)
+        id: meta_remote
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.vars.outputs.owner }}/rbi-remote
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+
+      - name: Build and push remote image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: modules/web/Dockerfile
+          push: true
+          tags: ${{ steps.meta_remote.outputs.tags }}
+          labels: ${{ steps.meta_remote.outputs.labels }}
+
+  release:
+    name: Publish GitHub release
+    runs-on: ubuntu-latest
+    needs:
+      - build-artifacts
+      - server-binaries
+      - remote-desktop
+      - docker
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*'
+          path: dist
+          merge-multiple: true
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/rbi-server-dist.tar.gz
+            dist/rbi-remote-web.tar.gz
+            dist/rbi-server-linux-x64.tar.gz
+            dist/rbi-server-macos-x64.tar.gz
+            dist/rbi-server-windows-x64.tar.gz
+            dist/rbi-remote-desktop-linux-x64.tar.gz
+            dist/rbi-remote-desktop-macos-x64.tar.gz
+            dist/rbi-remote-desktop-windows-x64.tar.gz
+            dist/openapi.yaml
