@@ -2,7 +2,8 @@
   "name": "librestock-inventory",
   "version": "0.0.1",
   "private": true,
-  "description": "LibreStock Inventory Management System - Monorepo",
+  "license": "AGPL-3.0",
+  "description": "LibreStock - Open source self-hostable inventory management system",
   "repository": {
     "type": "git",
     "url": "https://github.com/maximilianpw/librestock-inventory.git"

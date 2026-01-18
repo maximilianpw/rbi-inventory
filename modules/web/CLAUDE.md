@@ -1,6 +1,6 @@
 # LibreStock Web Module - Agent Context
 
-> TanStack Start frontend for yacht provisioning inventory management.
+> TanStack Start frontend for LibreStock - open source inventory management.
 
 ## Tech Stack
 

@@ -1,6 +1,6 @@
 # LibreStock API Module - Agent Context
 
-> NestJS REST API for yacht provisioning inventory management.
+> NestJS REST API for LibreStock - open source inventory management.
 
 ## Tech Stack
 
