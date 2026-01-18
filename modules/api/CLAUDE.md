@@ -15,13 +15,14 @@ modules/api/src/
 ├── app.routes.ts           # Route registration
 ├── config/database.config.ts
 ├── common/
-│   ├── decorators/         # @CurrentUser, @ClerkClaims
+│   ├── decorators/         # @CurrentUser, @ClerkClaims, @Transactional, @StandardThrottle
 │   ├── dto/                # BaseResponseDto, ErrorResponseDto
 │   ├── entities/           # BaseEntity, BaseAuditEntity
 │   ├── enums/              # AuditAction, UserRole
-│   ├── guards/             # ClerkAuthGuard
+│   ├── filters/            # ThrottlerExceptionFilter
+│   ├── guards/             # ClerkAuthGuard, clerk-errors (error classification)
 │   ├── hateoas/            # @HateoasLinks, HateoasInterceptor
-│   ├── interceptors/       # LoggingInterceptor
+│   ├── interceptors/       # LoggingInterceptor, TransactionInterceptor, AuditInterceptor
 │   └── middleware/         # RequestIdMiddleware
 └── routes/
     ├── auth/               # /api/v1/auth/*
@@ -102,6 +103,82 @@ async findOne(@Param('id') id: string) { ... }
 
 Products use soft delete via `BaseAuditEntity`. Repositories filter `deleted_at IS NULL` by default. Pass `includeDeleted: true` to include soft-deleted records.
 
+### Rate Limiting
+
+API endpoints are protected with configurable rate limits using `@nestjs/throttler`:
+
+**Throttle Decorators:**
+- `@StandardThrottle()` - 100 requests/min (most endpoints)
+- `@BulkThrottle()` - 20 requests/min (bulk operations)
+- `@AuthThrottle()` - 10 requests/min (auth endpoints to prevent brute force)
+- `@SkipThrottle()` - Skip rate limiting (health checks)
+
+**Usage:**
+```typescript
+@StandardThrottle()
+@Controller()
+export class ProductsController {
+  @BulkThrottle() // Override class-level throttle
+  @Post('bulk')
+  async bulkCreate() { ... }
+}
+```
+
+**429 Response:**
+```json
+{
+  "statusCode": 429,
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Please slow down your requests and try again later.",
+  "timestamp": "2026-01-18T20:00:00.000Z"
+}
+```
+
+### Enhanced Error Handling
+
+Authentication errors are classified for better UX:
+
+**Error Types:**
+- `token_expired` - Session expired, user should re-authenticate
+- `token_invalid` - Malformed/invalid token
+- `token_missing` - No authorization header provided
+- `network_error` - Clerk service unreachable (retryable)
+- `configuration_error` - Server misconfiguration
+- `unknown_error` - Other errors (retryable by default)
+
+**Structured Error Response:**
+```json
+{
+  "message": "Your session has expired. Please sign in again.",
+  "error_type": "token_expired",
+  "retryable": false
+}
+```
+
+Frontend can use `error_type` to show appropriate messages and `retryable` to determine retry logic.
+
+### Transaction Management
+
+Critical operations use `@Transactional()` decorator to ensure atomicity:
+
+**Usage:**
+```typescript
+@Transactional()
+async bulkCreate(dto: BulkCreateDto) {
+  // All database operations in this method run in a transaction
+  // If any operation fails, all changes are rolled back
+}
+```
+
+**Protected Operations:**
+- `ProductsService.bulkCreate` - Prevents partial batch inserts
+- `InventoryService.create` - Eliminates TOCTOU race conditions
+- `InventoryService.adjustQuantity` - Atomic quantity updates
+- `CategoriesService.update` - Safe circular reference checks
+- `AreasService.update` - Protected hierarchical updates
+
+The transaction interceptor automatically wraps decorated methods in TypeORM transactions with proper logging.
+
 ### Foreign Keys
 
 | Relationship          | On Delete | Effect                                |
@@ -142,10 +219,12 @@ Products use soft delete via `BaseAuditEntity`. Repositories filter `deleted_at 
 
 ### Health & Auth
 
-| Method | Path                   | Description        |
-| ------ | ---------------------- | ------------------ |
-| GET    | `/health-check`        | Health (no auth)   |
-| GET    | `/api/v1/auth/profile` | Clerk user profile |
+| Method | Path                      | Description                                       |
+| ------ | ------------------------- | ------------------------------------------------- |
+| GET    | `/health-check`           | Full health (DB + Clerk, no auth, skip throttle)  |
+| GET    | `/health-check/live`      | Liveness probe (always 200, k8s ready)            |
+| GET    | `/health-check/ready`     | Readiness probe (DB check only, k8s ready)        |
+| GET    | `/api/v1/auth/profile`    | Clerk user profile                                |
 
 ### Categories
 

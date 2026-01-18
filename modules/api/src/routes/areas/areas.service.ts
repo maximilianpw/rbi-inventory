@@ -3,6 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { Transactional } from '../../common/decorators/transactional.decorator';
 import { LocationRepository } from '../locations/location.repository';
 import { AreaRepository } from './area.repository';
 import { Area } from './entities/area.entity';
@@ -77,6 +78,7 @@ export class AreasService {
     return this.areaRepository.findHierarchyByLocationId(locationId);
   }
 
+  @Transactional()
   async update(id: string, dto: UpdateAreaDto): Promise<Area> {
     const existingArea = await this.areaRepository.findById(id);
     if (!existingArea) {

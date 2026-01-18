@@ -3,6 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { Transactional } from '../../common/decorators/transactional.decorator';
 import { ProductRepository } from '../products/product.repository';
 import { LocationRepository } from '../locations/location.repository';
 import { AreaRepository } from '../areas/area.repository';
@@ -77,6 +78,7 @@ export class InventoryService {
     return items.map((inventory) => this.toResponseDto(inventory));
   }
 
+  @Transactional()
   async create(
     createInventoryDto: CreateInventoryDto,
   ): Promise<InventoryResponseDto> {
@@ -233,6 +235,7 @@ export class InventoryService {
     return this.toResponseDto(updated!);
   }
 
+  @Transactional()
   async adjustQuantity(
     id: string,
     adjustDto: AdjustInventoryDto,

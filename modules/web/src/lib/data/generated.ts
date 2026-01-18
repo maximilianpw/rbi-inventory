@@ -1453,9 +1453,220 @@ export interface PaginatedAuditLogsResponseDto {
   meta: PaginationMetaDto
 }
 
+/**
+ * @nullable
+ */
+export type HealthCheck200Info = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+/**
+ * @nullable
+ */
+export type HealthCheck200Error = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+export type HealthCheck200Details = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+}
+
 export type HealthCheck200 = {
   status?: string
-  timestamp?: string
+  /** @nullable */
+  info?: HealthCheck200Info
+  /** @nullable */
+  error?: HealthCheck200Error
+  details?: HealthCheck200Details
+}
+
+/**
+ * @nullable
+ */
+export type HealthCheck503Info = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+/**
+ * @nullable
+ */
+export type HealthCheck503Error = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+export type HealthCheck503Details = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+}
+
+export type HealthCheck503 = {
+  status?: string
+  /** @nullable */
+  info?: HealthCheck503Info
+  /** @nullable */
+  error?: HealthCheck503Error
+  details?: HealthCheck503Details
+}
+
+/**
+ * @nullable
+ */
+export type Liveness200Info = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+/**
+ * @nullable
+ */
+export type Liveness200Error = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+export type Liveness200Details = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+}
+
+export type Liveness200 = {
+  status?: string
+  /** @nullable */
+  info?: Liveness200Info
+  /** @nullable */
+  error?: Liveness200Error
+  details?: Liveness200Details
+}
+
+/**
+ * @nullable
+ */
+export type Liveness503Info = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+/**
+ * @nullable
+ */
+export type Liveness503Error = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+export type Liveness503Details = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+}
+
+export type Liveness503 = {
+  status?: string
+  /** @nullable */
+  info?: Liveness503Info
+  /** @nullable */
+  error?: Liveness503Error
+  details?: Liveness503Details
+}
+
+/**
+ * @nullable
+ */
+export type Readiness200Info = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+/**
+ * @nullable
+ */
+export type Readiness200Error = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+export type Readiness200Details = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+}
+
+export type Readiness200 = {
+  status?: string
+  /** @nullable */
+  info?: Readiness200Info
+  /** @nullable */
+  error?: Readiness200Error
+  details?: Readiness200Details
+}
+
+/**
+ * @nullable
+ */
+export type Readiness503Info = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+/**
+ * @nullable
+ */
+export type Readiness503Error = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+} | null
+
+export type Readiness503Details = {
+  [key: string]: {
+    status: string
+    [key: string]: unknown
+  }
+}
+
+export type Readiness503 = {
+  status?: string
+  /** @nullable */
+  info?: Readiness503Info
+  /** @nullable */
+  error?: Readiness503Error
+  details?: Readiness503Details
 }
 
 export type ListProductsParams = {
@@ -1788,9 +1999,13 @@ export const ListAuditLogsAction = {
   STATUS_CHANGE: 'STATUS_CHANGE',
 } as const
 
+type AwaitedInput<T> = PromiseLike<T> | T
+
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
+
 /**
- * Returns the health status of the API
- * @summary Health check endpoint
+ * Comprehensive health check including database and Clerk configuration
+ * @summary Full health check
  */
 export const healthCheck = (signal?: AbortSignal) => {
   return getAxiosInstance<HealthCheck200>({
@@ -1806,7 +2021,7 @@ export const getHealthCheckQueryKey = () => {
 
 export const getHealthCheckQueryOptions = <
   TData = Awaited<ReturnType<typeof healthCheck>>,
-  TError = unknown,
+  TError = HealthCheck503,
 >(options?: {
   query?: Partial<
     UseQueryOptions<Awaited<ReturnType<typeof healthCheck>>, TError, TData>
@@ -1830,11 +2045,11 @@ export const getHealthCheckQueryOptions = <
 export type HealthCheckQueryResult = NonNullable<
   Awaited<ReturnType<typeof healthCheck>>
 >
-export type HealthCheckQueryError = unknown
+export type HealthCheckQueryError = HealthCheck503
 
 export function useHealthCheck<
   TData = Awaited<ReturnType<typeof healthCheck>>,
-  TError = unknown,
+  TError = HealthCheck503,
 >(
   options: {
     query: Partial<
@@ -1855,7 +2070,7 @@ export function useHealthCheck<
 }
 export function useHealthCheck<
   TData = Awaited<ReturnType<typeof healthCheck>>,
-  TError = unknown,
+  TError = HealthCheck503,
 >(
   options?: {
     query?: Partial<
@@ -1876,7 +2091,7 @@ export function useHealthCheck<
 }
 export function useHealthCheck<
   TData = Awaited<ReturnType<typeof healthCheck>>,
-  TError = unknown,
+  TError = HealthCheck503,
 >(
   options?: {
     query?: Partial<
@@ -1888,12 +2103,12 @@ export function useHealthCheck<
   queryKey: DataTag<QueryKey, TData, TError>
 }
 /**
- * @summary Health check endpoint
+ * @summary Full health check
  */
 
 export function useHealthCheck<
   TData = Awaited<ReturnType<typeof healthCheck>>,
-  TError = unknown,
+  TError = HealthCheck503,
 >(
   options?: {
     query?: Partial<
@@ -1905,6 +2120,262 @@ export function useHealthCheck<
   queryKey: DataTag<QueryKey, TData, TError>
 } {
   const queryOptions = getHealthCheckQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * Kubernetes liveness probe - returns 200 if application is running
+ * @summary Liveness probe
+ */
+export const liveness = (signal?: AbortSignal) => {
+  return getAxiosInstance<Liveness200>({
+    url: `/health-check/live`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getLivenessQueryKey = () => {
+  return [`/health-check/live`] as const
+}
+
+export const getLivenessQueryOptions = <
+  TData = Awaited<ReturnType<typeof liveness>>,
+  TError = Liveness503,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof liveness>>, TError, TData>
+  >
+}) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getLivenessQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof liveness>>> = ({
+    signal,
+  }) => liveness(signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof liveness>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type LivenessQueryResult = NonNullable<
+  Awaited<ReturnType<typeof liveness>>
+>
+export type LivenessQueryError = Liveness503
+
+export function useLiveness<
+  TData = Awaited<ReturnType<typeof liveness>>,
+  TError = Liveness503,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof liveness>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof liveness>>,
+          TError,
+          Awaited<ReturnType<typeof liveness>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useLiveness<
+  TData = Awaited<ReturnType<typeof liveness>>,
+  TError = Liveness503,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof liveness>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof liveness>>,
+          TError,
+          Awaited<ReturnType<typeof liveness>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useLiveness<
+  TData = Awaited<ReturnType<typeof liveness>>,
+  TError = Liveness503,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof liveness>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Liveness probe
+ */
+
+export function useLiveness<
+  TData = Awaited<ReturnType<typeof liveness>>,
+  TError = Liveness503,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof liveness>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getLivenessQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * Kubernetes readiness probe - returns 200 if application is ready to serve traffic
+ * @summary Readiness probe
+ */
+export const readiness = (signal?: AbortSignal) => {
+  return getAxiosInstance<Readiness200>({
+    url: `/health-check/ready`,
+    method: 'GET',
+    signal,
+  })
+}
+
+export const getReadinessQueryKey = () => {
+  return [`/health-check/ready`] as const
+}
+
+export const getReadinessQueryOptions = <
+  TData = Awaited<ReturnType<typeof readiness>>,
+  TError = Readiness503,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof readiness>>, TError, TData>
+  >
+}) => {
+  const { query: queryOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getReadinessQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof readiness>>> = ({
+    signal,
+  }) => readiness(signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof readiness>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ReadinessQueryResult = NonNullable<
+  Awaited<ReturnType<typeof readiness>>
+>
+export type ReadinessQueryError = Readiness503
+
+export function useReadiness<
+  TData = Awaited<ReturnType<typeof readiness>>,
+  TError = Readiness503,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof readiness>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof readiness>>,
+          TError,
+          Awaited<ReturnType<typeof readiness>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useReadiness<
+  TData = Awaited<ReturnType<typeof readiness>>,
+  TError = Readiness503,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof readiness>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof readiness>>,
+          TError,
+          Awaited<ReturnType<typeof readiness>>
+        >,
+        'initialData'
+      >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useReadiness<
+  TData = Awaited<ReturnType<typeof readiness>>,
+  TError = Readiness503,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof readiness>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Readiness probe
+ */
+
+export function useReadiness<
+  TData = Awaited<ReturnType<typeof readiness>>,
+  TError = Readiness503,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof readiness>>, TError, TData>
+    >
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getReadinessQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

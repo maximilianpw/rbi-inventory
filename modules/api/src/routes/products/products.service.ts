@@ -4,6 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { CategoryRepository } from '../categories/category.repository';
+import { Transactional } from '../../common/decorators/transactional.decorator';
 import { ErrorType } from '../../common/dto/error-response.dto';
 import {
   createEmptyBulkResult,
@@ -115,6 +116,7 @@ export class ProductsService {
     return ProductBuilder.toResponseDto(productWithRelations!);
   }
 
+  @Transactional()
   async bulkCreate(
     bulkDto: BulkCreateProductsDto,
     userId?: string,

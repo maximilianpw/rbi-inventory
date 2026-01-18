@@ -22,6 +22,7 @@ import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { MessageResponseDto } from '../../common/dto/message-response.dto';
 import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { StandardThrottle } from '../../common/decorators/throttle.decorator';
 import {
   CreateLocationDto,
   UpdateLocationDto,
@@ -35,6 +36,7 @@ import { LocationHateoas, DeleteLocationHateoas } from './locations.hateoas';
 @ApiTags('Locations')
 @ApiBearerAuth()
 @UseGuards(ClerkAuthGuard)
+@StandardThrottle()
 @Controller()
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}

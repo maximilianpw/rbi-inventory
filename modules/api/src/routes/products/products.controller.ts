@@ -31,6 +31,7 @@ import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import { AuditInterceptor } from '../../common/interceptors/audit.interceptor';
 import { Auditable } from '../../common/decorators/auditable.decorator';
 import { AuditAction, AuditEntityType } from '../../common/enums';
+import { StandardThrottle, BulkThrottle } from '../../common/decorators/throttle.decorator';
 import {
   CreateProductDto,
   UpdateProductDto,
@@ -55,6 +56,7 @@ import {
 @ApiTags('Products')
 @ApiBearerAuth()
 @UseGuards(ClerkAuthGuard)
+@StandardThrottle()
 @Controller()
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -166,6 +168,7 @@ export class ProductsController {
   }
 
   @Post('bulk')
+  @BulkThrottle()
   @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkOperationHateoas()
   @Auditable({
@@ -210,6 +213,7 @@ export class ProductsController {
   }
 
   @Patch('bulk/status')
+  @BulkThrottle()
   @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkOperationHateoas()
   @Auditable({
@@ -265,6 +269,7 @@ export class ProductsController {
   }
 
   @Delete('bulk')
+  @BulkThrottle()
   @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkDeleteHateoas()
   @Auditable({
@@ -310,6 +315,7 @@ export class ProductsController {
   }
 
   @Patch('bulk/restore')
+  @BulkThrottle()
   @UseInterceptors(HateoasInterceptor, AuditInterceptor)
   @BulkRestoreHateoas()
   @Auditable({

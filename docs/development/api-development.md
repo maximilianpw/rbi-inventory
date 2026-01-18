@@ -307,3 +307,302 @@ async softDelete(id: string, userId: string): Promise<void> {
   ]
 }
 ```
+
+## Rate Limiting
+
+The API uses `@nestjs/throttler` for IP-based rate limiting.
+
+### Throttle Decorators
+
+Apply to controllers or individual endpoints:
+
+```typescript
+import { StandardThrottle, BulkThrottle, AuthThrottle } from 'src/common/decorators/throttle.decorator';
+
+@StandardThrottle() // 100 req/min
+@Controller('products')
+export class ProductsController {
+
+  @BulkThrottle() // Override with 20 req/min
+  @Post('bulk')
+  async bulkCreate() { ... }
+}
+
+@AuthThrottle() // 10 req/min for auth endpoints
+@Controller('auth')
+export class AuthController { ... }
+```
+
+### Available Throttle Levels
+
+- `@StandardThrottle()` - 100 requests/minute (default for most endpoints)
+- `@BulkThrottle()` - 20 requests/minute (bulk operations)
+- `@AuthThrottle()` - 10 requests/minute (prevents brute force)
+- `@SkipThrottle()` - No rate limiting (health checks)
+
+### 429 Response
+
+When rate limited:
+
+```json
+{
+  "statusCode": 429,
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Please slow down your requests and try again later.",
+  "path": "/api/v1/products",
+  "timestamp": "2026-01-18T20:00:00.000Z",
+  "hint": "Consider implementing exponential backoff or waiting before retrying."
+}
+```
+
+## Transaction Management
+
+Use the `@Transactional()` decorator for atomic operations.
+
+### Basic Usage
+
+```typescript
+import { Transactional } from 'src/common/decorators/transactional.decorator';
+
+@Injectable()
+export class ProductsService {
+  @Transactional()
+  async bulkCreate(dto: BulkCreateProductsDto) {
+    // All database operations here run in a transaction
+    // If any operation fails, all changes are rolled back automatically
+
+    for (const product of dto.products) {
+      await this.productRepository.create(product);
+    }
+
+    return result;
+  }
+}
+```
+
+### When to Use Transactions
+
+Use `@Transactional()` for operations that:
+
+1. **Modify multiple records** - Ensure all-or-nothing semantics
+2. **Have dependencies** - Prevent partial completion (e.g., inventory creation)
+3. **Update hierarchies** - Protect parent-child relationships
+4. **Adjust quantities** - Prevent race conditions
+5. **Bulk operations** - Prevent partial batch inserts
+
+### Examples
+
+```typescript
+// Bulk insert - prevents partial batches
+@Transactional()
+async bulkCreate(products: CreateProductDto[]) {
+  const created = [];
+  for (const dto of products) {
+    created.push(await this.repository.create(dto));
+  }
+  return created;
+}
+
+// Inventory creation - prevents TOCTOU races
+@Transactional()
+async create(dto: CreateInventoryDto) {
+  // Check if inventory exists
+  const existing = await this.repository.findByProductAndLocation(
+    dto.product_id,
+    dto.location_id
+  );
+  if (existing) throw new ConflictException();
+
+  // Create inventory
+  return this.repository.create(dto);
+}
+
+// Quantity adjustment - atomic updates
+@Transactional()
+async adjustQuantity(id: string, adjustment: number) {
+  const inventory = await this.repository.findById(id);
+  const newQuantity = inventory.quantity + adjustment;
+
+  if (newQuantity < 0) {
+    throw new BadRequestException('Insufficient quantity');
+  }
+
+  await this.repository.update(id, { quantity: newQuantity });
+  return this.repository.findById(id);
+}
+
+// Circular reference check - atomic validation
+@Transactional()
+async update(id: string, dto: UpdateCategoryDto) {
+  if (dto.parent_id) {
+    await this.validateNoCircularReference(id, dto.parent_id);
+  }
+  return this.repository.update(id, dto);
+}
+```
+
+### Transaction Behavior
+
+- **Success**: All changes committed to database
+- **Error**: All changes rolled back automatically
+- **Logging**: Start and completion/rollback logged automatically
+- **Nesting**: Transactions can be nested (uses savepoints)
+- **Performance**: ~5-10ms overhead per transaction
+
+## Enhanced Error Handling
+
+Authentication errors include detailed type information.
+
+### Clerk Error Classification
+
+The `ClerkAuthGuard` classifies errors for better UX:
+
+```typescript
+{
+  "message": "Your session has expired. Please sign in again.",
+  "error_type": "token_expired",
+  "retryable": false
+}
+```
+
+### Error Types
+
+| Type | Description | Retryable | User Action |
+|------|-------------|-----------|-------------|
+| `token_expired` | Session has expired | No | Re-authenticate |
+| `token_invalid` | Malformed/invalid token | No | Re-authenticate |
+| `token_missing` | No auth header provided | No | Provide token |
+| `network_error` | Clerk service unavailable | Yes | Retry request |
+| `configuration_error` | Server misconfigured | No | Contact support |
+| `unknown_error` | Other errors | Yes | Retry or contact support |
+
+### Frontend Integration
+
+```typescript
+try {
+  await api.getProducts();
+} catch (error) {
+  if (error.error_type === 'token_expired') {
+    // Redirect to login
+    router.push('/login');
+  } else if (error.retryable) {
+    // Implement retry logic with exponential backoff
+    await retryWithBackoff(() => api.getProducts());
+  } else {
+    // Show error message
+    toast.error(error.message);
+  }
+}
+```
+
+### Error Logging
+
+Full error details are logged server-side for debugging:
+
+```
+[WARN] Authentication failed: token_expired - TokenExpiredError: jwt expired
+  path: /api/v1/products
+  method: GET
+  errorType: token_expired
+```
+
+## Health Checks
+
+The API provides three health check endpoints using `@nestjs/terminus`.
+
+### Endpoints
+
+#### Full Health Check
+
+`GET /health-check`
+
+Checks database connectivity and Clerk configuration:
+
+```json
+{
+  "status": "ok",
+  "info": {
+    "database": { "status": "up" },
+    "clerk": {
+      "status": "up",
+      "message": "Clerk is properly configured",
+      "environment": "test"
+    }
+  }
+}
+```
+
+Returns `503` if any check fails.
+
+#### Liveness Probe
+
+`GET /health-check/live`
+
+Kubernetes liveness probe - always returns `200` if app is running:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+#### Readiness Probe
+
+`GET /health-check/ready`
+
+Kubernetes readiness probe - checks database only:
+
+```json
+{
+  "status": "ok",
+  "info": {
+    "database": { "status": "up" }
+  }
+}
+```
+
+Returns `503` if database is unreachable.
+
+### Custom Health Indicators
+
+The Clerk health indicator validates configuration:
+
+```typescript
+// routes/health/indicators/clerk-health.indicator.ts
+@Injectable()
+export class ClerkHealthIndicator extends HealthIndicator {
+  async isHealthy(key: string): Promise<HealthIndicatorResult> {
+    const secretKey = this.configService.get<string>('CLERK_SECRET_KEY');
+
+    if (!secretKey) {
+      throw new HealthCheckError('Clerk not configured', ...);
+    }
+
+    const isValid = secretKey.startsWith('sk_test_') ||
+                    secretKey.startsWith('sk_live_');
+
+    return this.getStatus(key, isValid, {
+      message: 'Clerk is properly configured',
+      environment: secretKey.startsWith('sk_test_') ? 'test' : 'live'
+    });
+  }
+}
+```
+
+### Kubernetes Configuration
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /health-check/live
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /health-check/ready
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+```

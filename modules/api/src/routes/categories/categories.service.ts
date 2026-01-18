@@ -3,6 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { Transactional } from '../../common/decorators/transactional.decorator';
 import { Category } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -43,6 +44,7 @@ export class CategoriesService {
     });
   }
 
+  @Transactional()
   async update(
     id: string,
     updateCategoryDto: UpdateCategoryDto,

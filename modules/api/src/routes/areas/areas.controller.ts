@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { StandardThrottle } from '../../common/decorators/throttle.decorator';
 import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { AreasService } from './areas.service';
 import { CreateAreaDto } from './dto/create-area.dto';
@@ -33,6 +34,7 @@ import { AreaHateoas, AreaListHateoas } from './areas.hateoas';
 @ApiTags('Areas')
 @ApiBearerAuth('BearerAuth')
 @UseGuards(ClerkAuthGuard)
+@StandardThrottle()
 @Controller()
 export class AreasController {
   constructor(private readonly areasService: AreasService) {}

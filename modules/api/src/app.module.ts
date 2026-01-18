@@ -1,7 +1,8 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_INTERCEPTOR , RouterModule } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { ProductsModule } from './routes/products/products.module';
@@ -10,7 +11,9 @@ import { AreasModule } from './routes/areas/areas.module';
 import { InventoryModule } from './routes/inventory/inventory.module';
 import { AuditLogsModule } from './routes/audit-logs/audit-logs.module';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { TransactionInterceptor } from './common/interceptors/transaction.interceptor';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { ThrottlerExceptionFilter } from './common/filters/throttler-exception.filter';
 import databaseConfig from './config/database.config';
 import { HealthModule } from './routes/health/health.module';
 import { routes } from './app.routes';
@@ -32,6 +35,12 @@ import { routes } from './app.routes';
         return dbConfig;
       },
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // 60 seconds
+        limit: 100, // 100 requests per minute (global default)
+      },
+    ]),
     HealthModule,
     AuthModule,
     CategoriesModule,
@@ -46,6 +55,14 @@ import { routes } from './app.routes';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransactionInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: ThrottlerExceptionFilter,
     },
   ],
 })

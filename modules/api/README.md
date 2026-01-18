@@ -4,7 +4,7 @@ REST API for LibreStock Inventory Management System built with NestJS.
 
 ## Features
 
-- 🔐 **Clerk Authentication** - JWT-based auth with Clerk SDK
+- 🔐 **Clerk Authentication** - JWT-based auth with enhanced error classification
 - 📝 **OpenAPI/Swagger** - Auto-generated API documentation
 - ✅ **Validation** - Request validation with class-validator
 - 🏷️ **TypeScript** - Full type safety
@@ -12,6 +12,10 @@ REST API for LibreStock Inventory Management System built with NestJS.
 - 🎯 **Guards & Decorators** - Custom auth guards and user decorators
 - 🔗 **HATEOAS** - Hypermedia links in API responses
 - 📦 **Inventory Management** - Track products across locations and areas
+- 🚦 **Rate Limiting** - IP-based throttling with tiered limits
+- 💪 **Transactions** - Atomic operations with `@Transactional` decorator
+- 🏥 **Health Checks** - Kubernetes-ready liveness & readiness probes
+- ⚠️ **Smart Error Handling** - Classified auth errors with retry hints
 
 ## Getting Started
 
@@ -161,11 +165,66 @@ getClaims(@ClerkClaims() claims: any) {
 }
 ```
 
+### Rate Limiting
+
+The API includes built-in rate limiting to prevent abuse:
+
+- **Standard endpoints**: 100 requests/minute
+- **Bulk operations**: 20 requests/minute
+- **Auth endpoints**: 10 requests/minute (prevents brute force)
+- **Health checks**: No rate limiting
+
+When rate limited, you'll receive a `429 Too Many Requests` response:
+
+```json
+{
+  "statusCode": 429,
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Please slow down your requests and try again later.",
+  "timestamp": "2026-01-18T20:00:00.000Z"
+}
+```
+
+### Transaction Management
+
+Critical operations are wrapped in database transactions to ensure data consistency:
+
+- **Bulk operations** - All-or-nothing inserts/updates
+- **Inventory creation** - Prevents race conditions
+- **Quantity adjustments** - Atomic updates
+- **Hierarchical updates** - Safe parent-child modifications
+
+If any operation within a transaction fails, all changes are automatically rolled back.
+
+### Enhanced Error Handling
+
+Authentication errors include detailed type information for better UX:
+
+```json
+{
+  "message": "Your session has expired. Please sign in again.",
+  "error_type": "token_expired",
+  "retryable": false
+}
+```
+
+**Error Types:**
+- `token_expired` - User needs to re-authenticate
+- `token_invalid` - Malformed token
+- `token_missing` - No authorization header
+- `network_error` - Clerk service unavailable (can retry)
+- `configuration_error` - Server misconfiguration
+- `unknown_error` - Other errors
+
+Frontends can use `error_type` to display appropriate messages and `retryable` to implement smart retry logic.
+
 ## API Endpoints
 
 ### Health
 
-- `GET /health-check` - Health status (no auth required)
+- `GET /health-check` - Full health check (DB + Clerk, no auth)
+- `GET /health-check/live` - Liveness probe (always 200, Kubernetes ready)
+- `GET /health-check/ready` - Readiness probe (DB check, Kubernetes ready)
 
 ### Authentication
 

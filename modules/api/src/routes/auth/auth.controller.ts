@@ -9,6 +9,7 @@ import {
 import { createClerkClient } from '@clerk/backend';
 import { ClerkClaims } from 'src/common/decorators/clerk-claims.decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { AuthThrottle } from 'src/common/decorators/throttle.decorator';
 import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
 import { ClerkAuthGuard } from 'src/common/guards/clerk-auth.guard';
 import { SessionClaimsResponseDto } from './dto/session-claims-response.dto';
@@ -17,6 +18,7 @@ import { ProfileResponseDto } from './dto/profile-response.dto';
 @ApiTags('Auth')
 @ApiBearerAuth()
 @UseGuards(ClerkAuthGuard)
+@AuthThrottle()
 @Controller('auth')
 export class AuthController {
   constructor(private configService: ConfigService) {}

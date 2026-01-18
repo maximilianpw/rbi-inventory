@@ -3,10 +3,12 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { verifyToken } from '@clerk/backend';
+import { classifyClerkError } from './clerk-errors';
 
 export interface ClerkRequest extends Request {
   auth?: {
@@ -18,6 +20,8 @@ export interface ClerkRequest extends Request {
 
 @Injectable()
 export class ClerkAuthGuard implements CanActivate {
+  private readonly logger = new Logger(ClerkAuthGuard.name);
+
   constructor(private configService: ConfigService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -45,9 +49,26 @@ export class ClerkAuthGuard implements CanActivate {
       };
 
       return true;
-       
-    } catch {
-      throw new UnauthorizedException('Invalid or expired token');
+    } catch (error) {
+      // Classify the error for better user experience
+      const classified = classifyClerkError(error);
+
+      // Log the full error for debugging
+      this.logger.warn(
+        `Authentication failed: ${classified.type} - ${classified.originalError}`,
+        {
+          path: request.path,
+          method: request.method,
+          errorType: classified.type,
+        },
+      );
+
+      // Throw structured error with classification
+      throw new UnauthorizedException({
+        message: classified.message,
+        error_type: classified.type,
+        retryable: classified.retryable,
+      });
     }
   }
 

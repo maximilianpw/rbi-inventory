@@ -21,6 +21,7 @@ import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { MessageResponseDto } from '../../common/dto/message-response.dto';
 import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
+import { StandardThrottle } from '../../common/decorators/throttle.decorator';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -31,6 +32,7 @@ import { CategoryHateoas, DeleteCategoryHateoas } from './categories.hateoas';
 @ApiTags('Categories')
 @ApiBearerAuth()
 @UseGuards(ClerkAuthGuard)
+@StandardThrottle()
 @Controller()
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
