@@ -20,10 +20,7 @@ import {
   parseNumberParam,
   parseStringParam,
 } from '@/lib/router/search'
-import {
-  getListLocationsQueryOptions,
-  type ListLocationsParams,
-} from '@/lib/data/generated'
+import { prefetchLocationsData } from '@/lib/router/loaders'
 
 const locationsSearchSchema = z.object({
   q: z.preprocess(parseStringParam, z.string().optional()),
@@ -37,17 +34,7 @@ export const Route = createFileRoute('/locations')({
   validateSearch: (search) => locationsSearchSchema.parse(search),
   loader: async ({ context: { queryClient }, location }) => {
     const search = locationsSearchSchema.parse(location.search)
-    const params: ListLocationsParams = {
-      page: search.page ?? 1,
-      limit: LOCATIONS_PAGE_SIZE,
-    }
-    if (search.q) {
-      params.search = search.q
-    }
-    if (search.type) {
-      params.type = search.type
-    }
-    await queryClient.ensureQueryData(getListLocationsQueryOptions(params))
+    await prefetchLocationsData(queryClient, search, LOCATIONS_PAGE_SIZE)
   },
   component: LocationsPage,
 })

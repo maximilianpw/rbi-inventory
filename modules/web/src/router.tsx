@@ -1,7 +1,4 @@
-import {
-  createRouter,
-  type AnyRouter,
-} from '@tanstack/react-router'
+import { createRouter, type AnyRouter } from '@tanstack/react-router'
 import {
   QueryClient,
   QueryClientProvider,
@@ -25,7 +22,10 @@ export function getRouter(): AnyRouter {
             error !== null &&
             'response' in error &&
             (error as { response?: { status?: number } }).response?.status
-              ? Number((error as { response?: { status?: number } }).response?.status)
+              ? Number(
+                  (error as { response?: { status?: number } }).response
+                    ?.status,
+                )
               : undefined
           if (status && status >= 400 && status < 500) {
             return false
@@ -50,7 +50,10 @@ export function getRouter(): AnyRouter {
       }
     },
     hydrate: (dehydrated) => {
-      if (dehydrated?.queryClientState && isDehydratedState(dehydrated.queryClientState)) {
+      if (
+        dehydrated?.queryClientState &&
+        isDehydratedState(dehydrated.queryClientState)
+      ) {
         hydrate(queryClient, dehydrated.queryClientState)
       }
     },

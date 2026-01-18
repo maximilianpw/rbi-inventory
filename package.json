@@ -19,7 +19,12 @@
     "docs:build": "mkdocs build --strict"
   },
   "devDependencies": {
-    "prettier": "^3.7.4"
+    "@types/node": "^20.19.27",
+    "eslint": "^9.39.1",
+    "globals": "^15.15.0",
+    "prettier": "^3.8.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.50.1"
   },
   "engines": {
     "node": ">=20.0.0",

@@ -13,16 +13,14 @@ import { SearchBar } from '@/components/items/SearchBar'
 import {
   useAreasControllerFindAll,
   useListAllLocations,
-  getListAllLocationsQueryOptions,
-  getAreasControllerFindAllQueryOptions,
-  getListInventoryQueryOptions,
+  type ListInventoryParams,
 } from '@/lib/data/generated'
-import type { ListInventoryParams } from '@/lib/data/generated'
 import {
   parseBooleanParam,
   parseNumberParam,
   parseStringParam,
 } from '@/lib/router/search'
+import { prefetchInventoryData } from '@/lib/router/loaders'
 
 const inventorySearchSchema = z.object({
   location: z.preprocess(parseStringParam, z.string().optional()),
@@ -39,36 +37,7 @@ export const Route = createFileRoute('/inventory')({
   validateSearch: (search) => inventorySearchSchema.parse(search),
   loader: async ({ context: { queryClient }, location }) => {
     const search = inventorySearchSchema.parse(location.search)
-    await queryClient.ensureQueryData(getListAllLocationsQueryOptions())
-
-    if (search.location) {
-      await queryClient.ensureQueryData(
-        getAreasControllerFindAllQueryOptions({
-          location_id: search.location,
-        }),
-      )
-    }
-
-    const params: ListInventoryParams = {
-      page: search.page ?? 1,
-      limit: INVENTORY_PAGE_SIZE,
-    }
-    if (search.area) {
-      params.area_id = search.area
-    } else if (search.location) {
-      params.location_id = search.location
-    }
-    if (search.q) {
-      params.search = search.q
-    }
-    if (search.low) {
-      params.low_stock = true
-    }
-    if (search.expiring) {
-      params.expiring_soon = true
-    }
-
-    await queryClient.ensureQueryData(getListInventoryQueryOptions(params))
+    await prefetchInventoryData(queryClient, search, INVENTORY_PAGE_SIZE)
   },
   component: InventoryPage,
 })
