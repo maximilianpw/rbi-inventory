@@ -1,14 +1,18 @@
-# LibreStock - Yacht Provisioning Management System
+# LibreStock - Open Source Inventory Management
 
-This is an internal management system for **LibreStock**, a specialized provisioning company serving the luxury yacht industry.
+**Self-hostable inventory management for businesses of all sizes.**
 
-## Business Context
+LibreStock is a modern, full-stack inventory management system designed to be deployed anywhere - from a single server in your office to cloud infrastructure. Whether you're managing yacht provisioning, warehouse stock, retail inventory, or any other business that needs to track products and supplies, LibreStock provides the tools you need.
 
-LibreStock manages orders for yacht owners, handling everything from luxury linens and cosmetics to personalized amenities. The company acts as a single point of contact, consolidating orders from multiple suppliers into unified deliveries for yacht owners.
+## Deployment Models
+
+- **Self-Hosted**: Install the server on one machine, connect clients from multiple PCs on your network
+- **Cloud-Hosted**: Deploy to your cloud provider of choice (planned hosted service coming soon)
+- **Hybrid**: Run your server locally with remote access for distributed teams
 
 ## Project Vision
 
-This application is being developed as part of a Master's program to modernize and streamline the entire business workflow. The system will evolve in phases:
+LibreStock is being developed to provide a modern, user-friendly alternative to complex enterprise inventory systems. The system will evolve in phases:
 
 ### Phase 1: Inventory Management (In Development)
 
@@ -16,21 +20,21 @@ A comprehensive internal inventory management system that helps track stock, org
 
 ### Phase 2: Task Management (Planned)
 
-A customized, user-friendly task management system (mini-Jira) tailored specifically for the team's workflow. Unlike generic project management tools, this will be:
+A user-friendly task management system integrated with inventory. Unlike generic project management tools, this will be:
 
 - Designed with non-technical users in mind
 - Integrated directly with inventory data
-- Focused on order fulfillment workflows
+- Focused on order fulfillment and procurement workflows
 - Connected to active orders and delivery schedules
 
 ### Phase 3: Client Portal (Future)
 
-A dedicated portal for yacht owners to:
+A dedicated portal for your customers to:
 
 - Track delivery status in real-time
 - View order history
 - Place quick reorders of previously purchased items
-- Streamline communication between clients and the provisioning team
+- Streamline communication between clients and your team
 
 ---
 
@@ -144,9 +148,9 @@ Inventory ← quantity of a product at a location/area
 - **Minimum Level**: Automated low-stock alerts when quantity drops below threshold
 - **Audit History**: Complete accountability trail with user ID tracking for all changes
 
-### Business Workflow
+### Example Workflow
 
-1. Yacht owner places order
+1. Customer places order
 2. Staff checks inventory availability
 3. Items below minimum level trigger supplier reorder
 4. Usage records track fulfillment
@@ -190,18 +194,40 @@ Inventory ← quantity of a product at a location/area
 
 ---
 
-## Project Context
+## Use Cases
 
-This application is being developed as a Master's degree project, designed to modernize operations for a real business with specific needs:
+LibreStock can be adapted for various industries:
 
-- Non-technical user base requiring intuitive interfaces
-- Yacht industry specifics (luxury goods, time-sensitive deliveries)
-- Multi-stakeholder system (internal staff + external clients)
-- Scalability for future business growth
+- **Provisioning & Catering**: Manage supplies for yacht provisioning, event catering, or hospitality
+- **Retail**: Track store inventory across multiple locations
+- **Warehouse Management**: Monitor stock levels, areas, and supplier relationships
+- **Manufacturing**: Track raw materials and finished goods
+- **Healthcare**: Manage medical supplies with expiry tracking
+- **Any business** that needs to track products, locations, and suppliers
+
+## Project Goals
+
+LibreStock is being developed as an open source Master's degree project with the following design principles:
+
+- **User-friendly**: Intuitive interfaces for non-technical users
+- **Flexible**: Adaptable to different industries and workflows
+- **Self-hostable**: Full control over your data and infrastructure
+- **Modern stack**: Built with current best practices and technologies
+- **Multi-stakeholder**: Support for internal staff and external clients
+- **Scalable**: Designed to grow with your business
 
 ---
 
 ## License
 
-This application is proprietary to **LibreStock**.
-Unauthorized copying or distribution is prohibited.
+**GNU Affero General Public License v3.0 (AGPL-3.0)**
+
+This project is free and open source software licensed under the AGPL-3.0 license. This ensures that:
+
+- Anyone can use, modify, and distribute LibreStock
+- If you host LibreStock as a service (cloud or on-premise), you must share your modifications
+- The software and all derivatives remain free and open source
+
+See the [LICENSE](LICENSE) file for full details.
+
+This project is developed as part of a Master's degree program and is committed to remaining free and open source software.

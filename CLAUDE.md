@@ -1,6 +1,6 @@
 # LibreStock Inventory System - Agent Context
 
-> pnpm monorepo for yacht provisioning inventory management. NestJS API + TanStack Start frontend.
+> Open source pnpm monorepo for self-hostable inventory management. NestJS API + TanStack Start frontend.
 
 ## Tech Stack
 
