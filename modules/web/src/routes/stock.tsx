@@ -268,6 +268,9 @@ function ItemsPage(): React.JSX.Element {
                 />
                 <PaginationControls
                   isLoading={isLoading}
+                  page={page}
+                  totalItems={meta?.total}
+                  totalPages={meta?.total_pages ?? 1}
                   onPageChange={(nextPage) => {
                     void navigate({
                       search: (prev: StockSearch) => ({
@@ -277,9 +280,6 @@ function ItemsPage(): React.JSX.Element {
                       replace: true,
                     })
                   }}
-                  page={page}
-                  totalItems={meta?.total}
-                  totalPages={meta?.total_pages ?? 1}
                 />
               </>
             )}

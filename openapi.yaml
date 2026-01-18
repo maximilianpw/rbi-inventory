@@ -2248,6 +2248,47 @@ paths:
       summary: Get audit history for a specific user
       tags:
         - Audit Logs
+  /branding:
+    get:
+      operationId: getBranding
+      parameters: []
+      responses:
+        '200':
+          description: Branding settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandingResponseDto'
+      summary: Get branding settings (public)
+      tags:
+        - Branding
+    put:
+      operationId: updateBranding
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBrandingDto'
+      responses:
+        '200':
+          description: Updated branding settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandingResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+      security:
+        - bearer: []
+      summary: Update branding settings
+      tags:
+        - Branding
 info:
   title: LibreStock Inventory API
   description: REST API for LibreStock Inventory Management System
@@ -3598,3 +3639,77 @@ components:
       required:
         - data
         - meta
+    PoweredByDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product name
+          example: LibreStock
+        url:
+          type: string
+          description: Product URL
+          example: https://github.com/maximilianpw/librestock
+      required:
+        - name
+        - url
+    BrandingResponseDto:
+      type: object
+      properties:
+        app_name:
+          type: string
+          description: Application name
+        tagline:
+          type: string
+          description: Application tagline
+        logo_url:
+          type: string
+          description: Logo URL
+          nullable: true
+        favicon_url:
+          type: string
+          description: Favicon URL
+          nullable: true
+        primary_color:
+          type: string
+          description: Primary brand color (hex)
+        powered_by:
+          description: Powered by attribution (always present)
+          $ref: '#/components/schemas/PoweredByDto'
+        updated_at:
+          format: date-time
+          type: string
+          description: Last update timestamp
+      required:
+        - app_name
+        - tagline
+        - logo_url
+        - favicon_url
+        - primary_color
+        - powered_by
+        - updated_at
+    UpdateBrandingDto:
+      type: object
+      properties:
+        app_name:
+          type: string
+          description: Application name
+          maxLength: 100
+        tagline:
+          type: string
+          description: Application tagline
+          maxLength: 255
+        logo_url:
+          type: string
+          description: Logo URL (relative or absolute)
+          maxLength: 500
+          nullable: true
+        favicon_url:
+          type: string
+          description: Favicon URL (relative or absolute)
+          maxLength: 500
+          nullable: true
+        primary_color:
+          type: string
+          description: Primary brand color (hex)
+          example: '#3b82f6'

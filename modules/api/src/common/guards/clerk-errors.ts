@@ -23,7 +23,7 @@ export interface ClassifiedError {
  * Classifies Clerk authentication errors into user-friendly categories
  */
 export function classifyClerkError(error: any): ClassifiedError {
-  const errorMessage = error?.message || error?.toString() || 'Unknown error';
+  const errorMessage = error?.message ?? error?.toString() ?? 'Unknown error';
   const errorString = errorMessage.toLowerCase();
 
   // Token expired

@@ -60,7 +60,7 @@ export class TransactionInterceptor implements NestInterceptor {
           return result;
         } catch (error: any) {
           this.logger.warn(
-            `Transaction rolled back for ${className}.${methodName}: ${error?.message || 'Unknown error'}`,
+            `Transaction rolled back for ${className}.${methodName}: ${error?.message ?? 'Unknown error'}`,
           );
           throw error;
         }

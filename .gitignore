@@ -22,6 +22,7 @@ logfile
 
 node_modules/
 .DS_Store
+dist/
 
 # MkDocs generated site
 site/

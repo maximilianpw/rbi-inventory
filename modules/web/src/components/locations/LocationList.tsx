@@ -100,10 +100,10 @@ export function LocationList({
       </div>
       <PaginationControls
         isLoading={isLoading}
-        onPageChange={onPageChange}
         page={page}
         totalItems={meta?.total}
         totalPages={meta?.total_pages ?? 1}
+        onPageChange={onPageChange}
       />
     </>
   )

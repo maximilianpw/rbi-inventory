@@ -18,6 +18,7 @@ import AppSidebar from '@/components/common/Header'
 import { ErrorState } from '@/components/common/ErrorState'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AuthProvider } from '@/hooks/providers/AuthProvider'
+import { BrandingProvider, useBranding } from '@/hooks/providers/BrandingProvider'
 import { I18nProvider } from '@/hooks/providers/I18nProvider'
 import { ThemeProvider } from '@/hooks/providers/ThemeProvider'
 import { Theme } from '@/lib/enums/theme.enum'
@@ -35,10 +36,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        name: 'description',
-        content: 'Inventory management system for yacht provisioning',
-      },
-      {
         name: 'apple-mobile-web-app-capable',
         content: 'yes',
       },
@@ -46,17 +43,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         name: 'apple-mobile-web-app-status-bar-style',
         content: 'default',
       },
-      {
-        name: 'apple-mobile-web-app-title',
-        content: 'LibreStock',
-      },
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
-      { rel: 'icon', href: '/icons/icon-192x192.png' },
-      { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },
     ],
-    title: 'Rivierabeauty Inventory',
   }),
   component: RootComponent,
   pendingComponent: RoutePending,
@@ -74,48 +64,79 @@ function RootComponent(): React.JSX.Element {
   )
 }
 
+function DynamicHead(): React.JSX.Element {
+  const { branding } = useBranding()
+
+  return (
+    <>
+      <title>{branding.app_name}</title>
+      <meta content={branding.tagline} name="description" />
+      <meta content={branding.app_name} name="apple-mobile-web-app-title" />
+      <link
+        href={branding.favicon_url ?? '/icons/icon-192x192.png'}
+        rel="icon"
+      />
+      <link
+        href={branding.favicon_url ?? '/icons/apple-touch-icon.png'}
+        rel="apple-touch-icon"
+      />
+    </>
+  )
+}
+
+function WelcomeScreen(): React.JSX.Element {
+  const { branding } = useBranding()
+
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="text-center">
+        <h1 className="mb-4 text-2xl font-semibold">
+          Welcome to {branding.app_name}
+        </h1>
+        <SignInButton mode="modal">
+          <button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2">
+            Sign In
+          </button>
+        </SignInButton>
+      </div>
+    </div>
+  )
+}
+
 function RootDocument({
   children,
 }: {
   children: React.ReactNode
 }): React.JSX.Element {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html suppressHydrationWarning lang="en">
       <head>
         <HeadContent />
       </head>
-      <body className="antialiased" suppressHydrationWarning>
+      <body suppressHydrationWarning className="antialiased">
         <AuthProvider>
-          <I18nProvider>
-            <ThemeProvider
-              disableTransitionOnChange
-              enableSystem
-              attribute="class"
-              defaultTheme={Theme.SYSTEM}
-            >
-              <SignedIn>
-                <SidebarProvider>
-                  <AppSidebar />
-                  <main className="flex flex-1 flex-col">{children}</main>
-                  <Toaster />
-                </SidebarProvider>
-              </SignedIn>
-              <SignedOut>
-                <div className="flex min-h-screen items-center justify-center">
-                  <div className="text-center">
-                    <h1 className="mb-4 text-2xl font-semibold">
-                      Welcome to LibreStock Inventory
-                    </h1>
-                    <SignInButton mode="modal">
-                      <button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2">
-                        Sign In
-                      </button>
-                    </SignInButton>
-                  </div>
-                </div>
-              </SignedOut>
-            </ThemeProvider>
-          </I18nProvider>
+          <BrandingProvider>
+            <DynamicHead />
+            <I18nProvider>
+              <ThemeProvider
+                disableTransitionOnChange
+                enableSystem
+                attribute="class"
+                defaultTheme={Theme.SYSTEM}
+              >
+                <SignedIn>
+                  <SidebarProvider>
+                    <AppSidebar />
+                    <main className="flex flex-1 flex-col">{children}</main>
+                    <Toaster />
+                  </SidebarProvider>
+                </SignedIn>
+                <SignedOut>
+                  <WelcomeScreen />
+                </SignedOut>
+              </ThemeProvider>
+            </I18nProvider>
+          </BrandingProvider>
         </AuthProvider>
         <Scripts />
       </body>

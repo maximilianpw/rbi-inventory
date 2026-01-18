@@ -43,9 +43,9 @@ export function SearchBar({
       />
       {value ? (
         <button
+          aria-label="Clear search"
           className="text-muted-foreground hover:text-foreground absolute right-2 top-1/2 -translate-y-1/2 rounded p-1"
           type="button"
-          aria-label="Clear search"
           onClick={handleClear}
         >
           <X className="size-4" />

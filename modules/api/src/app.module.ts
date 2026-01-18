@@ -10,6 +10,7 @@ import { LocationsModule } from './routes/locations/locations.module';
 import { AreasModule } from './routes/areas/areas.module';
 import { InventoryModule } from './routes/inventory/inventory.module';
 import { AuditLogsModule } from './routes/audit-logs/audit-logs.module';
+import { BrandingModule } from './routes/branding/branding.module';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TransactionInterceptor } from './common/interceptors/transaction.interceptor';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
@@ -49,6 +50,7 @@ import { routes } from './app.routes';
     AreasModule,
     InventoryModule,
     AuditLogsModule,
+    BrandingModule,
     RouterModule.register(routes),
   ],
   providers: [

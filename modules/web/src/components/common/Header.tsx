@@ -3,6 +3,7 @@ import { SignedOut, SignInButton } from '@clerk/tanstack-react-start'
 import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { PoweredBy } from '@/components/common/PoweredBy'
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
+import { useBranding } from '@/hooks/providers/BrandingProvider'
 
 function useRoutes(): {
   name: string
@@ -58,6 +60,7 @@ function useRoutes(): {
 
 export default function AppSidebar(): React.JSX.Element {
   const { t } = useTranslation()
+  const { branding } = useBranding()
   const routes = useRoutes()
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
@@ -66,8 +69,15 @@ export default function AppSidebar(): React.JSX.Element {
     <Sidebar>
       <SidebarHeader>
         <Link className="inline-flex items-center gap-2" to="/">
+          {branding.logo_url ? (
+            <img
+              alt={branding.app_name}
+              className="h-6 w-auto"
+              src={branding.logo_url}
+            />
+          ) : null}
           <span className="text-base font-bold tracking-tight">
-            LibreStock Inventory
+            {branding.app_name}
           </span>
         </Link>
       </SidebarHeader>
@@ -110,6 +120,7 @@ export default function AppSidebar(): React.JSX.Element {
         <SignedOut>
           <SignInButton mode="modal" />
         </SignedOut>
+        <PoweredBy />
       </SidebarFooter>
     </Sidebar>
   )

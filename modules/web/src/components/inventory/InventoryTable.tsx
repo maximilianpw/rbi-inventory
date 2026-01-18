@@ -281,12 +281,12 @@ export function InventoryTable({
   if (!isLoading && inventoryItems.length === 0) {
     return (
       <EmptyState
+        variant="bordered"
         message={
           hasActiveFilters
             ? (t('inventory.noInventoryFiltered') || 'No results for these filters')
             : (t('inventory.noInventory') || 'No inventory found')
         }
-        variant="bordered"
       />
     )
   }
@@ -323,10 +323,10 @@ export function InventoryTable({
       <div className="px-4 pb-4">
         <PaginationControls
           isLoading={isLoading}
-          onPageChange={onPageChange}
           page={page}
           totalItems={meta?.total}
           totalPages={meta?.total_pages ?? 1}
+          onPageChange={onPageChange}
         />
       </div>
     </div>

@@ -16,7 +16,7 @@ export class ClerkHealthIndicator extends HealthIndicator {
     super();
   }
 
-  async isHealthy(key: string): Promise<HealthIndicatorResult> {
+  isHealthy(key: string): HealthIndicatorResult {
     const secretKey = this.configService.get<string>('CLERK_SECRET_KEY');
 
     // Check if secret key exists
