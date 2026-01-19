@@ -1,7 +1,6 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { AuditAction, AuditEntityType } from 'src/common/enums';
-import { ClerkAuthGuard } from 'src/common/guards/clerk-auth.guard';
 import { AuditLogsController } from './audit-logs.controller';
 import { AuditLogService } from './audit-log.service';
 import { type AuditLog } from './entities/audit-log.entity';
@@ -40,8 +39,6 @@ describe('AuditLogsController', () => {
         },
       ],
     })
-      .overrideGuard(ClerkAuthGuard)
-      .useValue({ canActivate: () => true })
       .compile();
 
     controller = module.get<AuditLogsController>(AuditLogsController);

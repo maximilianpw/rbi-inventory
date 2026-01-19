@@ -7,7 +7,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { UserRole } from '../enums';
-import { ClerkRequest } from './clerk-auth.guard';
+import type { UserSession } from '@thallesp/nestjs-better-auth';
+import { getUserSession } from '../auth/session';
 
 type RoleClaim = string | string[] | undefined;
 
@@ -18,19 +19,23 @@ const normalizeRoles = (claim: RoleClaim): string[] => {
   return claim ? [claim] : [];
 };
 
-const extractRoles = (sessionClaims: Record<string, unknown> | undefined) => {
-  if (!sessionClaims) {
+const extractRoles = (session: UserSession | undefined) => {
+  if (!session) {
     return [];
   }
 
-  const claims = sessionClaims as Record<string, any>;
+  const claims = session as Record<string, any>;
   const candidateRoles = [
+    claims.user?.roles,
+    claims.user?.role,
     claims.roles,
     claims.role,
-    claims.publicMetadata?.roles,
-    claims.publicMetadata?.role,
-    claims.public_metadata?.roles,
-    claims.public_metadata?.role,
+    claims.user?.metadata?.roles,
+    claims.user?.metadata?.role,
+    claims.user?.publicMetadata?.roles,
+    claims.user?.publicMetadata?.role,
+    claims.user?.public_metadata?.roles,
+    claims.user?.public_metadata?.role,
   ];
 
   return candidateRoles.flatMap((roleClaim) => normalizeRoles(roleClaim));
@@ -51,8 +56,9 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest<ClerkRequest>();
-    const roles = extractRoles(request.auth?.sessionClaims);
+    const request = context.switchToHttp().getRequest();
+    const session = getUserSession(request);
+    const roles = extractRoles(session);
     const hasRole = requiredRoles.some((role) => roles.includes(role));
 
     if (!hasRole) {

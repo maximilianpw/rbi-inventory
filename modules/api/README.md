@@ -4,7 +4,7 @@ REST API for LibreStock Inventory Management System built with NestJS.
 
 ## Features
 
-- 🔐 **Clerk Authentication** - JWT-based auth with enhanced error classification
+- 🔐 **Better Auth Authentication** - JWT/session auth with global guard
 - 📝 **OpenAPI/Swagger** - Auto-generated API documentation
 - ✅ **Validation** - Request validation with class-validator
 - 🏷️ **TypeScript** - Full type safety
@@ -42,7 +42,7 @@ Set the following environment variables in `.env`:
 
 ```env
 PORT=8080
-CLERK_SECRET_KEY=your_clerk_secret_key
+BETTER_AUTH_SECRET=your_better_auth_secret
 DATABASE_URL=postgresql://postgres@/librestock_inventory
 ```
 
@@ -106,11 +106,12 @@ src/
 │   ├── health.controller.ts
 │   └── health.module.ts
 ├── common/                # Shared utilities
+│   ├── auth/              # Auth helpers
+│   │   └── session.ts
 │   ├── decorators/        # Custom decorators
-│   │   ├── current-user.decorator.ts
-│   │   └── clerk-claims.decorator.ts
+│   │   └── roles.decorator.ts
 │   ├── guards/            # Auth guards
-│   │   └── clerk-auth.guard.ts
+│   │   └── roles.guard.ts
 │   ├── middleware/        # Middleware
 │   │   └── request-id.middleware.ts
 │   ├── interceptors/      # Interceptors
@@ -124,46 +125,21 @@ src/
 
 ## Authentication
 
-All `/api/v1/*` endpoints (except `/health-check`) require Clerk JWT authentication.
+All `/api/v1/*` endpoints (except `/health-check`) require Better Auth authentication.
 
 ### Using the API with Authentication
 
-Include the Clerk JWT token in the Authorization header:
+Include the Better Auth token in the Authorization header:
 
 ```bash
-curl -H "Authorization: Bearer YOUR_CLERK_JWT_TOKEN" \
+curl -H "Authorization: Bearer YOUR_BETTER_AUTH_TOKEN" \
   http://localhost:8080/api/v1/users
 ```
 
-### Custom Decorators
+### Sessions
 
-#### `@CurrentUser()`
-
-Extract the authenticated user from the request:
-
-```typescript
-@Get('me')
-getMe(@CurrentUser() user: any) {
-  return user; // { userId, sessionId, sessionClaims }
-}
-
-// Extract specific field
-@Get('id')
-getUserId(@CurrentUser('userId') userId: string) {
-  return userId;
-}
-```
-
-#### `@ClerkClaims()`
-
-Extract Clerk session claims:
-
-```typescript
-@Get('claims')
-getClaims(@ClerkClaims() claims: any) {
-  return claims; // Full JWT claims
-}
-```
+Use the `@Session()` decorator from `@thallesp/nestjs-better-auth` to access the
+authenticated session in controllers.
 
 ### Rate Limiting
 
@@ -198,37 +174,20 @@ If any operation within a transaction fails, all changes are automatically rolle
 
 ### Enhanced Error Handling
 
-Authentication errors include detailed type information for better UX:
-
-```json
-{
-  "message": "Your session has expired. Please sign in again.",
-  "error_type": "token_expired",
-  "retryable": false
-}
-```
-
-**Error Types:**
-- `token_expired` - User needs to re-authenticate
-- `token_invalid` - Malformed token
-- `token_missing` - No authorization header
-- `network_error` - Clerk service unavailable (can retry)
-- `configuration_error` - Server misconfiguration
-- `unknown_error` - Other errors
-
-Frontends can use `error_type` to display appropriate messages and `retryable` to implement smart retry logic.
+Authentication errors include type information for better UX. Refer to the
+Better Auth docs for error payload details.
 
 ## API Endpoints
 
 ### Health
 
-- `GET /health-check` - Full health check (DB + Clerk, no auth)
+- `GET /health-check` - Full health check (DB + Better Auth, no auth)
 - `GET /health-check/live` - Liveness probe (always 200, Kubernetes ready)
 - `GET /health-check/ready` - Readiness probe (DB check, Kubernetes ready)
 
 ### Authentication
 
-- `GET /api/v1/auth/profile` - Get current user profile from Clerk
+- `GET /api/v1/auth/profile` - Get current user profile from Better Auth
 - `GET /api/v1/auth/session-claims` - Get JWT session claims
 
 ### Users
@@ -321,10 +280,9 @@ pnpm run test:cov
 
 This implementation is ported from the Go/Gin API and includes:
 
-- ✅ Clerk authentication guard (equivalent to Go middleware)
+- ✅ Better Auth integration (equivalent to Go middleware)
 - ✅ Request ID middleware
 - ✅ Structured logging with request IDs
-- ✅ Current user extraction decorators
 - ✅ All API endpoints from OpenAPI spec
 - ✅ Input validation
 - ✅ Error handling

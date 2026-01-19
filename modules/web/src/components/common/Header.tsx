@@ -1,5 +1,4 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { SignedOut, SignInButton } from '@clerk/tanstack-react-start'
 import { LayoutDashboard, Package, Settings, Logs, MapPin, Boxes } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,6 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
+import { useAuthSession } from '@/hooks/providers/AuthProvider'
 import { useBranding } from '@/hooks/providers/BrandingProvider'
 
 function useRoutes(): {
@@ -61,6 +61,7 @@ function useRoutes(): {
 export default function AppSidebar(): React.JSX.Element {
   const { t } = useTranslation()
   const { branding } = useBranding()
+  const { session } = useAuthSession()
   const routes = useRoutes()
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
@@ -117,9 +118,11 @@ export default function AppSidebar(): React.JSX.Element {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-        <SignedOut>
-          <SignInButton mode="modal" />
-        </SignedOut>
+        {!session ? (
+          <Link className="px-2 py-1 text-sm" to="/login">
+            Sign In
+          </Link>
+        ) : null}
         <PoweredBy />
       </SidebarFooter>
     </Sidebar>

@@ -79,7 +79,7 @@ The inventory management system will provide:
 - **TanStack Start** (TanStack Router + Vite) with **React 19** for the user interface
 - **TanStack Query/Form** for data fetching and form handling
 - **Tailwind CSS** with **Radix UI** for styling
-- **Clerk** for authentication
+- **Better Auth** for authentication
 - **Orval** for generating typed API hooks from OpenAPI spec
 
 ### Backend
@@ -87,7 +87,7 @@ The inventory management system will provide:
 - **NestJS 11** with **TypeScript** for API server
 - **TypeORM** for database ORM
 - **PostgreSQL 16** for data persistence
-- **Clerk** for JWT authentication
+- **Better Auth** for authentication
 - **OpenAPI/Swagger** for API documentation
 
 ### Tooling

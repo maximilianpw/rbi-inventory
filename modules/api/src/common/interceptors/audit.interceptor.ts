@@ -8,7 +8,11 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ClerkRequest } from '../guards/clerk-auth.guard';
+import {
+  getUserIdFromSession,
+  getUserSession,
+  type AuthRequest,
+} from '../auth/session';
 import {
   AUDIT_METADATA_KEY,
   AuditMetadata,
@@ -37,7 +41,7 @@ export class AuditInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest<ClerkRequest>();
+    const request = context.switchToHttp().getRequest<AuthRequest>();
     const auditContext = this.extractAuditContext(request);
 
     return next.handle().pipe(
@@ -57,7 +61,7 @@ export class AuditInterceptor implements NestInterceptor {
     );
   }
 
-  private extractAuditContext(request: ClerkRequest): AuditContext {
+  private extractAuditContext(request: AuthRequest): AuditContext {
     const forwardedFor = request.headers['x-forwarded-for'];
     const ipAddress = Array.isArray(forwardedFor)
       ? forwardedFor[0]
@@ -65,8 +69,9 @@ export class AuditInterceptor implements NestInterceptor {
         request.socket?.remoteAddress ??
         null;
 
+    const session = getUserSession(request);
     return {
-      userId: request.auth?.userId ?? null,
+      userId: getUserIdFromSession(session),
       ipAddress,
       userAgent: request.headers['user-agent'] ?? null,
     };
@@ -75,7 +80,7 @@ export class AuditInterceptor implements NestInterceptor {
   private handleSuccessfulRequest(
     metadata: AuditMetadata,
     context: AuditContext,
-    request: ClerkRequest,
+    request: AuthRequest,
     response: unknown,
   ): void {
     const entityId = this.extractEntityId(metadata, request, response);
@@ -115,7 +120,7 @@ export class AuditInterceptor implements NestInterceptor {
 
   private extractEntityId(
     metadata: AuditMetadata,
-    request: ClerkRequest,
+    request: AuthRequest,
     response: unknown,
   ): string | string[] | null {
     // Try to get from route params (e.g., :id)

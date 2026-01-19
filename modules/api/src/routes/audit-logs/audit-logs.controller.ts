@@ -17,7 +17,6 @@ import {
 import { AuditEntityType } from 'src/common/enums';
 import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { Roles } from '../../common/decorators';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { UserRole } from '../../common/enums';
 import { AuditLogService } from './audit-log.service';
@@ -29,7 +28,7 @@ import {
 
 @ApiTags('Audit Logs')
 @ApiBearerAuth()
-@UseGuards(ClerkAuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 @Roles(UserRole.ADMIN)
 @Controller()
 export class AuditLogsController {

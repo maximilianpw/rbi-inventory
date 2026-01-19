@@ -6,7 +6,8 @@ import {
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 import { SkipThrottle } from '@nestjs/throttler';
-import { ClerkHealthIndicator } from './indicators/clerk-health.indicator';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
+import { BetterAuthHealthIndicator } from './indicators/better-auth-health.indicator';
 
 @ApiTags('Health')
 @Controller()
@@ -15,15 +16,16 @@ export class HealthController {
   constructor(
     private health: HealthCheckService,
     private db: TypeOrmHealthIndicator,
-    private clerk: ClerkHealthIndicator,
+    private betterAuth: BetterAuthHealthIndicator,
   ) {}
 
   @Get('health-check')
+  @AllowAnonymous()
   @HealthCheck()
   @ApiOperation({
     summary: 'Full health check',
     description:
-      'Comprehensive health check including database and Clerk configuration',
+      'Comprehensive health check including database and Better Auth configuration',
     operationId: 'healthCheck',
   })
   @ApiResponse({
@@ -37,11 +39,12 @@ export class HealthController {
   check() {
     return this.health.check([
       () => this.db.pingCheck('database'),
-      () => this.clerk.isHealthy('clerk'),
+      () => this.betterAuth.isHealthy('better-auth'),
     ]);
   }
 
   @Get('health-check/live')
+  @AllowAnonymous()
   @HealthCheck()
   @ApiOperation({
     summary: 'Liveness probe',
@@ -58,6 +61,7 @@ export class HealthController {
   }
 
   @Get('health-check/ready')
+  @AllowAnonymous()
   @HealthCheck()
   @ApiOperation({
     summary: 'Readiness probe',

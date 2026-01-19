@@ -9,7 +9,6 @@ import {
   Param,
   Query,
   ParseUUIDPipe,
-  UseGuards,
   UseInterceptors,
   Req,
 } from '@nestjs/common';
@@ -24,9 +23,10 @@ import {
 import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { MessageResponseDto } from '../../common/dto/message-response.dto';
 import {
-  ClerkAuthGuard,
-  ClerkRequest,
-} from '../../common/guards/clerk-auth.guard';
+  getUserIdFromSession,
+  getUserSession,
+  type AuthRequest,
+} from '../../common/auth/session';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import { AuditInterceptor } from '../../common/interceptors/audit.interceptor';
 import { Auditable } from '../../common/decorators/auditable.decorator';
@@ -55,7 +55,6 @@ import {
 
 @ApiTags('Products')
 @ApiBearerAuth()
-@UseGuards(ClerkAuthGuard)
 @StandardThrottle()
 @Controller()
 export class ProductsController {
@@ -162,9 +161,10 @@ export class ProductsController {
   @ApiResponse({ status: 401, type: ErrorResponseDto })
   async createProduct(
     @Body() createProductDto: CreateProductDto,
-    @Req() req: ClerkRequest,
+    @Req() req: AuthRequest,
   ): Promise<ProductResponseDto> {
-    return this.productsService.create(createProductDto, req.auth?.userId);
+    const userId = getUserIdFromSession(getUserSession(req));
+    return this.productsService.create(createProductDto, userId ?? undefined);
   }
 
   @Post('bulk')
@@ -185,9 +185,10 @@ export class ProductsController {
   @ApiResponse({ status: 401, type: ErrorResponseDto })
   async bulkCreateProducts(
     @Body() bulkDto: BulkCreateProductsDto,
-    @Req() req: ClerkRequest,
+    @Req() req: AuthRequest,
   ): Promise<BulkOperationResultDto> {
-    return this.productsService.bulkCreate(bulkDto, req.auth?.userId);
+    const userId = getUserIdFromSession(getUserSession(req));
+    return this.productsService.bulkCreate(bulkDto, userId ?? undefined);
   }
 
   @Put(':id')
@@ -207,9 +208,10 @@ export class ProductsController {
   async updateProduct(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
-    @Req() req: ClerkRequest,
+    @Req() req: AuthRequest,
   ): Promise<ProductResponseDto> {
-    return this.productsService.update(id, updateProductDto, req.auth?.userId);
+    const userId = getUserIdFromSession(getUserSession(req));
+    return this.productsService.update(id, updateProductDto, userId ?? undefined);
   }
 
   @Patch('bulk/status')
@@ -230,9 +232,10 @@ export class ProductsController {
   @ApiResponse({ status: 401, type: ErrorResponseDto })
   async bulkUpdateStatus(
     @Body() bulkDto: BulkUpdateStatusDto,
-    @Req() req: ClerkRequest,
+    @Req() req: AuthRequest,
   ): Promise<BulkOperationResultDto> {
-    return this.productsService.bulkUpdateStatus(bulkDto, req.auth?.userId);
+    const userId = getUserIdFromSession(getUserSession(req));
+    return this.productsService.bulkUpdateStatus(bulkDto, userId ?? undefined);
   }
 
   @Delete(':id')
@@ -257,10 +260,11 @@ export class ProductsController {
   async deleteProduct(
     @Param('id', ParseUUIDPipe) id: string,
     @Query('permanent') permanent: string,
-    @Req() req: ClerkRequest,
+    @Req() req: AuthRequest,
   ): Promise<MessageResponseDto> {
     const isPermanent = permanent === 'true' || permanent === '1';
-    await this.productsService.delete(id, req.auth?.userId, isPermanent);
+    const userId = getUserIdFromSession(getUserSession(req));
+    await this.productsService.delete(id, userId ?? undefined, isPermanent);
     return {
       message: isPermanent
         ? 'Product permanently deleted'
@@ -286,9 +290,10 @@ export class ProductsController {
   @ApiResponse({ status: 401, type: ErrorResponseDto })
   async bulkDeleteProducts(
     @Body() bulkDto: BulkDeleteDto,
-    @Req() req: ClerkRequest,
+    @Req() req: AuthRequest,
   ): Promise<BulkOperationResultDto> {
-    return this.productsService.bulkDelete(bulkDto, req.auth?.userId);
+    const userId = getUserIdFromSession(getUserSession(req));
+    return this.productsService.bulkDelete(bulkDto, userId ?? undefined);
   }
 
   @Patch(':id/restore')
