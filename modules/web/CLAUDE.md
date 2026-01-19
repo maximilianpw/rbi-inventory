@@ -5,7 +5,7 @@
 ## Tech Stack
 
 TanStack Start · TanStack Router · React 19 · TypeScript · Tailwind CSS 4 · Radix UI · TanStack
-Query + Form · Clerk Auth · i18next · Orval
+Query + Form · Better Auth · i18next · Orval
 
 ## Directory Structure
 
@@ -98,11 +98,10 @@ navigate({ to: '/locations' })
 Order matters in `__root.tsx`:
 
 ```
-ClerkProvider → AuthProvider → ReactQueryProvider → I18nProvider → ThemeProvider → SidebarProvider
+AuthProvider → ReactQueryProvider → I18nProvider → ThemeProvider → SidebarProvider
 ```
 
-- **ClerkProvider**: Authentication (from `@clerk/tanstack-react-start`)
-- **AuthProvider**: Registers Clerk token getter with axios-client
+- **AuthProvider**: Better Auth session loader + axios token getter
 - **ReactQueryProvider**: Server state management
 - **I18nProvider**: Translations
 
@@ -152,7 +151,7 @@ await mutation.mutateAsync(formData)
 | Form state   | TanStack Form + Zod | `useForm({ validators: { onSubmit: schema } })` |
 | UI state     | useState            | `selectedCategoryId`, `expandedIds`             |
 | Global UI    | Context             | Sidebar state                                   |
-| Auth         | Clerk               | `useAuth()`, `<SignedIn>`                       |
+| Auth         | Better Auth         | `useAuthSession()`                             |
 
 ## Forms (TanStack Form + Zod)
 

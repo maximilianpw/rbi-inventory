@@ -7,7 +7,6 @@ import {
   Body,
   Param,
   Query,
-  UseGuards,
   UseInterceptors,
   ParseUUIDPipe,
   HttpCode,
@@ -20,7 +19,6 @@ import {
   ApiBearerAuth,
   ApiParam,
 } from '@nestjs/swagger';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import { StandardThrottle } from '../../common/decorators/throttle.decorator';
 import { ErrorResponseDto } from '../../common/dto/error-response.dto';
@@ -33,7 +31,6 @@ import { AreaHateoas, AreaListHateoas } from './areas.hateoas';
 
 @ApiTags('Areas')
 @ApiBearerAuth('BearerAuth')
-@UseGuards(ClerkAuthGuard)
 @StandardThrottle()
 @Controller()
 export class AreasController {

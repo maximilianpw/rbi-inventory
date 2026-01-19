@@ -1,17 +1,15 @@
 import { z } from 'zod'
 
 const serverSchema = z.object({
-  CLERK_SECRET_KEY: z.string().optional(),
+  BETTER_AUTH_SECRET: z.string().optional(),
 })
 
 const clientSchema = z.object({
-  VITE_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   VITE_API_BASE_URL: z.string().url(),
 })
 
 const processEnv = {
-  CLERK_SECRET_KEY: import.meta.env.CLERK_SECRET_KEY,
-  VITE_CLERK_PUBLISHABLE_KEY: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+  BETTER_AUTH_SECRET: import.meta.env.BETTER_AUTH_SECRET,
   VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
 }
 
@@ -23,7 +21,7 @@ if (!merged.success) {
     merged.error.flatten().fieldErrors,
   )
   console.error(
-    'Make sure your .env file has VITE_API_BASE_URL and VITE_CLERK_PUBLISHABLE_KEY set.',
+    'Make sure your .env file has VITE_API_BASE_URL set.',
   )
   throw new Error('Invalid environment variables')
 }

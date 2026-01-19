@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
-    "@clerk/tanstack-react-start": "^0.18.3",
+    "better-auth": "latest",
     "@formatjs/intl-localematcher": "^0.7.3",
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.4",

@@ -1,32 +1,30 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Controller, Get } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { createClerkClient } from '@clerk/backend';
-import { ClerkClaims } from 'src/common/decorators/clerk-claims.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 import { AuthThrottle } from 'src/common/decorators/throttle.decorator';
 import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
-import { ClerkAuthGuard } from 'src/common/guards/clerk-auth.guard';
+import {
+  getSessionIdFromSession,
+  getSessionTimingFromSession,
+  getUserIdFromSession,
+} from 'src/common/auth/session';
 import { SessionClaimsResponseDto } from './dto/session-claims-response.dto';
 import { ProfileResponseDto } from './dto/profile-response.dto';
 
 @ApiTags('Auth')
 @ApiBearerAuth()
-@UseGuards(ClerkAuthGuard)
 @AuthThrottle()
 @Controller('auth')
 export class AuthController {
-  constructor(private configService: ConfigService) {}
-
   @Get('profile')
   @ApiOperation({
     summary: 'Get user profile',
-    description: 'Retrieves the current user profile from Clerk',
+    description: 'Retrieves the current user profile from Better Auth',
     operationId: 'getProfile',
   })
   @ApiResponse({
@@ -45,12 +43,9 @@ export class AuthController {
     type: ErrorResponseDto,
   })
   async getProfile(
-    @CurrentUser('userId') userId: string,
+    @Session() session: UserSession,
   ): Promise<ProfileResponseDto> {
-    const secretKey = this.configService.get<string>('CLERK_SECRET_KEY');
-    const client = createClerkClient({ secretKey });
-    const user = await client.users.getUser(userId);
-    return user;
+    return session.user;
   }
 
   @Get('session-claims')
@@ -75,14 +70,14 @@ export class AuthController {
     type: ErrorResponseDto,
   })
   getSessionClaims(
-    @ClerkClaims() claims: any,
-    @CurrentUser() user: any,
+    @Session() session: UserSession,
   ): SessionClaimsResponseDto {
+    const { issuedAt, expiresAt } = getSessionTimingFromSession(session);
     return {
-      user_id: user.userId,
-      session_id: user.sessionId,
-      expires_at: claims.exp,
-      issued_at: claims.iat,
+      user_id: getUserIdFromSession(session) ?? '',
+      session_id: getSessionIdFromSession(session) ?? '',
+      expires_at: expiresAt ?? 0,
+      issued_at: issuedAt ?? 0,
     };
   }
 }

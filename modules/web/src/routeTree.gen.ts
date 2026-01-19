@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StockRouteImport } from './routes/stock'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as AuditLogsRouteImport } from './routes/audit-logs'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const StockRoute = StockRouteImport.update({
   id: '/stock',
@@ -31,6 +33,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationsRoute = LocationsRouteImport.update({
@@ -58,26 +65,35 @@ const LocationsIdRoute = LocationsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => LocationsRoute,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit-logs': typeof AuditLogsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/settings': typeof SettingsRoute
   '/stock': typeof StockRoute
   '/locations/$id': typeof LocationsIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit-logs': typeof AuditLogsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/settings': typeof SettingsRoute
   '/stock': typeof StockRoute
   '/locations/$id': typeof LocationsIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,10 +101,12 @@ export interface FileRoutesById {
   '/audit-logs': typeof AuditLogsRoute
   '/inventory': typeof InventoryRoute
   '/locations': typeof LocationsRouteWithChildren
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/settings': typeof SettingsRoute
   '/stock': typeof StockRoute
   '/locations/$id': typeof LocationsIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,30 +115,36 @@ export interface FileRouteTypes {
     | '/audit-logs'
     | '/inventory'
     | '/locations'
+    | '/login'
     | '/products'
     | '/settings'
     | '/stock'
     | '/locations/$id'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/audit-logs'
     | '/inventory'
     | '/locations'
+    | '/login'
     | '/products'
     | '/settings'
     | '/stock'
     | '/locations/$id'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
     | '/audit-logs'
     | '/inventory'
     | '/locations'
+    | '/login'
     | '/products'
     | '/settings'
     | '/stock'
     | '/locations/$id'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -128,9 +152,11 @@ export interface RootRouteChildren {
   AuditLogsRoute: typeof AuditLogsRoute
   InventoryRoute: typeof InventoryRoute
   LocationsRoute: typeof LocationsRouteWithChildren
+  LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRoute
   SettingsRoute: typeof SettingsRoute
   StockRoute: typeof StockRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -154,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/locations': {
@@ -191,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsIdRouteImport
       parentRoute: typeof LocationsRoute
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -211,9 +251,11 @@ const rootRouteChildren: RootRouteChildren = {
   AuditLogsRoute: AuditLogsRoute,
   InventoryRoute: InventoryRoute,
   LocationsRoute: LocationsRouteWithChildren,
+  LoginRoute: LoginRoute,
   ProductsRoute: ProductsRoute,
   SettingsRoute: SettingsRoute,
   StockRoute: StockRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

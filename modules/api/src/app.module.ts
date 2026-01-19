@@ -3,7 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { AuthModule } from './routes/auth/auth.module';
+import { AuthModule as BetterAuthModule } from '@thallesp/nestjs-better-auth';
+import { AuthModule as AuthRoutesModule } from './routes/auth/auth.module';
 import { CategoriesModule } from './routes/categories/categories.module';
 import { ProductsModule } from './routes/products/products.module';
 import { LocationsModule } from './routes/locations/locations.module';
@@ -18,6 +19,7 @@ import { ThrottlerExceptionFilter } from './common/filters/throttler-exception.f
 import databaseConfig from './config/database.config';
 import { HealthModule } from './routes/health/health.module';
 import { routes } from './app.routes';
+import { auth } from './auth';
 
 @Module({
   imports: [
@@ -42,8 +44,9 @@ import { routes } from './app.routes';
         limit: 100, // 100 requests per minute (global default)
       },
     ]),
+    BetterAuthModule.forRoot({ auth }),
     HealthModule,
-    AuthModule,
+    AuthRoutesModule,
     CategoriesModule,
     ProductsModule,
     LocationsModule,

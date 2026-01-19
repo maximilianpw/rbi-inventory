@@ -1,23 +1,15 @@
 import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-} from '@clerk/tanstack-react-start'
-import {
   HeadContent,
   Outlet,
   Scripts,
   createRootRouteWithContext,
   Link,
-  type ErrorComponentProps,
 } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
 
 import AppSidebar from '@/components/common/Header'
-import { ErrorState } from '@/components/common/ErrorState'
 import { SidebarProvider } from '@/components/ui/sidebar'
-import { AuthProvider } from '@/hooks/providers/AuthProvider'
+import { AuthProvider, useAuthSession } from '@/hooks/providers/AuthProvider'
 import {
   BrandingProvider,
   useBranding,
@@ -59,11 +51,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootComponent(): React.JSX.Element {
   return (
-    <ClerkProvider>
+    <AuthProvider>
       <RootDocument>
         <Outlet />
       </RootDocument>
-    </ClerkProvider>
+    </AuthProvider>
   )
 }
 
@@ -96,13 +88,36 @@ function WelcomeScreen(): React.JSX.Element {
         <h1 className="mb-4 text-2xl font-semibold">
           Welcome to {branding.app_name}
         </h1>
-        <SignInButton mode="modal">
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2">
-            Sign In
-          </button>
-        </SignInButton>
+        <Link
+          className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex rounded-md px-4 py-2"
+          to="/login"
+        >
+          Sign In
+        </Link>
       </div>
     </div>
+  )
+}
+
+function AuthLoadingScreen(): React.JSX.Element {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="text-muted-foreground text-sm">Loading…</div>
+    </div>
+  )
+}
+
+function AuthenticatedLayout({
+  children,
+}: {
+  children: React.ReactNode
+}): React.JSX.Element {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="flex flex-1 flex-col">{children}</main>
+      <Toaster />
+    </SidebarProvider>
   )
 }
 
@@ -111,36 +126,33 @@ function RootDocument({
 }: {
   children: React.ReactNode
 }): React.JSX.Element {
+  const { session, isLoading } = useAuthSession()
+
   return (
     <html suppressHydrationWarning lang="en">
       <head>
         <HeadContent />
       </head>
       <body suppressHydrationWarning className="antialiased">
-        <AuthProvider>
-          <BrandingProvider>
-            <DynamicHead />
-            <I18nProvider>
-              <ThemeProvider
-                disableTransitionOnChange
-                enableSystem
-                attribute="class"
-                defaultTheme={Theme.SYSTEM}
-              >
-                <SignedIn>
-                  <SidebarProvider>
-                    <AppSidebar />
-                    <main className="flex flex-1 flex-col">{children}</main>
-                    <Toaster />
-                  </SidebarProvider>
-                </SignedIn>
-                <SignedOut>
-                  <WelcomeScreen />
-                </SignedOut>
-              </ThemeProvider>
-            </I18nProvider>
-          </BrandingProvider>
-        </AuthProvider>
+        <BrandingProvider>
+          <DynamicHead />
+          <I18nProvider>
+            <ThemeProvider
+              disableTransitionOnChange
+              enableSystem
+              attribute="class"
+              defaultTheme={Theme.SYSTEM}
+            >
+              {isLoading ? (
+                <AuthLoadingScreen />
+              ) : session ? (
+                <AuthenticatedLayout>{children}</AuthenticatedLayout>
+              ) : (
+                <WelcomeScreen />
+              )}
+            </ThemeProvider>
+          </I18nProvider>
+        </BrandingProvider>
         <Scripts />
       </body>
     </html>

@@ -4,7 +4,7 @@
 
 ## Tech Stack
 
-NestJS 11 · TypeORM 0.3 · PostgreSQL 16 · Clerk Auth · class-validator · Swagger
+NestJS 11 · TypeORM 0.3 · PostgreSQL 16 · Better Auth · class-validator · Swagger
 
 ## Directory Structure
 
@@ -15,12 +15,12 @@ modules/api/src/
 ├── app.routes.ts           # Route registration
 ├── config/database.config.ts
 ├── common/
-│   ├── decorators/         # @CurrentUser, @ClerkClaims, @Transactional, @StandardThrottle
+│   ├── decorators/         # @Transactional, @StandardThrottle, @Roles
 │   ├── dto/                # BaseResponseDto, ErrorResponseDto
 │   ├── entities/           # BaseEntity, BaseAuditEntity
 │   ├── enums/              # AuditAction, UserRole
 │   ├── filters/            # ThrottlerExceptionFilter
-│   ├── guards/             # ClerkAuthGuard, clerk-errors (error classification)
+│   ├── guards/             # RolesGuard
 │   ├── hateoas/            # @HateoasLinks, HateoasInterceptor
 │   ├── interceptors/       # LoggingInterceptor, TransactionInterceptor, AuditInterceptor
 │   └── middleware/         # RequestIdMiddleware
@@ -72,9 +72,8 @@ Each feature module follows:
 
 ### Authentication
 
-- All `/api/v1/*` routes require `@UseGuards(ClerkAuthGuard)`
-- Access user: `@CurrentUser('userId')` or `@CurrentUser()` for full object
-- Access JWT claims: `@ClerkClaims()`
+- All `/api/v1/*` routes require Better Auth (global guard)
+- Access session: `@Session()` from `@thallesp/nestjs-better-auth`
 
 ### HATEOAS
 
@@ -136,26 +135,8 @@ export class ProductsController {
 
 ### Enhanced Error Handling
 
-Authentication errors are classified for better UX:
-
-**Error Types:**
-- `token_expired` - Session expired, user should re-authenticate
-- `token_invalid` - Malformed/invalid token
-- `token_missing` - No authorization header provided
-- `network_error` - Clerk service unreachable (retryable)
-- `configuration_error` - Server misconfiguration
-- `unknown_error` - Other errors (retryable by default)
-
-**Structured Error Response:**
-```json
-{
-  "message": "Your session has expired. Please sign in again.",
-  "error_type": "token_expired",
-  "retryable": false
-}
-```
-
-Frontend can use `error_type` to show appropriate messages and `retryable` to determine retry logic.
+Authentication errors include type information for better UX. Refer to the
+Better Auth docs for payload details.
 
 ### Transaction Management
 
@@ -221,10 +202,10 @@ The transaction interceptor automatically wraps decorated methods in TypeORM tra
 
 | Method | Path                      | Description                                       |
 | ------ | ------------------------- | ------------------------------------------------- |
-| GET    | `/health-check`           | Full health (DB + Clerk, no auth, skip throttle)  |
+| GET    | `/health-check`           | Full health (DB + Better Auth, no auth, skip throttle)  |
 | GET    | `/health-check/live`      | Liveness probe (always 200, k8s ready)            |
 | GET    | `/health-check/ready`     | Readiness probe (DB check only, k8s ready)        |
-| GET    | `/api/v1/auth/profile`    | Clerk user profile                                |
+| GET    | `/api/v1/auth/profile`    | Better Auth user profile                          |
 
 ### Categories
 
@@ -286,7 +267,7 @@ The transaction interceptor automatically wraps decorated methods in TypeORM tra
 ## Environment Variables
 
 ```bash
-CLERK_SECRET_KEY=sk_test_xxxxx    # Required
+BETTER_AUTH_SECRET=sk_test_xxxxx    # Required
 
 # Database (URL or individual vars)
 DATABASE_URL=postgresql://user:pass@host:5432/librestock_inventory

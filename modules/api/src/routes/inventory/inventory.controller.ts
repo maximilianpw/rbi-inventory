@@ -9,7 +9,6 @@ import {
   Param,
   Query,
   ParseUUIDPipe,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
@@ -21,7 +20,6 @@ import {
 } from '@nestjs/swagger';
 import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { MessageResponseDto } from '../../common/dto/message-response.dto';
-import { ClerkAuthGuard } from '../../common/guards/clerk-auth.guard';
 import { HateoasInterceptor } from '../../common/hateoas/hateoas.interceptor';
 import { StandardThrottle } from '../../common/decorators/throttle.decorator';
 import {
@@ -37,7 +35,6 @@ import { InventoryHateoas, DeleteInventoryHateoas } from './inventory.hateoas';
 
 @ApiTags('Inventory')
 @ApiBearerAuth()
-@UseGuards(ClerkAuthGuard)
 @StandardThrottle()
 @Controller()
 export class InventoryController {

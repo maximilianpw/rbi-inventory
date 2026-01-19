@@ -9,6 +9,7 @@ import { AppModule } from 'src/app.module';
 async function generateOpenApi() {
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn'],
+    bodyParser: false,
   });
 
   app.useGlobalPipes(
@@ -31,12 +32,12 @@ async function generateOpenApi() {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
-        description: 'Clerk JWT token',
+        description: 'Better Auth token',
       },
       'BearerAuth',
     )
     .addTag('Health', 'System health endpoints')
-    .addTag('Auth', 'Authentication endpoints (Clerk JWT)')
+    .addTag('Auth', 'Authentication endpoints (Better Auth)')
     .addTag('Users', 'User management endpoints')
     .addTag('Categories', 'Product category management')
     .addTag('Products', 'Product catalog management')

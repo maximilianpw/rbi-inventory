@@ -44,7 +44,6 @@
       }
     },
     "onlyBuiltDependencies": [
-      "@clerk/shared",
       "@nestjs/core",
       "@sentry/cli",
       "esbuild",

@@ -3,6 +3,7 @@ import { type INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { type Repository } from 'typeorm';
+import { AuthGuard } from '@thallesp/nestjs-better-auth';
 import { AppModule } from '../src/app.module';
 import { Product } from '../src/routes/products/entities/product.entity';
 import { Category } from '../src/routes/categories/entities/category.entity';
@@ -14,10 +15,13 @@ describe('ProductsController (e2e)', () => {
   let authToken: string;
   let testCategory: Category;
 
-  const mockClerkGuard = {
+  const mockAuthGuard = {
     canActivate: jest.fn().mockImplementation((context) => {
       const req = context.switchToHttp().getRequest();
-      req.auth = { userId: 'test-user-id', sessionId: 'test-session-id' };
+      req.session = {
+        user: { id: 'test-user-id' },
+        session: { id: 'test-session-id' },
+      };
       return true;
     }),
   };
@@ -26,12 +30,8 @@ describe('ProductsController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideGuard(
-        await import('../src/common/guards/clerk-auth.guard').then(
-          (m) => m.ClerkAuthGuard,
-        ),
-      )
-      .useValue(mockClerkGuard)
+      .overrideGuard(AuthGuard)
+      .useValue(mockAuthGuard)
       .compile();
 
     app = moduleFixture.createNestApplication();
