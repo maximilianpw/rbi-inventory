@@ -29,6 +29,8 @@ import type { RouterContext } from '@/lib/router/context'
 
 // eslint-disable-next-line import/order
 import appCss from './globals.css?url'
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
+import { NotFound } from '@/components/NotFound'
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
@@ -51,8 +53,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   }),
   component: RootComponent,
   pendingComponent: RoutePending,
-  errorComponent: RouteError,
-  notFoundComponent: RouteNotFound,
+  errorComponent: DefaultCatchBoundary,
+  notFoundComponent: () => NotFound,
 })
 
 function RootComponent(): React.JSX.Element {
@@ -149,45 +151,9 @@ function RoutePending(): React.JSX.Element {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-50 h-1 w-full bg-primary/20"
+      className="bg-primary/20 pointer-events-none fixed top-0 left-0 z-50 h-1 w-full"
     >
-      <div className="h-full w-1/3 animate-pulse bg-primary" />
-    </div>
-  )
-}
-
-function RouteError({ error }: ErrorComponentProps): React.JSX.Element {
-  const message =
-    error instanceof Error && error.message ? error.message : 'Something went wrong.'
-  return (
-    <div className="flex min-h-screen items-center justify-center p-6">
-      <div className="w-full max-w-lg space-y-4">
-        <ErrorState
-          message={message}
-          variant="bordered"
-        />
-        <div className="flex justify-center">
-          <Link className="text-primary underline" to="/">
-            Return home
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function RouteNotFound(): React.JSX.Element {
-  return (
-    <div className="flex min-h-screen items-center justify-center p-6">
-      <div className="w-full max-w-lg space-y-4 text-center">
-        <h1 className="text-2xl font-semibold">Page not found</h1>
-        <p className="text-muted-foreground">
-          The page you are looking for does not exist or has moved.
-        </p>
-        <Link className="text-primary underline" to="/">
-          Return home
-        </Link>
-      </div>
+      <div className="bg-primary h-full w-1/3 animate-pulse" />
     </div>
   )
 }
