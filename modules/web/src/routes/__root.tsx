@@ -18,7 +18,10 @@ import AppSidebar from '@/components/common/Header'
 import { ErrorState } from '@/components/common/ErrorState'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AuthProvider } from '@/hooks/providers/AuthProvider'
-import { BrandingProvider, useBranding } from '@/hooks/providers/BrandingProvider'
+import {
+  BrandingProvider,
+  useBranding,
+} from '@/hooks/providers/BrandingProvider'
 import { I18nProvider } from '@/hooks/providers/I18nProvider'
 import { ThemeProvider } from '@/hooks/providers/ThemeProvider'
 import { Theme } from '@/lib/enums/theme.enum'
@@ -44,9 +47,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         content: 'default',
       },
     ],
-    links: [
-      { rel: 'stylesheet', href: appCss },
-    ],
+    links: [{ rel: 'stylesheet', href: appCss }],
   }),
   component: RootComponent,
   pendingComponent: RoutePending,
@@ -68,7 +69,7 @@ function DynamicHead(): React.JSX.Element {
   const { branding } = useBranding()
 
   return (
-    <>
+    <div>
       <title>{branding.app_name}</title>
       <meta content={branding.tagline} name="description" />
       <meta content={branding.app_name} name="apple-mobile-web-app-title" />
@@ -80,7 +81,7 @@ function DynamicHead(): React.JSX.Element {
         href={branding.favicon_url ?? '/icons/apple-touch-icon.png'}
         rel="apple-touch-icon"
       />
-    </>
+    </div>
   )
 }
 
